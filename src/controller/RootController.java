@@ -364,9 +364,9 @@ public class RootController implements Initializable {
 		try {
 			if (txtId.getText().trim().equals("") || txtPass.getText().trim().equals(""))
 				throw new Exception();
-			Parent root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
-			Scene scene = new Scene(root);
-			Stage user_MainStage = new Stage(StageStyle.UTILITY);
+			//Parent root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
+			//Scene scene = new Scene(root);
+			//Stage user_MainStage = new Stage(StageStyle.UTILITY);
 //			scene.getStylesheets().add(getClass().getResource("/application/libraryCss.css").toString());
 			try {
 				Stage user_MainStage = new Stage(StageStyle.UTILITY);
