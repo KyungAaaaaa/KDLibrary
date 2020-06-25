@@ -13,7 +13,7 @@ import javafx.scene.control.Alert.AlertType;
 import model.Book;
 
 public class BookDAO {
-	public static ObservableList<String> categoryList=FXCollections.observableArrayList("로맨스", "만화", "소설");
+	public static ObservableList<String> categoryList=FXCollections.observableArrayList("경제 경영", "동화", "만화","소설","요리","인물","자기계발","종교");
 
 	// 도서 테이블 전체보기
 	public ArrayList<Book> getBookTbl() {

@@ -1,0 +1,13 @@
+AnchorPane{
+	-fx-background-color:#f8ecc9;
+	
+}
+
+Button{
+	-fx-background-color:#a79c8e;
+	-fx-font-family: "NanumGothic";
+	
+}
+Label:focused{
+	-fx-text-fill:white;
+}

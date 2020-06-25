@@ -114,6 +114,7 @@ public class AdminManagement implements Initializable {
 	private String localUrl;
 	private Image localImage;
 	private String selectFileName;
+	Image image=null;
 	BookDAO dao = new BookDAO();
 
 	@Override
@@ -420,6 +421,7 @@ public class AdminManagement implements Initializable {
 	private void handleBtnBookEditAction(ActionEvent e) {
 
 		try {
+			
 			if (bookTableSelectIndex == -1)
 				throw new Exception("수정할 데이터를 선택하세요.");
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
@@ -441,12 +443,11 @@ public class AdminManagement implements Initializable {
 			ImageView imgV = (ImageView) root.lookup("#imgV");
 			btnCancel.setOnAction(eve -> addPopup.close());
 			cmbCategory.setItems(dao.categoryList);
-
 			Book book0 = obLBook.get(bookTableSelectIndex);
-			selectFileName = book0.getFileimg().trim();
+			selectFileName = book0.getFileimg();
 			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
-			localImage = new Image(localUrl);
-			imgV.setImage(localImage);
+			image = new Image(localUrl);
+			imgV.setImage(image);
 			txtISBN.setText(book0.getIsbn());
 			txtISBN.setDisable(true);
 			txtTitle.setText(book0.getTitle());
@@ -457,7 +458,7 @@ public class AdminManagement implements Initializable {
 			txaInformation.setText(book0.getInformation());
 
 			btnFileSelect.setOnAction(eve1 -> {
-				Image image = handleBtnImageFileAction(addPopup);
+				image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
 			});
 
@@ -486,9 +487,12 @@ public class AdminManagement implements Initializable {
 					book0.setDate(txtDate.getText());
 					book0.setInformation(txaInformation.getText());
 
-					if (selectFile == null)
-						selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
-
+					if ((selectFile == null)) {
+						//selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
+					selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
+					//System.out.println(selectFileName);
+					//System.out.println(selectFile.toString());
+					}
 					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
 					String fileName = null;
@@ -924,6 +928,7 @@ public class AdminManagement implements Initializable {
 			if (selectFile != null) {
 				String localURL = selectFile.toURI().toURL().toString();// 파일의 실제 경로명!!알아두자
 				image = new Image(localURL, false);
+			
 			} else {
 
 			}
