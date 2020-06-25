@@ -250,12 +250,14 @@ public class AdminController implements Initializable {
 								Connection con2 = null;
 								PreparedStatement pstmt2 = null;
 								try {
+									
 									con2=DBUtil.getConnection();
 									String query = "update noticeTBL set title = ?, content = ? where No = ?";
 									pstmt2=con2.prepareStatement(query);
 									pstmt2.setString(1, txtAdminMfTitle.getText());
 									pstmt2.setString(2, txaAdminMfContent.getText());
-//									pstmt2.setString(3, );
+									pstmt2.setString(3, colNo.getText());
+									
 									
 									
 								} catch (Exception e1) {
