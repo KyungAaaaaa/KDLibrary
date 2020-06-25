@@ -15,6 +15,7 @@ import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -32,6 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -55,14 +57,17 @@ public class AdminController implements Initializable {
 	@FXML
 	Button btnAd;
 	ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
-	private ObservableList<Notice> obsList = FXCollections.observableArrayList();
+	private ObservableList<Notice> obsListN = FXCollections.observableArrayList();
+	private ObservableList<Schedule> obsListS = FXCollections.observableArrayList();
 	ArrayList<Notice> arrayList = null;
+	ArrayList<Schedule> arrayList2 = null;
 	private int tableViewselectedIndex;
+	private int tableViewselectedIndex2;
 	SimpleDateFormat format2 = new SimpleDateFormat("yyyy년 MM월 dd일");
 	Date time = new Date();
 	String Noticetime = format2.format(time);
 	String date = LocalDate.now().toString();
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// 로그아웃 버튼 : 로그인화면으로 돌아가기
@@ -76,7 +81,7 @@ public class AdminController implements Initializable {
 
 		// 관리자 일정 버튼
 		btnSchedule.setOnAction(e -> handleBtnScheduleAction(e));
-
+		
 	}
 
 	// 관리 버튼 : 미완성
@@ -123,7 +128,7 @@ public class AdminController implements Initializable {
 	// 관리자 공지사항버튼
 	private void handleBtnNoticeAction(ActionEvent e) {
 		try {
-			obsList.clear();
+			obsListN.clear();
 			Parent adminNoticeView = FXMLLoader.load(getClass().getResource("/view/user_notice.fxml"));
 			Scene scene = new Scene(adminNoticeView);
 			Stage adminNoticeStage = new Stage(StageStyle.UTILITY);
@@ -155,17 +160,47 @@ public class AdminController implements Initializable {
 			colDate.setCellValueFactory(new PropertyValueFactory("date"));
 
 			tbladminNotice.getColumns().addAll(colNo, colTitle, colContent, colDate);
-			tbladminNotice.setOnMouseClicked(event->{
-				tableViewselectedIndex=tbladminNotice.getSelectionModel().getSelectedIndex();
-			});
 			DAO dao = new DAO();
 			arrayList = dao.getNotice();
 			for (Notice n : arrayList) {
-				obsList.add(n);
+				obsListN.add(n);
 			}
-			tbladminNotice.setItems(obsList);
+			tbladminNotice.setItems(obsListN);
+			
+			// 삭제버튼 
+			btnadminDelete.setOnAction(event3 -> {
+						Connection con2 = null;
+						PreparedStatement pstmt2 = null;
+						try {
+							if(tbladminNotice.getSelectionModel().getSelectedItem()==null) throw new Exception();
+							con2 = DBUtil.getConnection();
+							String query = "delete from noticeTBL where no = ?";
+							pstmt2 = con2.prepareStatement(query);
+							Notice not2 = obsListN.get(tableViewselectedIndex);
+							pstmt2.setInt(1, not2.getNo());
+							int notxx = pstmt2.executeUpdate();
+							if(notxx!=0) {
+								obsListN.remove(tableViewselectedIndex);
+								Alert alert =new Alert(AlertType.INFORMATION);
+								alert.setTitle("공지사항 삭제");
+								alert.setHeaderText("공지사항이 삭제 완료되었습니다.");
+								alert.showAndWait();
+								
+							}else {
+								throw new Exception();
+							}
+							
+						} catch (Exception e1) {
+							Alert alert =new Alert(AlertType.ERROR);
+							alert.setTitle("에러발생");
+							alert.setHeaderText("공지삭제를 점검하세요");
+							alert.setContentText(e1.getMessage());
+							alert.showAndWait();
+						}
+						
+					});
 
-			// 공지사항등록창 버튼
+			// 등록창 버튼
 			btnadminAdd.setOnAction(event -> {
 				try {
 					Parent adminNotAddView = FXMLLoader.load(getClass().getResource("/view/admin_NoticeAdd.fxml"));
@@ -182,8 +217,7 @@ public class AdminController implements Initializable {
 					adminNotAddStage.setScene(scene2);
 					adminNotAddStage.setTitle("공지사항 등록");
 					adminNotAddStage.show();
-
-					// 등록버튼
+					
 					btnAdminAddOk.setOnAction(e2 -> {
 						Connection con1 = null;
 						PreparedStatement pstmt1 = null;
@@ -197,7 +231,8 @@ public class AdminController implements Initializable {
 
 							pstmt1 = con1.prepareStatement(query);
 
-							Notice n = new Notice(txtAdminAddTitle.getText(), txaAdminAddContent.getText(),
+							Notice n = new Notice(txtAdminAddTitle.getText(), 
+									txaAdminAddContent.getText(),
 									lblAdminAddDate.getText());
 							pstmt1.setString(1, n.getTitle());
 							pstmt1.setString(2, n.getContent());
@@ -206,7 +241,7 @@ public class AdminController implements Initializable {
 							int v = pstmt1.executeUpdate();
 
 							if (v != 0) {
-								obsList.clear();
+								obsListN.clear();
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("알림");
 								alert.setHeaderText("공지사항 등록 완료");
@@ -214,9 +249,9 @@ public class AdminController implements Initializable {
 								adminNotAddStage.close();
 								arrayList = dao.getNotice();
 								for (Notice n1 : arrayList) {
-									obsList.add(n1);
+									obsListN.add(n1);
 								}
-								tbladminNotice.setItems(obsList);
+								tbladminNotice.setItems(obsListN);
 							} else {
 								throw new Exception();
 							}
@@ -233,51 +268,98 @@ public class AdminController implements Initializable {
 					btnAdminAddNo.setOnAction(event2 -> adminNotAddStage.close());
 					lblAdminAddDate.setText(Noticetime);
 
-					// 수정버튼 미완성
-					btnadminEdit.setOnMouseClicked(e3 -> {
-						try {
-							Parent adminNotMfView = FXMLLoader
-									.load(getClass().getResource("/view/admin_NoticeModified.fxml"));
-							Scene scene3 = new Scene(adminNotMfView);
-							Stage adminNotMfStage = new Stage();
-
-							TextField txtAdminMfTitle = (TextField) scene3.lookup("#txtTitle");
-							Label lblAdminMfDate = (Label) scene3.lookup("#lblDate");
-							TextArea txaAdminMfContent = (TextArea) scene3.lookup("#txaContent");
-							Button btnAdminMfOk = (Button) scene3.lookup("#btnOk");
-							Button btnAdminMfNo = (Button) scene3.lookup("#btnNo");
-							btnAdminMfOk.setOnAction(event2 ->{
-								Connection con2 = null;
-								PreparedStatement pstmt2 = null;
-								try {
-									
-									con2=DBUtil.getConnection();
-									String query = "update noticeTBL set title = ?, content = ? where No = ?";
-									pstmt2=con2.prepareStatement(query);
-									pstmt2.setString(1, txtAdminMfTitle.getText());
-									pstmt2.setString(2, txaAdminMfContent.getText());
-									pstmt2.setString(3, colNo.getText());
-									
-									
-									
-								} catch (Exception e1) {
-									
-								}
-
-							});
-							adminNotMfStage.setScene(scene3);
-							adminNotMfStage.setResizable(false);
-							adminNotMfStage.setTitle("공지사항 수정창");
-							adminNotMfStage.show();
-						} catch (IOException e1) {
-						}
-					});
-
 				} catch (Exception e1) {
+					Alert alert =new Alert(AlertType.ERROR);
+					alert.setTitle("수정 에러발생");
+					alert.setHeaderText(e1.getMessage());
 				}
 
 			});
+			
+			// 테이블뷰에서 선택한 인덱스를 정수값으로 받아오는 이벤트
+			tbladminNotice.setOnMousePressed(event->{
+				tableViewselectedIndex=tbladminNotice.getSelectionModel().getSelectedIndex();
+			});
+			
+			// 수정버튼
+			// 테이블뷰 선택을 더블 클릭으로 바꾸어주는 이벤트
+			tbladminNotice.setOnMouseClicked(event-> {
+				if(event.getClickCount()>1) {
+					try {
+						Parent adminNotMfView = FXMLLoader.load(getClass().getResource("/view/admin_NoticeModified.fxml"));
+						Scene scene3 = new Scene(adminNotMfView);
+						Stage adminNotMfStage = new Stage();
+						adminNotMfStage.setScene(scene3);
+						adminNotMfStage.setResizable(false);
+						adminNotMfStage.setTitle("공지사항 수정창");
+						adminNotMfStage.show();
 
+						TextField txtAdminMfTitle = (TextField) scene3.lookup("#txtTitle");
+						Label lblAdminMfDate = (Label) scene3.lookup("#lblDate");
+						TextArea txaAdminMfContent = (TextArea) scene3.lookup("#txaContent");
+						Button btnAdminMfOk = (Button) scene3.lookup("#btnOk");
+						Button btnAdminMfNo = (Button) scene3.lookup("#btnNo");
+
+						// Notice가 있는 obsListN를 가져와서 not에 넣어줌
+						Notice not = obsListN.get(tableViewselectedIndex);
+						txtAdminMfTitle.setText(not.getTitle());
+						txaAdminMfContent.setText(not.getContent());
+						
+						btnAdminMfOk.setOnAction(event3 ->{
+							if(!(txtAdminMfTitle.getText().trim().equals("")||txaAdminMfContent.getText().trim().equals(""))) {
+
+							Connection con2 = null;
+							PreparedStatement pstmt2 = null;
+							try {
+								con2=DBUtil.getConnection();
+
+								String query = "update noticeTBL set title = ?, content = ?, date = ? where No = ?";
+								
+								not.setTitle(txtAdminMfTitle.getText());
+								not.setContent(txaAdminMfContent.getText());
+								not.setDate(lblAdminMfDate.getText());
+								
+								pstmt2=con2.prepareStatement(query);
+								pstmt2.setString(1, not.getTitle());
+								pstmt2.setString(2, not.getContent());
+								pstmt2.setString(3, not.getDate());
+								pstmt2.setInt(4, not.getNo());
+
+								int mf = pstmt2.executeUpdate();
+
+								if(mf != 0) {
+									obsListN.set(tableViewselectedIndex, not);
+									Alert alert = new Alert(AlertType.INFORMATION);
+									alert.setTitle("알림");
+									alert.setHeaderText("수정을 성공적으로 진행하였습니다");
+									alert.showAndWait();
+									adminNotMfStage.close();
+								}else {
+									throw new Exception();
+								}
+
+							} catch (Exception e1) {
+								Alert alert = new Alert(AlertType.CONFIRMATION);
+								alert.setTitle("에러발생");
+								alert.setHeaderText("공지사항 수정 문제발생");
+								alert.setContentText(e1.getMessage());
+								alert.showAndWait();
+							}
+							}else{
+								Alert alert = new Alert(AlertType.CONFIRMATION);
+								alert.setTitle("에러발생");
+								alert.setHeaderText("공지내용을 모두 작성해주시기 바랍니다.");
+								alert.showAndWait();
+							}
+
+						});
+						btnAdminMfNo.setOnAction(event3 -> adminNotMfStage.close());
+						lblAdminMfDate.setText(Noticetime);
+					} catch (IOException e1) {
+					} 
+				}
+			});
+			
 			adminNoticeStage.initModality(Modality.WINDOW_MODAL);
 			adminNoticeStage.initOwner(stage);
 			adminNoticeStage.setScene(scene);
@@ -448,6 +530,67 @@ public class AdminController implements Initializable {
 				}
 
 			});
+			
+			//
+			listV.setOnMousePressed(event->{
+				tableViewselectedIndex2=listV.getSelectionModel().getSelectedIndex();
+			});
+			
+			// 수정버튼
+			btnEdit.setOnAction(eve ->{
+				try {
+					Parent adminScheduleView = FXMLLoader.load(getClass().getResource("/view/scheduleEditPopup.fxml"));
+					Scene scene = new Scene(adminScheduleView);
+					Stage adminScheduleStage = new Stage();
+					
+					Button btnEdit2 = (Button) scene.lookup("#btnEdit");
+					Label lbDate2 = (Label) scene.lookup("#lbDate");
+					TextArea txaContent2 = (TextArea) scene.lookup("#txaContent");
+					
+					lbDate2.setText(date);
+					
+					//No랑 인덱스값이랑 매치안됨 미완
+					btnEdit2.setOnAction(eve2->{
+						Connection con2 = null;
+						PreparedStatement pstmt = null;
+						try {
+							con2 = DBUtil.getConnection();
+							String query = "update ScheduleTBL set content = ? where No = ?";
+							pstmt = con2.prepareStatement(query);
+							
+							Schedule sh = schduleList.get(tableViewselectedIndex2);
+							
+							pstmt.setString(1, sh.getContent());
+							//pstmt.setInt(2, sh.getNo());
+							pstmt.setInt(2, 1);
+							int ase =pstmt.executeUpdate();
+							if(ase!=0) {
+								sh.setContent(txaContent2.getText());
+								sh.setNo(tableViewselectedIndex2);
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("일정표 수정창");
+								alert.setHeaderText("수정이 완료되었습니다");
+								alert.showAndWait();
+								adminScheduleStage.close();
+							}else{
+								throw new Exception();
+							}
+							
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							System.out.println(e1.getMessage());
+						}
+					});
+					
+					adminScheduleStage.setScene(scene);
+					adminScheduleStage.setResizable(false);
+					adminScheduleStage.setTitle("일정표 수정");
+					adminScheduleStage.show();
+				} catch (IOException e1) {
+					
+				}
+			});
+			
 			btnClose.setOnAction(e3 -> arg0.close());
 
 		} catch (IOException e1) {

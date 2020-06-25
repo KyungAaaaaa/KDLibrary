@@ -71,7 +71,7 @@
                               <Insets right="8.0" />
                            </padding>
                         </Label>
-                        <Label id="lbPhone" text="전화번호 나올자리" />
+                        <TextField id="txtPhone" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">

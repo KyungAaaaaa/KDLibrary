@@ -317,11 +317,9 @@ public class User_MainController implements Initializable {
 
 						Label lblId2 = (Label) scene1.lookup("#lblId");
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
-						Label lbPhone2 = (Label) scene1.lookup("#lbPhone");
 						TextField txtPass2 = (TextField) scene1.lookup("#txtPass");
 						TextField txtName2 = (TextField) scene1.lookup("#txtName");
-						// TextField txtPhoneNumber2=(TextField) scene1.lookup("txtPhoneNumber");
-						// TextField txtPhoneNumber2=(TextField) scene1.lookup("txtPhoneNumber");
+						TextField txtPhone2=(TextField) scene1.lookup("#txtPhone");
 						ImageView imgView = (ImageView) scene1.lookup("#imgView");
 						Button btnModifyNo2 = (Button) scene1.lookup("#btnNo");
 						Button btnModifyAdd2 = (Button) scene1.lookup("#btnAdd");
@@ -331,8 +329,7 @@ public class User_MainController implements Initializable {
 						lblBirth2.setText(memberDao.m.getBirth());
 						txtPass2.setText(memberDao.m.getPass());
 						txtName2.setText(memberDao.m.getName());
-						lbPhone2.setText(memberDao.m.getPhoneNumber());
-						// txtPhoneNumber2.setText(memberDao.m.getPhoneNumber());
+						txtPhone2.setText(memberDao.m.getPhoneNumber());
 
 						btnModifyAdd2.setOnAction(event2 -> {
 							// Member m = new Member(txtName2.getText(), txtPass2.getText());
@@ -340,20 +337,19 @@ public class User_MainController implements Initializable {
 							PreparedStatement pstmt = null;
 							try {
 								con = DBUtil.getConnection();
-
-								String query = "update memberTBL set name = ? ,pass = ? where id = ?";
-
+								String query = "update memberTBL set name = ? ,pass = ?, phoneNumber = ? where id = ?";
 								pstmt = con.prepareStatement(query);
-
 								pstmt.setString(1, txtName2.getText());
 								pstmt.setString(2, txtPass2.getText());
-								pstmt.setString(3, memberDao.m.getId());
+								pstmt.setString(3, txtPhone2.getText());
+								pstmt.setString(4, memberDao.m.getId());
 
 								int userModify = pstmt.executeUpdate();
 
 								if (userModify != 0) {
 									memberDao.m.setName(txtName2.getText());
 									memberDao.m.setPass(txtPass2.getText());
+									memberDao.m.setPhoneNumber(txtPhone2.getText());
 
 									Alert alert = new Alert(AlertType.INFORMATION);
 									alert.setTitle("계정관리");
