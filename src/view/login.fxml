@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -7,42 +8,48 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="547.0" prefWidth="421.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RootController">
+<AnchorPane prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RootController">
    <children>
-      <ImageView fitHeight="562.0" fitWidth="449.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../Desktop/images/KakaoTalk_20200616_213832185.jpg" />
-         </image>
-      </ImageView>
-      <HBox layoutX="101.0" layoutY="252.0">
-         <children>
-            <Label text="ID :  ">
-               <font>
-                  <Font name="Arial Black" size="18.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtId" prefHeight="27.0" prefWidth="138.0" />
-         </children>
-      </HBox>
-      <HBox layoutX="76.0" layoutY="282.0">
-         <children>
-            <Label text="Pass :  ">
-               <font>
-                  <Font name="Arial Black" size="18.0" />
-               </font>
-            </Label>
-            <PasswordField fx:id="txtPass" prefHeight="27.0" prefWidth="138.0" />
-         </children>
-      </HBox>
-      <Button fx:id="btnLogin" layoutX="293.0" layoutY="252.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="52.0" text="로그인" />
-      <Button fx:id="btnExit" layoutX="286.0" layoutY="346.0" mnemonicParsing="false" text="취  소" />
-      <Button fx:id="btnSign" layoutX="120.0" layoutY="346.0" mnemonicParsing="false" text="회원가입" />
-      <Button fx:id="btnAdminLogin" layoutX="188.0" layoutY="346.0" mnemonicParsing="false" text="관리자 로그인" />
-      <Label fx:id="lblFindPass" layoutX="200.0" layoutY="318.0" text="비밀번호를 잊으셨습니까? " />
-      <Label layoutX="84.0" layoutY="120.0" text="KDLIBRARY " textFill="#0e572e">
+      <Label layoutX="87.0" layoutY="135.0" text="KDLIBRARY " textFill="#0e572e">
          <font>
             <Font name="Arial Black" size="40.0" />
          </font>
       </Label>
+      <VBox layoutX="93.0" layoutY="259.0" spacing="10.0">
+         <children>
+            <HBox>
+               <children>
+                  <Label text="ID :  ">
+                     <font>
+                        <Font name="Arial Black" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </Label>
+                  <TextField fx:id="txtId" prefHeight="27.0" prefWidth="138.0" />
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label text="Pass :  ">
+                     <font>
+                        <Font name="Arial Black" size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField fx:id="txtPass" prefHeight="27.0" prefWidth="138.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Button fx:id="btnLogin" layoutX="307.0" layoutY="259.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="52.0" text="로그인" />
+      <Label fx:id="lblFindPass" layoutX="214.0" layoutY="329.0" text="비밀번호를 잊으셨습니까? " />
+      <HBox layoutX="135.0" layoutY="352.0" spacing="10.0">
+         <children>
+            <Button fx:id="btnSign" mnemonicParsing="false" text="회원가입" />
+            <Button fx:id="btnAdminLogin" mnemonicParsing="false" text="관리자 로그인" />
+            <Button fx:id="btnExit" mnemonicParsing="false" text="취  소" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

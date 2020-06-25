@@ -367,6 +367,7 @@ public class RootController implements Initializable {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
 			Scene scene = new Scene(root);
 			Stage user_MainStage = new Stage(StageStyle.UTILITY);
+//			scene.getStylesheets().add(getClass().getResource("/application/libraryCss.css").toString());
 
 			con = DBUtil.getConnection();
 			try {
