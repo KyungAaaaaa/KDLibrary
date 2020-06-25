@@ -113,6 +113,7 @@ public class User_MainController implements Initializable {
 	private ObservableList<Notice> obsList = FXCollections.observableArrayList();
 	private ObservableList<Member> obsList2;
 	private int tableViewselectedIndex;
+	public Stage stage2;
 
 	// String selectFileName;
 	public User_MainController() {
@@ -137,13 +138,12 @@ public class User_MainController implements Initializable {
 
 		// 공지사항
 		btnNotice.setOnAction(event -> handlerBtnNotice(event));
-		
+
 		// 자료신청
 		btnBookApply.setOnAction(event -> handlerBtnBookApply(event));
 
 	}
 
-	
 	private void setReturnRentalBook() {
 		try {
 			BookDAO dao = new BookDAO();
@@ -176,7 +176,6 @@ public class User_MainController implements Initializable {
 	// 대여중인 도서 정보(반납)
 	private void getRentalBookInformationPopup(Book b) {
 		try {
-
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
 			Stage userModifyStage = new Stage(StageStyle.UTILITY);
@@ -185,7 +184,7 @@ public class User_MainController implements Initializable {
 			Label lbWriter = (Label) scene.lookup("#lbWriter");
 			Label lbCompany = (Label) scene.lookup("#lbCompany");
 			Label lbDate = (Label) scene.lookup("#lbDate");
-			Label lbInformation = (Label) scene.lookup("#lbInformation");
+			TextArea txaInformation = (TextArea) scene.lookup("#txaInformation");
 			Button btnClose = (Button) scene.lookup("#btnClose");
 			Button btnRental = (Button) scene.lookup("#btnRental");
 			ImageView imgV = (ImageView) scene.lookup("#imgV");
@@ -195,32 +194,29 @@ public class User_MainController implements Initializable {
 			lbWriter.setText(b.getWriter());
 			lbCompany.setText(b.getCompany());
 			lbDate.setText(b.getDate());
-			lbInformation.setText(b.getInformation());
+			txaInformation.setText(b.getInformation());
 			String selectFileName = b.getFileimg();
 			String localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
 			imgV.setImage(new Image(localUrl));
-			userModifyStage.initModality(Modality.WINDOW_MODAL);
-			userModifyStage.initOwner(this.stage);
+			// userModifyStage.initModality(Modality.WINDOW_MODAL);
+			userModifyStage.initOwner(stage2);
+			// userModifyStage.initOwner(this.stage);
 			userModifyStage.setScene(scene);
 			userModifyStage.setResizable(false);
 			userModifyStage.setTitle("책 정보");
 			userModifyStage.show();
 			btnClose.setOnAction(e -> userModifyStage.close());
 			btnRental.setOnAction(e -> {
-
 				MemberDAO dao = new MemberDAO();
-
 				Connection con1 = null;
 				PreparedStatement preparedStatement1 = null;
 				PreparedStatement preparedStatement2 = null;
 				try {
-
 					con1 = DBUtil.getConnection(); //
 					String query1 = "update memberTBL set rentalBook=? where Id=?";
 					String query2 = "update BookTBL set rental=? where ISBN=?";
 					preparedStatement1 = con1.prepareStatement(query1);
 					preparedStatement2 = con1.prepareStatement(query2);
-
 					preparedStatement1.setString(1, null);
 					preparedStatement1.setString(2, dao.m.getId());
 					preparedStatement2.setBoolean(1, false);
@@ -239,13 +235,11 @@ public class User_MainController implements Initializable {
 						alert.showAndWait();
 						throw new Exception();
 					}
-
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setHeaderText("등록 실패 DB에러");
 					alert.showAndWait();
 				}
-
 			});
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -264,7 +258,6 @@ public class User_MainController implements Initializable {
 		try {
 			mainView = FXMLLoader.load(getClass().getResource("/view/user_BookSearch.fxml"));
 			Scene scene = new Scene(mainView);
-
 			mainStage = new Stage();
 			mainStage.setTitle("자료 검색");
 			mainStage.setScene(scene);
@@ -317,67 +310,68 @@ public class User_MainController implements Initializable {
 				if (txtPass.getText().equals(memberDao.m.getPass())) {
 					userModifyStage.close();
 					try {
-						Parent userModifyView2 = FXMLLoader.load(getClass().getResource("/view/user_changingInformation2.fxml"));
+						Parent userModifyView2 = FXMLLoader
+								.load(getClass().getResource("/view/user_changingInformation2.fxml"));
 						Scene scene1 = new Scene(userModifyView2);
 						Stage userModifyStage2 = new Stage(StageStyle.UTILITY);
-						
+
 						Label lblId2 = (Label) scene1.lookup("#lblId");
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
 						Label lbPhone2 = (Label) scene1.lookup("#lbPhone");
 						TextField txtPass2 = (TextField) scene1.lookup("#txtPass");
 						TextField txtName2 = (TextField) scene1.lookup("#txtName");
 						// TextField txtPhoneNumber2=(TextField) scene1.lookup("txtPhoneNumber");
-						//TextField txtPhoneNumber2=(TextField) scene1.lookup("txtPhoneNumber");
+						// TextField txtPhoneNumber2=(TextField) scene1.lookup("txtPhoneNumber");
 						ImageView imgView = (ImageView) scene1.lookup("#imgView");
 						Button btnModifyNo2 = (Button) scene1.lookup("#btnNo");
 						Button btnModifyAdd2 = (Button) scene1.lookup("#btnAdd");
-						
+
 						imgView.setImage(new Image("file:/C:/images/Library_MemberData/" + memberDao.m.getFileimg()));
 						lblId2.setText(memberDao.m.getId());
 						lblBirth2.setText(memberDao.m.getBirth());
 						txtPass2.setText(memberDao.m.getPass());
 						txtName2.setText(memberDao.m.getName());
 						lbPhone2.setText(memberDao.m.getPhoneNumber());
-						//txtPhoneNumber2.setText(memberDao.m.getPhoneNumber());
-						
+						// txtPhoneNumber2.setText(memberDao.m.getPhoneNumber());
+
 						btnModifyAdd2.setOnAction(event2 -> {
-							//Member m = new Member(txtName2.getText(), txtPass2.getText());
+							// Member m = new Member(txtName2.getText(), txtPass2.getText());
 							Connection con = null;
 							PreparedStatement pstmt = null;
 							try {
 								con = DBUtil.getConnection();
-							
+
 								String query = "update memberTBL set name = ? ,pass = ? where id = ?";
-								
+
 								pstmt = con.prepareStatement(query);
-								
+
 								pstmt.setString(1, txtName2.getText());
 								pstmt.setString(2, txtPass2.getText());
 								pstmt.setString(3, memberDao.m.getId());
-								
+
 								int userModify = pstmt.executeUpdate();
-								
-								if(userModify != 0) {
+
+								if (userModify != 0) {
 									memberDao.m.setName(txtName2.getText());
 									memberDao.m.setPass(txtPass2.getText());
-								
-									Alert alert =new Alert(AlertType.INFORMATION);
+
+									Alert alert = new Alert(AlertType.INFORMATION);
 									alert.setTitle("계정관리");
 									alert.setHeaderText("회원정보 수정이 완료되었습니다");
 									alert.showAndWait();
 									userModifyStage2.close();
-								}else {
+								} else {
 									throw new Exception();
 								}
 							} catch (Exception e) {
-								Alert alert =new Alert(AlertType.ERROR);
+								Alert alert = new Alert(AlertType.ERROR);
 								alert.setTitle("에러발생");
 								alert.setHeaderText("수정창 점검");
 								alert.setContentText(e.getMessage());
 								alert.showAndWait();
 							}
 						});
-						
+
 						userModifyStage2.initModality(Modality.WINDOW_MODAL);
 						userModifyStage2.initOwner(stage);
 						userModifyStage2.setScene(scene1);
@@ -453,7 +447,7 @@ public class User_MainController implements Initializable {
 			Button btnUserNoticeNo = (Button) scene.lookup("#btnNo");
 			Button btnUserNoticeAdd = (Button) scene.lookup("#btnAdd");
 			Button btnUserNoticeDelete = (Button) scene.lookup("#btnDelete");
-			
+
 			TableColumn colNo = new TableColumn("No");
 			colNo.setMaxWidth(30);
 			colNo.setStyle("-fx-allignment: CENTER");
@@ -476,7 +470,7 @@ public class User_MainController implements Initializable {
 
 			tblUserNotice.getColumns().addAll(colNo, colTitle, colContent, colDate);
 			tblUserNotice.setItems(obsList);
-			
+
 			Connection con = null;
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
@@ -491,9 +485,7 @@ public class User_MainController implements Initializable {
 
 				ArrayList<Notice> arrayList = new ArrayList<Notice>();
 				while (rs.next()) {
-					Notice notice = new Notice(rs.getString("title"),
-							rs.getString("content"),
-							rs.getString("date"),
+					Notice notice = new Notice(rs.getString("title"), rs.getString("content"), rs.getString("date"),
 							rs.getInt("No"));
 					arrayList.add(notice);
 				}
@@ -510,7 +502,7 @@ public class User_MainController implements Initializable {
 				alert.setContentText(e1.getMessage());
 				alert.showAndWait();
 			}
-			
+
 			userNoticeStage.initModality(Modality.WINDOW_MODAL);
 			userNoticeStage.initOwner(stage);
 			userNoticeStage.setScene(scene);
@@ -518,7 +510,7 @@ public class User_MainController implements Initializable {
 			userNoticeStage.setTitle("공지사항");
 			userNoticeStage.show();
 			btnUserNoticeNo.setOnAction(event1 -> userNoticeStage.close());
-			
+
 			btnUserNoticeAdd.setVisible(false);
 			btnUserNoticeAdd.setDisable(true);
 			btnUserNoticeDelete.setVisible(false);

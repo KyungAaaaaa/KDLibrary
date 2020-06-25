@@ -368,9 +368,13 @@ public class RootController implements Initializable {
 			Scene scene = new Scene(root);
 			Stage user_MainStage = new Stage(StageStyle.UTILITY);
 //			scene.getStylesheets().add(getClass().getResource("/application/libraryCss.css").toString());
-
-			con = DBUtil.getConnection();
 			try {
+				Stage user_MainStage = new Stage(StageStyle.UTILITY);
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
+				Parent root = fxmlLoader.load();
+				User_MainController user_MainController = fxmlLoader.getController();
+				user_MainController.stage2 = user_MainStage;
+				con = DBUtil.getConnection();
 				String query = "select * from memberTBL where Id = ? and pass = ?";
 				pstmt = con.prepareStatement(query);
 				pstmt.setString(1, txtId.getText().trim());
@@ -385,6 +389,8 @@ public class RootController implements Initializable {
 					throw new Exception();
 				MemberDAO dao = new MemberDAO();
 
+				
+				Scene scene = new Scene(root);
 				user_MainStage = new Stage();
 				user_MainStage.setTitle("¸Þ´º");
 				user_MainStage.setScene(scene);
