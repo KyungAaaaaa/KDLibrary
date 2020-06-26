@@ -7,32 +7,55 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="387.0" prefWidth="453.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_MainController">
+<AnchorPane prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_MainController">
    <children>
-      <Label layoutX="150.0" layoutY="40.0" text="회원 메뉴창">
+      <Label layoutX="323.0" layoutY="258.0" text="회원 메뉴창">
          <font>
             <Font size="29.0" />
          </font>
       </Label>
-      <VBox alignment="CENTER" layoutX="150.0" layoutY="125.0" spacing="20.0">
-         <children>
-            <Button fx:id="btnUserModify" mnemonicParsing="false" text="회원 정보 수정" />
-            <Button fx:id="btnOut" mnemonicParsing="false" text="로그아웃" />
-         </children>
-      </VBox>
-      <ImageView fx:id="imgV" fitHeight="124.0" fitWidth="112.0" layoutX="24.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" />
-      <VBox alignment="CENTER" layoutX="305.0" layoutY="213.0" spacing="20.0">
+      <VBox alignment="CENTER" layoutX="712.0" layoutY="378.0" spacing="20.0">
          <children>
             <Button fx:id="btnBookSearch" mnemonicParsing="false" text="자료검색" />
             <Button fx:id="btnBookApply" mnemonicParsing="false" text="자료신청" />
-            <Button fx:id="btnBookRental" mnemonicParsing="false" text="대여도서" />
-         </children>
-      </VBox>
-      <VBox alignment="CENTER" layoutX="85.0" layoutY="234.0" spacing="20.0">
-         <children>
             <Button fx:id="btnNotice" mnemonicParsing="false" text="공지사항" />
             <Button fx:id="btnCalendar" mnemonicParsing="false" text="일정표" />
          </children>
       </VBox>
+      <HBox layoutX="14.0" layoutY="14.0" spacing="20.0">
+         <children>
+            <ImageView fx:id="imgV" fitHeight="110.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Users/user/Desktop/images/Daco_4079755.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Label text="이 름">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label text="아이디">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <Label text="생년월일">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" spacing="10.0">
+               <children>
+                  <Button fx:id="btnUserModify" mnemonicParsing="false" text="회원 정보 수정" />
+                  <Button fx:id="btnBookRental" mnemonicParsing="false" text="대여도서" />
+                  <Button fx:id="btnOut" mnemonicParsing="false" text="로그아웃" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

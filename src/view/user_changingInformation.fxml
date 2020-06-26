@@ -7,14 +7,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="266.0" fitWidth="461.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../Downloads/Download%20premium%20vector%20of%20Blank%20reminder%20paper%20notes%20vector%20set%2021007902.jpg" />
-         </image>
-      </ImageView>
-      <HBox alignment="CENTER_LEFT" layoutX="65.0" layoutY="100.0">
+      <HBox alignment="CENTER_LEFT" layoutX="54.0" layoutY="55.0">
          <children>
             <Label id="lb" text="Pass : ">
                <font>
@@ -24,7 +19,7 @@
             <PasswordField id="txtPass" />
          </children>
       </HBox>
-      <HBox layoutX="98.0" layoutY="168.0" spacing="40.0">
+      <HBox layoutX="87.0" layoutY="123.0" spacing="40.0">
          <children>
             <Button id="btnOk" mnemonicParsing="false" text="확 인" />
             <Button id="btnNo" mnemonicParsing="false" text="취 소" />

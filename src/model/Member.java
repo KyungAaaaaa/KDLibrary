@@ -12,7 +12,7 @@ public class Member {
 	
 	// 1. 
 	public Member(String name, String id, String pass, String phoneNumber, String birth, String rentalBook,
-			String fileimg, String etc) {
+			 String etc) {
 		super();
 		this.name = name;
 		this.id = id;
@@ -20,7 +20,6 @@ public class Member {
 		this.phoneNumber = phoneNumber;
 		this.birth = birth;
 		this.rentalBook = rentalBook;
-		this.fileimg = fileimg;
 		this.etc = etc;
 	}
 	

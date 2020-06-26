@@ -8,14 +8,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="650.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="650.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../Desktop/images/KakaoTalk_20200616_221612546.png" />
-         </image>
-      </ImageView>
-      <HBox alignment="CENTER_LEFT" layoutX="137.0" layoutY="164.0">
+      <HBox alignment="CENTER_LEFT" layoutX="146.0" layoutY="165.0">
          <children>
             <Label text="이름 : ">
                <font>
@@ -32,7 +27,7 @@
             </TextField>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="124.0" layoutY="199.0">
+      <HBox alignment="CENTER_LEFT" layoutX="133.0" layoutY="200.0">
          <children>
             <Label text="아이디 : ">
                <font>
@@ -45,7 +40,7 @@
             <TextField id="txtId" />
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="108.0" layoutY="238.0">
+      <HBox alignment="CENTER_LEFT" layoutX="117.0" layoutY="239.0">
          <children>
             <Label text="비밀번호 :  ">
                <font>
@@ -58,7 +53,7 @@
             <PasswordField id="txtPass" />
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="98.0" layoutY="274.0">
+      <HBox alignment="CENTER_LEFT" layoutX="107.0" layoutY="275.0">
          <children>
             <Label text="비밀번호 확인 : ">
                <font>
@@ -68,7 +63,7 @@
             <PasswordField id="txtPass2" />
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="102.0" layoutY="309.0">
+      <HBox alignment="CENTER_LEFT" layoutX="111.0" layoutY="310.0">
          <children>
             <Label text="생년월일 : ">
                <font>
@@ -81,7 +76,7 @@
             <DatePicker id="datePicker" prefHeight="23.0" prefWidth="138.0" />
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="108.0" layoutY="342.0">
+      <HBox alignment="CENTER_LEFT" layoutX="117.0" layoutY="343.0">
          <children>
             <Label text="휴대전화 : ">
                <font>
@@ -94,7 +89,7 @@
             <TextField id="txtPhoneNumber" />
          </children>
       </HBox>
-      <VBox alignment="CENTER" layoutX="131.0" layoutY="390.0" spacing="20.0">
+      <VBox alignment="CENTER" layoutX="140.0" layoutY="391.0" spacing="20.0">
          <children>
             <ImageView id="imgView" fitHeight="76.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -103,13 +98,13 @@
             <TextField id="txtSee" alignment="CENTER" promptText="보이는대로 입력하세요" />
          </children>
       </VBox>
-      <HBox alignment="CENTER_LEFT" layoutX="166.0" layoutY="525.0" spacing="50.0">
+      <HBox alignment="CENTER_LEFT" layoutX="175.0" layoutY="526.0" spacing="50.0">
          <children>
             <Button id="btnOk" mnemonicParsing="false" text="등 록" />
             <Button id="btnNo" mnemonicParsing="false" text="취 소" />
          </children>
       </HBox>
-      <Label layoutX="95.0" layoutY="65.0" text="welcome !" textFill="#000003">
+      <Label layoutX="104.0" layoutY="66.0" text="welcome !" textFill="#000003">
          <font>
             <Font name="Arial Black" size="52.0" />
          </font>

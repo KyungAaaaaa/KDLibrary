@@ -270,13 +270,9 @@ public class AdminManagement implements Initializable {
 			DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
 			ComboBox cmbEtc = (ComboBox) root.lookup("#cmbEtc");
 			TextField txtRentalBook = (TextField) root.lookup("#txtRentalBook");
-			ImageView imgV = (ImageView) root.lookup("#imgV");
 			cmbEtc.setItems(FXCollections.observableArrayList("정상", "연체"));
 			btnCancel.setOnAction(eve -> addPopup.close());
 			Member selectUser = obLMember.get(userTableSelectIndex);
-			selectFileName = selectUser.getFileimg();
-			localUrl = "file:/C:/images/Library_MemberData/" + selectFileName;
-			imgV.setImage(new Image(localUrl));
 			txtId.setText(selectUser.getId());
 			txtName.setText(selectUser.getName());
 			txtPass.setText(selectUser.getPass());
@@ -284,10 +280,6 @@ public class AdminManagement implements Initializable {
 			txtRentalBook.setText(selectUser.getRentalBook());
 			cmbEtc.setValue(selectUser.getEtc());
 
-			btnFileSelect.setOnAction(eve1 -> {
-				Image image = handleBtnImageFileAction(addPopup);
-				imgV.setImage(image);
-			});
 
 			btnOk.setOnAction(eve -> {
 				Connection con1 = null;
@@ -295,7 +287,7 @@ public class AdminManagement implements Initializable {
 				try {
 
 					con1 = DBUtil.getConnection(); //
-					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,rentalBook=?,fileimg=?,etc=? where Id=?";
+					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,rentalBook=?,etc=? where Id=?";
 					preparedStatement = con1.prepareStatement(query);
 
 					preparedStatement.setString(1, txtName.getText());
@@ -303,8 +295,8 @@ public class AdminManagement implements Initializable {
 					preparedStatement.setString(3, txtPhoneNumber.getText());
 					preparedStatement.setString(4, dpBirth.getValue().toString());
 					preparedStatement.setString(5, txtRentalBook.getText());
-					preparedStatement.setString(7, cmbEtc.getValue().toString());
-					preparedStatement.setString(8, selectUser.getId());
+					preparedStatement.setString(6, cmbEtc.getValue().toString());
+					preparedStatement.setString(7, selectUser.getId());
 					selectUser.setName(txtName.getText());
 					selectUser.setPass(txtPass.getText());
 					selectUser.setPhoneNumber(txtPhoneNumber.getText());
@@ -312,38 +304,6 @@ public class AdminManagement implements Initializable {
 					selectUser.setRentalBook(txtRentalBook.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
 
-					if (selectFile == null)
-						selectFile = new File(directoryMemberSave.getAbsolutePath() + "\\" + selectFileName);
-
-					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
-					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
-					String fileName = null;
-					try {
-						fileName = "Member_" + selectUser.getId() + "_" + selectUser.getName() + ".jpg";
-						preparedStatement.setString(6, fileName);
-						selectUser.setFileimg(fileName);
-						bis = new BufferedInputStream(new FileInputStream(selectFile));
-						bos = new BufferedOutputStream(
-								new FileOutputStream(directoryMemberSave.getAbsolutePath() + "\\" + fileName));
-						int data = -1;// -1더이상 읽을값이 없다는 의미
-						while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
-							bos.write(data); // 파일 복사
-							bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
-						}
-					} catch (Exception e1) {
-						System.out.println("파일 복사에러 : " + e1.getMessage());
-						return; // 파일 에러인데 밑에 저장하는과정을 실행하면안되기때문에 리턴으로 끝내버린다
-					} finally {
-						try {
-							selectUser.setFileimg(fileName);
-							imageDelete(selectFileName, "member");
-							if (bis != null)
-								bis.close();
-							if (bos != null)
-								bos.close();
-						} catch (IOException e1) {
-						}
-					}
 
 					if (preparedStatement.executeUpdate() != 0) {
 						Alert alert = new Alert(AlertType.INFORMATION);

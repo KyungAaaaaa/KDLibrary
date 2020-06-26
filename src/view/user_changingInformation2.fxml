@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox layoutX="15.0" layoutY="29.0" prefHeight="100.0">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="183.0" spacing="15.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label alignment="CENTER" text="아이디 : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets right="23.0" />
+                           </padding>
+                        </Label>
+                        <Label id="lblId" text="아이디 나올자리" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label alignment="CENTER" text="이름 : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets right="37.0" />
+                           </padding>
+                        </Label>
+                        <TextField id="txtName" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label alignment="CENTER" text="비밀번호 : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets right="7.0" />
+                           </padding>
+                        </Label>
+                        <TextField id="txtPass" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label alignment="CENTER" text="전화번호 : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets right="8.0" />
+                           </padding>
+                        </Label>
+                        <TextField id="txtPhone" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT">
+                     <children>
+                        <Label alignment="CENTER" text="생년월일 : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <padding>
+                              <Insets right="9.0" />
+                           </padding>
+                        </Label>
+                        <Label id="lblBirth" text="생년월일 나올자리" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <HBox layoutX="334.0" layoutY="252.0" spacing="50.0">
+         <children>
+            <Button id="btnAdd" mnemonicParsing="false" text="변 경" />
+            <Button id="btnNo" mnemonicParsing="false" text="취 소" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
