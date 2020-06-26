@@ -11,6 +11,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.Book;
+import model.Statistical;
 
 public class BookDAO {
 	public static ObservableList<String> categoryList=FXCollections.observableArrayList("경제 경영", "동화", "만화","소설","요리","인물","자기계발","종교");
@@ -119,6 +120,11 @@ public class BookDAO {
 				preparedStatement = con.prepareStatement(query);
 				preparedStatement.setString(1, "%" + searchText + "%");
 				}
+			else if (type.equals("ISBN")) {
+				query = "select * from BookTBL where ISBN=?;";
+				preparedStatement = con.prepareStatement(query);
+				preparedStatement.setString(1, "%" + searchText + "%");
+			}
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
 				arrayList.add(new Book(rs.getString("ISBN"), rs.getString("title"), rs.getString("category"),
@@ -142,8 +148,6 @@ public class BookDAO {
 		}
 		return arrayList;
 	}
-
-
 
 	// 도서 삭제 메소드
 	public int deleteBook(Book selectBook) {
@@ -174,4 +178,38 @@ public class BookDAO {
 		return returnValue;
 	}
 
+	
+	
+//누적 이용수 (대출 수)
+	public ArrayList<Statistical> getAllRentalCount() {
+		ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet rs = null;
+		try {
+			con = DBUtil.getConnection();
+			String query = "select * from BookTBL;";
+			preparedStatement = con.prepareStatement(query);
+			rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				arrayList.add(new Statistical(rs.getString("ISBN"),rs.getString("date"), rs.getString("id")));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rs != null)
+					rs.close();
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+		}
+		
+		return arrayList;
+	}
 }

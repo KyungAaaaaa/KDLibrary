@@ -6,7 +6,6 @@ HBox{
 Button{
 	-fx-background-color:#a79c8e;
 	-fx-font-family: "NanumGothic";
-	
 }
 Label{
 	-fx-text-fill:black;
