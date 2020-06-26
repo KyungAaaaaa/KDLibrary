@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
@@ -49,12 +50,38 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab text="통계">
+            <Tab fx:id="chartTab" text="통계">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button fx:id="btnBarChart" layoutX="749.0" layoutY="99.0" mnemonicParsing="false" text="장르별 도서 갯수 확인" />
+                        <StackPane layoutX="27.0" layoutY="36.0" prefHeight="582.0" prefWidth="666.0">
+                           <children>
+                              <LineChart fx:id="lineChart">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                           </children>
+                        </StackPane>
+                        <Button fx:id="btnPieChart" layoutX="749.0" layoutY="143.0" mnemonicParsing="false" text="파이차트" />
+                        <Button fx:id="btnLineChart" layoutX="749.0" layoutY="190.0" mnemonicParsing="false" text="라인차트" />
+                        <PieChart fx:id="pieChart" layoutX="454.0" layoutY="246.0" />
+                     </children></AnchorPane>
                </content>
             </Tab>
         </tabs>
       </TabPane>
+      <BarChart fx:id="barChart" barGap="1.0" categoryGap="2.0" layoutX="14.0" layoutY="674.0" prefHeight="244.0" prefWidth="268.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis minorTickCount="1" side="LEFT" tickLength="5.0" upperBound="15.0" />
+        </yAxis>
+      </BarChart>
    </children>
 </AnchorPane>

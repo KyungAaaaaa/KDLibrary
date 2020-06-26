@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -18,16 +19,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import model.Book;
 
 public class User_BookSearchController implements Initializable {
+	@FXML
+	HBox bookBox;
 	@FXML
 	ImageView imgV11;
 	@FXML
@@ -46,8 +49,7 @@ public class User_BookSearchController implements Initializable {
 	ImageView imgV32;
 	@FXML
 	ImageView imgV33;
-	@FXML
-	ListView<String> listV;
+	// @FXML ListView<String> listV;
 	@FXML
 	Label lbTitle11;
 	@FXML
@@ -68,11 +70,29 @@ public class User_BookSearchController implements Initializable {
 	Label lbTitle33;
 	@FXML
 	Button btnBack;
+	@FXML
+	Button btnCategory1;
+	@FXML
+	Button btnCategory11;
+	@FXML
+	Button btnCategory12;
+	@FXML
+	Button btnCategory13;
+	@FXML
+	Button btnCategory14;
+	@FXML
+	Button btnCategory15;
+	@FXML
+	Button btnCategory16;
+	@FXML
+	Button btnCategory17;
 	private String listViewSelectItem;
+	String wkdfm = null;
 	public Stage stage;
 	ArrayList<Book> bookList;
 	ArrayList<Label> bookTitleList = new ArrayList<Label>();
 	ArrayList<ImageView> bookImageVList = new ArrayList<ImageView>();
+	ArrayList<Button> buttonList = new ArrayList<Button>();
 	private String selectFileName;
 	private String localUrl;
 	private int bookCount;
@@ -82,15 +102,60 @@ public class User_BookSearchController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		listV.setOnMousePressed(e -> listViewSelectIndexSetMethod());
-		listV.setOnMouseClicked(e -> getCartegoryBook());
-		listV.setItems(dao.categoryList);
+		// listV.setOnMousePressed(e -> listViewSelectIndexSetMethod());
+		// listV.setOnMouseClicked(e -> getCartegoryBook());
+		/*
+		 * btnCategory1.setOnAction(e -> { listViewSelectIndexSetMethod();
+		 * getCartegoryBook(); });
+		 */
+		// listV.setItems(dao.categoryList);
 		btnBack.setOnAction(e -> handleBtnBackAction(e));
 		getBookSelectMethod();
+		getCategorySelectMethod();
+		
+	}
+
+	private void getCategorySelectMethod() {
+		btnCategory1.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory1);
+			getCartegoryBook();
+		});
+		btnCategory11.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory11);
+			getCartegoryBook();
+		});
+		btnCategory12.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory12);
+			getCartegoryBook();
+		});
+		btnCategory13.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory13);
+			getCartegoryBook();
+		});
+		btnCategory14.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory14);
+			getCartegoryBook();
+		});
+		btnCategory15.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory15);
+			getCartegoryBook();
+		});
+		btnCategory16.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory16);
+			getCartegoryBook();
+		});
+		btnCategory17.setOnAction(e -> {
+			listViewSelectIndexSetMethod(btnCategory17);
+			getCartegoryBook();
+		});
 	}
 
 	private void getBookSelectMethod() {
-
+		buttonList.addAll(FXCollections.observableArrayList(btnCategory1,btnCategory11,btnCategory12
+				,btnCategory13,btnCategory14,btnCategory15,btnCategory16,btnCategory17));
+		for(Button b:buttonList) {
+			b.setText(BookDAO.categoryList.get(buttonList.indexOf(b)));
+		}
 		imgV11.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(0)));
 		imgV12.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(1)));
 		imgV13.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(2)));
@@ -120,12 +185,20 @@ public class User_BookSearchController implements Initializable {
 		}
 	}
 
-	private void listViewSelectIndexSetMethod() {
-		listViewSelectItem = listV.getSelectionModel().getSelectedItem();
+	private void listViewSelectIndexSetMethod(Button button) {
+		// listViewSelectItem = listV.getSelectionModel().getSelectedItem();
+		for(Button b:buttonList) {
+			b.setStyle("-fx-background-color:  #00ff0000");
+		}
+		wkdfm = button.getText();
+		listViewSelectItem = wkdfm;
+		button.setStyle("-fx-background-color:#dedcee");
 	}
+	
 
 	// 장르 선택시 책 진열
 	private void getCartegoryBook() {
+		bookBox.setStyle("-fx-background-color:#dedcee");
 		BookDAO dao = new BookDAO();
 		bookList = dao.searchBook(listViewSelectItem, "category");
 		bookCount = bookList.size();
@@ -189,20 +262,33 @@ public class User_BookSearchController implements Initializable {
 						Connection con1 = null;
 						PreparedStatement preparedStatement1 = null;
 						PreparedStatement preparedStatement2 = null;
+						PreparedStatement preparedStatement3 = null;
 						try {
 
 							con1 = DBUtil.getConnection(); //
 							String query1 = "update memberTBL set rentalBook=? where Id=?";
 							String query2 = "update BookTBL set rental=? where ISBN=?";
+							String query3 = "insert into StatisticalTBL values (?,?,?)";
 							preparedStatement1 = con1.prepareStatement(query1);
 							preparedStatement2 = con1.prepareStatement(query2);
+							preparedStatement3 = con1.prepareStatement(query3);
 
-							preparedStatement1.setString(1, b.getTitle());
+							preparedStatement1.setString(1, b.getIsbn());
 							preparedStatement1.setString(2, dao.m.getId());
+							
 							preparedStatement2.setBoolean(1, true);
+							
 							preparedStatement2.setString(2, b.getIsbn());
+							
+							
+							preparedStatement3.setString(1, b.getIsbn());
+							
+						preparedStatement3.setString(2, LocalDate.now().toString());
+							//preparedStatement3.setString(2, "asd");
+							preparedStatement3.setString(3, dao.m.getId());
 
-							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0) {
+							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0&& preparedStatement3.executeUpdate() != 0) {
+								//if (preparedStatement1.executeUpdate() != 0 ) {
 								dao.m.setRentalBook(b.getTitle());
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("대여완료");
@@ -211,6 +297,7 @@ public class User_BookSearchController implements Initializable {
 							} else {
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("등록 실패");
+								
 								alert.showAndWait();
 								throw new Exception();
 							}
@@ -218,6 +305,7 @@ public class User_BookSearchController implements Initializable {
 						} catch (Exception e1) {
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setHeaderText("등록 실패 DB에러");
+							alert.setContentText(e1.getMessage());
 							alert.showAndWait();
 						}
 

@@ -18,13 +18,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -42,8 +45,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -52,6 +53,7 @@ import javafx.stage.StageStyle;
 import model.Book;
 import model.Member;
 import model.RequestBook;
+import model.Statistical;
 
 public class AdminManagement implements Initializable {
 	@FXML
@@ -74,6 +76,8 @@ public class AdminManagement implements Initializable {
 	@FXML
 	Tab requestTab;
 	@FXML
+	Tab chartTab;
+	@FXML
 	AnchorPane requestContainer;
 ///////////////////////////
 	@FXML
@@ -95,9 +99,23 @@ public class AdminManagement implements Initializable {
 	@FXML
 	Button btnRequestDelete;
 	@FXML
+	Button btnBarChart;
+	@FXML
+	Button btnPieChart;
+	@FXML
+	Button btnLineChart;
+	@FXML
 	TextField txtBookSearch;
 	@FXML
 	TextField txtUserSearch;
+	@FXML
+	AreaChart areaChart;
+	@FXML
+	BarChart barChart;
+	@FXML
+	PieChart pieChart;
+	@FXML
+	LineChart lineChart;
 	///////////////////////////
 	private double tabWidth = 90.0;
 	public static int lastSelectedTabIndex = 0;
@@ -114,11 +132,15 @@ public class AdminManagement implements Initializable {
 	private String localUrl;
 	private Image localImage;
 	private String selectFileName;
-	Image image=null;
+	Image image = null;
 	BookDAO dao = new BookDAO();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		// chartTab.setOnSelectionChanged(e->handelBtnBarChartAction(e));
+		btnBarChart.setOnAction((e -> handelBtnBarChartAction(e)));
+		btnPieChart.setOnAction((e -> handelBtnPieChartAction(e)));
+		btnLineChart.setOnAction((e -> handelBtnLineChartAction(e)));
 		setDirectorySaveImage();
 		tblUserColumnSetting();
 		tblBookColumnSetting();
@@ -151,15 +173,17 @@ public class AdminManagement implements Initializable {
 		// 관리페이지 뒤로가기
 		btnBack.setOnAction(e -> handleBtnBackAction(e));
 
-		//configureView();
+		// configureView();
 	}
 
 ///////////////////////////
 	private void configureView() {
-	
-		  tabContainer.setTabMinWidth(tabWidth); tabContainer.setTabMaxWidth(tabWidth);
-		  tabContainer.setTabMinHeight(tabWidth);
-		  tabContainer.setTabMaxHeight(tabWidth); tabContainer.setRotateGraphic(true);
+
+		tabContainer.setTabMinWidth(tabWidth);
+		tabContainer.setTabMaxWidth(tabWidth);
+		tabContainer.setTabMinHeight(tabWidth);
+		tabContainer.setTabMaxHeight(tabWidth);
+		tabContainer.setRotateGraphic(true);
 	}
 ///////////////////////////
 
@@ -280,7 +304,6 @@ public class AdminManagement implements Initializable {
 			txtRentalBook.setText(selectUser.getRentalBook());
 			cmbEtc.setValue(selectUser.getEtc());
 
-
 			btnOk.setOnAction(eve -> {
 				Connection con1 = null;
 				PreparedStatement preparedStatement = null;
@@ -303,7 +326,6 @@ public class AdminManagement implements Initializable {
 					selectUser.setBirth(dpBirth.getValue().toString());
 					selectUser.setRentalBook(txtRentalBook.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
-
 
 					if (preparedStatement.executeUpdate() != 0) {
 						Alert alert = new Alert(AlertType.INFORMATION);
@@ -381,7 +403,7 @@ public class AdminManagement implements Initializable {
 	private void handleBtnBookEditAction(ActionEvent e) {
 
 		try {
-			
+
 			if (bookTableSelectIndex == -1)
 				throw new Exception("수정할 데이터를 선택하세요.");
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
@@ -448,10 +470,11 @@ public class AdminManagement implements Initializable {
 					book0.setInformation(txaInformation.getText());
 
 					if ((selectFile == null)) {
-						//selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
-					selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
-					//System.out.println(selectFileName);
-					//System.out.println(selectFile.toString());
+						// selectFile = new File(directorySave.getAbsolutePath() + "\\" +
+						// selectFileName);
+						selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
+						// System.out.println(selectFileName);
+						// System.out.println(selectFile.toString());
 					}
 					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
@@ -641,7 +664,7 @@ public class AdminManagement implements Initializable {
 
 	// 도서 테이블 검색 버튼 이벤트
 	private void handleBtnBookSearchAction(ActionEvent e) {
-		
+
 		ArrayList<Book> arrayList = dao.searchBook(txtBookSearch.getText(), "title");
 		obLBook.clear();
 		for (Book b : arrayList) {
@@ -855,6 +878,151 @@ public class AdminManagement implements Initializable {
 
 	}
 
+	/* ========================통계====================== */
+
+	// 바차트 막대그래프 출력
+	private void handelBtnBarChartAction(Event e) {
+		try {
+
+			XYChart.Series series1 = new XYChart.Series();
+			series1.setName(dao.categoryList.get(0));
+			XYChart.Series series2 = new XYChart.Series();
+			series2.setName(dao.categoryList.get(1));
+			XYChart.Series series3 = new XYChart.Series();
+			series3.setName(dao.categoryList.get(2));
+			XYChart.Series series4 = new XYChart.Series();
+			series4.setName(dao.categoryList.get(3));
+			XYChart.Series series5 = new XYChart.Series();
+			series5.setName(dao.categoryList.get(4));
+			XYChart.Series series6 = new XYChart.Series();
+			series6.setName(dao.categoryList.get(5));
+			XYChart.Series series7 = new XYChart.Series();
+			series7.setName(dao.categoryList.get(6));
+
+			ObservableList obL1 = FXCollections.observableArrayList();
+			ObservableList obL2 = FXCollections.observableArrayList();
+			ObservableList obL3 = FXCollections.observableArrayList();
+			ObservableList obL4 = FXCollections.observableArrayList();
+			ObservableList obL5 = FXCollections.observableArrayList();
+			ObservableList obL6 = FXCollections.observableArrayList();
+			ObservableList obL7 = FXCollections.observableArrayList();
+
+			obL1.add(new XYChart.Data("", dao.searchBook(series1.getName(), "category").size()));
+			obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(), "category").size()));
+			obL3.add(new XYChart.Data("", dao.searchBook(series3.getName(), "category").size()));
+			obL4.add(new XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
+			obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(), "category").size()));
+			obL6.add(new XYChart.Data("", dao.searchBook(series6.getName(), "category").size()));
+			obL7.add(new XYChart.Data("", dao.searchBook(series7.getName(), "category").size()));
+
+			series1.setData(obL1);
+			barChart.getData().add(series1);
+			series2.setData(obL2);
+			barChart.getData().add(series2);
+			series3.setData(obL3);
+			barChart.getData().add(series3);
+			series4.setData(obL4);
+			barChart.getData().add(series4);
+			series5.setData(obL5);
+			barChart.getData().add(series5);
+			series6.setData(obL6);
+			barChart.getData().add(series6);
+			series7.setData(obL7);
+			barChart.getData().add(series7);
+
+		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("데이터 에러");
+			alert.setHeaderText("데이터가 존재하지않습니다.");
+			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
+		}
+
+	}
+
+	// 파이차트 출력
+	private void handelBtnPieChartAction(Event e) {
+		try {
+
+			ObservableList obLPie = FXCollections.observableArrayList();
+			/*
+			 * obLPie.add(new PieChart.Data(series1.getName(),
+			 * dao.searchBook(series1.getName(), "category").size())); obLPie.add(new
+			 * PieChart.Data(series2.getName(), dao.searchBook(series2.getName(),
+			 * "category").size())); obLPie.add(new PieChart.Data(series3.getName(),
+			 * dao.searchBook(series3.getName(), "category").size())); obLPie.add(new
+			 * PieChart.Data(series4.getName(), dao.searchBook(series4.getName(),
+			 * "category").size())); obLPie.add(new PieChart.Data(series5.getName(),
+			 * dao.searchBook(series5.getName(), "category").size())); obLPie.add(new
+			 * PieChart.Data(series6.getName(), dao.searchBook(series6.getName(),
+			 * "category").size())); obLPie.add(new PieChart.Data(series7.getName(),
+			 * dao.searchBook(series7.getName(), "category").size()));
+			 * 
+			 * pieChart.setData(obLPie);
+			 */
+
+		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("데이터 에러");
+			alert.setHeaderText("데이터가 존재하지않습니다.");
+			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
+		}
+
+	}
+
+	// 라인차트 출력
+	private void handelBtnLineChartAction(ActionEvent e) {
+		try {
+			ArrayList<Statistical> rentalList = dao.getAllRentalCount();
+			int rentalCount = rentalList.size();
+
+			XYChart.Series series1 = new XYChart.Series();
+			series1.setName(dao.categoryList.get(0));
+			XYChart.Series series2 = new XYChart.Series();
+			series2.setName(dao.categoryList.get(1));
+			XYChart.Series series3 = new XYChart.Series();
+			series3.setName(dao.categoryList.get(2));
+			XYChart.Series series4 = new XYChart.Series();
+			series4.setName(dao.categoryList.get(3));
+			XYChart.Series series5 = new XYChart.Series();
+			series5.setName(dao.categoryList.get(4));
+
+			ObservableList obL1 = FXCollections.observableArrayList();
+			ObservableList obL2 = FXCollections.observableArrayList();
+			ObservableList obL3 = FXCollections.observableArrayList();
+			ObservableList obL4 = FXCollections.observableArrayList();
+			ObservableList obL5 = FXCollections.observableArrayList();
+
+			obL1.add(new XYChart.Data("", dao.searchBook(series1.getName(), "category").size()));
+			obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(), "category").size()));
+			obL3.add(new XYChart.Data("", dao.searchBook(series3.getName(), "category").size()));
+			obL4.add(new XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
+			obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(), "category").size()));
+
+			series1.setData(obL1);
+			barChart.getData().add(series1);
+			series2.setData(obL2);
+			barChart.getData().add(series2);
+			series3.setData(obL3);
+			barChart.getData().add(series3);
+			series4.setData(obL4);
+			barChart.getData().add(series4);
+			series5.setData(obL5);
+			barChart.getData().add(series5);
+
+		} catch (
+
+		Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("데이터 에러");
+			alert.setHeaderText("데이터가 존재하지않습니다.");
+			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
+		}
+
+	}
+
 	/* ========================서브함수들 ====================== */
 
 	// 이미지파일 삭제 메소드
@@ -888,7 +1056,7 @@ public class AdminManagement implements Initializable {
 			if (selectFile != null) {
 				String localURL = selectFile.toURI().toURL().toString();// 파일의 실제 경로명!!알아두자
 				image = new Image(localURL, false);
-			
+
 			} else {
 
 			}
