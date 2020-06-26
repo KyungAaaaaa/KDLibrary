@@ -143,7 +143,8 @@ public class User_MainController implements Initializable {
 	private void setReturnRentalBook() {
 		try {
 			BookDAO dao = new BookDAO();
-			bookList = dao.searchBook(memberDao.m.getRentalBook(), "title");
+			bookList = dao.searchBook(memberDao.m.getRentalBook(), "ISBN");
+			System.out.println(memberDao.m.getRentalBook());
 			getRentalBookInformationPopup(bookList.get(0));
 
 		} catch (Exception e) {

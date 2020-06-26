@@ -289,7 +289,7 @@ public class User_BookSearchController implements Initializable {
 
 							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0&& preparedStatement3.executeUpdate() != 0) {
 								//if (preparedStatement1.executeUpdate() != 0 ) {
-								dao.m.setRentalBook(b.getTitle());
+								dao.m.setRentalBook(b.getIsbn());
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("대여완료");
 								alert.showAndWait();

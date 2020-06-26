@@ -121,9 +121,9 @@ public class BookDAO {
 				preparedStatement.setString(1, "%" + searchText + "%");
 				}
 			else if (type.equals("ISBN")) {
-				query = "select * from BookTBL where ISBN=?;";
+				query = "select * from BookTBL where ISBN like ?;";
 				preparedStatement = con.prepareStatement(query);
-				preparedStatement.setString(1, "%" + searchText + "%");
+				preparedStatement.setString(1,"%" + searchText + "%" );
 			}
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
