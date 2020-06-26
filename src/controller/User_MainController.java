@@ -84,6 +84,7 @@ import model.Book;
 import model.Member;
 import model.Notice;
 import model.RequestBook;
+import model.Schedule;
 
 public class User_MainController implements Initializable {
 	@FXML
@@ -110,8 +111,10 @@ public class User_MainController implements Initializable {
 	Date time = new Date();
 	String BookApplytime = format1.format(time);
 	ArrayList<Book> bookList;
+	ArrayList<Schedule> schList = new ArrayList<Schedule>();
 	private ObservableList<Notice> obsList = FXCollections.observableArrayList();
 	private ObservableList<Member> obsList2;
+	private ObservableList<Schedule> obsListS= FXCollections.observableArrayList();
 	private int tableViewselectedIndex;
 	public Stage stage2;
 
@@ -143,7 +146,7 @@ public class User_MainController implements Initializable {
 	private void setReturnRentalBook() {
 		try {
 			BookDAO dao = new BookDAO();
-			bookList = dao.searchBook(memberDao.m.getRentalBook(), "title");
+			bookList = dao.searchBook(memberDao.m.getRentalBook(), "ISBN");
 			getRentalBookInformationPopup(bookList.get(0));
 
 		} catch (Exception e) {
@@ -408,9 +411,50 @@ public class User_MainController implements Initializable {
 			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule.fxml"));
 			Scene scene = new Scene(userScheduleView);
 			Stage userScheduleStage = new Stage(StageStyle.UTILITY);
-
 			TableView tblUserSchedule = (TableView) scene.lookup("#tblSchedule");
 			Button btnUserScheduleNo = (Button) scene.lookup("#btnNo");
+			
+			TableColumn colDate = new TableColumn("날 짜");
+			colDate.setMaxWidth(115);
+			colDate.setStyle("-fx-allignment: CENTER");
+			colDate.setCellValueFactory(new PropertyValueFactory("date"));
+
+			TableColumn colContent = new TableColumn("내 용");
+			colContent.setPrefWidth(550);
+			colContent.setStyle("-fx-allignment: CENTER");
+			colContent.setCellValueFactory(new PropertyValueFactory("content"));
+			tblUserSchedule.getColumns().addAll(colDate,colContent);
+			
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			ResultSet rs = null;
+			try {
+				con=DBUtil.getConnection();
+				String query = "SELECT * FROM ScheduleTBL";
+				pstmt = con.prepareStatement(query);
+				rs=pstmt.executeQuery();
+				
+				while(rs.next()) {
+					Schedule schedule = new Schedule(rs.getString("content"),rs.getString("date"));
+					schList.add(schedule);
+				}
+				
+				for(int i=0; i<schList.size(); i++) {
+					Schedule s = schList.get(i);
+					obsListS.add(s);
+				}
+				
+				tblUserSchedule.setItems(obsListS);
+				
+			} catch (Exception e) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("에러발생");
+				alert.setHeaderText("일정표 불러오기 오류");
+				alert.setContentText(e.getMessage());
+				alert.showAndWait();
+			}
+			
+			
 			userScheduleStage.initModality(Modality.WINDOW_MODAL);
 			userScheduleStage.initOwner(stage);
 			userScheduleStage.setScene(scene);
@@ -461,6 +505,45 @@ public class User_MainController implements Initializable {
 
 			tblUserNotice.getColumns().addAll(colNo, colTitle, colContent, colDate);
 			tblUserNotice.setItems(obsList);
+			
+			tblUserNotice.setOnMousePressed(event1->{
+				tableViewselectedIndex=tblUserNotice.getSelectionModel().getSelectedIndex();
+			});
+			
+			tblUserNotice.setOnMouseClicked(event1-> {
+				if(event1.getClickCount()>1) {
+					try {
+						Parent userNotView = FXMLLoader.load(getClass().getResource("/view/user_NoticeView.fxml"));
+						Scene scene1 = new Scene(userNotView);
+						Stage userNotStage = new Stage();
+						
+						TextField txtTitleNotView = (TextField) scene1.lookup("#txtTitle");
+						Label lblDateNotView = (Label) scene1.lookup("#lblDate");
+						TextArea txaContentNotView = (TextArea) scene1.lookup("#txaContent");
+						Button btnNoNotView = (Button) scene1.lookup("#btnNo");
+						
+						Notice noti = obsList.get(tableViewselectedIndex);
+						txtTitleNotView.setText(noti.getTitle());
+						lblDateNotView.setText(noti.getDate());
+						txaContentNotView.setText(noti.getContent());
+						
+						
+						userNotStage.setScene(scene1);
+						userNotStage.setResizable(false);
+						userNotStage.setTitle("공지정보");
+						userNotStage.show();
+						
+						btnNoNotView.setOnAction(event2-> userNotStage.close());
+						
+					} catch (IOException e) {
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("에러발생");
+						alert.setHeaderText("공지사항뷰 부르기 오류");
+						alert.setContentText(e.getMessage());
+						alert.showAndWait();
+					}
+				}
+			});
 
 			Connection con = null;
 			PreparedStatement pstmt = null;

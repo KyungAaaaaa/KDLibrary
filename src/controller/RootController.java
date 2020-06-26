@@ -72,7 +72,7 @@ public class RootController implements Initializable {
 		private void handleBtnSignAction(MouseEvent event) {
 
 			try {
-
+				int randomPass = 0;
 				Parent root = FXMLLoader.load(getClass().getResource("/view/sign.fxml"));
 				Scene scene = new Scene(root);
 				Stage signStage = new Stage(StageStyle.UTILITY);
@@ -87,8 +87,8 @@ public class RootController implements Initializable {
 				Button btnSignOk = (Button) scene.lookup("#btnOk");
 				Button btnSignNo = (Button) scene.lookup("#btnNo");
 				ImageView imgSignView = (ImageView) scene.lookup("#imgView");
-				int randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);
-
+			
+				randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);
 				switch (randomPass) {
 				case 0:
 					img = new Image(getClass().getResource("/image/보안문자.png").toString());
@@ -353,7 +353,6 @@ public class RootController implements Initializable {
 		}
 	}
 
-	
 	// 로그인
 	public void handleBtnLoginAction(ActionEvent event) {
 		Connection con = null;
@@ -363,7 +362,6 @@ public class RootController implements Initializable {
 		try {
 			if (txtId.getText().trim().equals("") || txtPass.getText().trim().equals(""))
 				throw new Exception();
-//			scene.getStylesheets().add(getClass().getResource("/application/libraryCss.css").toString());
 			try {
 				Stage user_MainStage = new Stage(StageStyle.UTILITY);
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
@@ -385,6 +383,7 @@ public class RootController implements Initializable {
 					throw new Exception();
 				MemberDAO dao = new MemberDAO();
 				Scene scene = new Scene(root);
+				//scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
 				user_MainStage = new Stage();
 				user_MainStage.setTitle("메뉴");
 				user_MainStage.setScene(scene);
@@ -392,14 +391,13 @@ public class RootController implements Initializable {
 				((Stage) btnLogin.getScene().getWindow()).close();
 				user_MainStage.show();
 				dao.m = dao.loginUser(txtId.getText().trim());
-
 			} catch (Exception e) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("에러발생");
 				alert.setHeaderText("존재하지 않는 계정입니다");
 				alert.showAndWait();
 			}
-
+			
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");
