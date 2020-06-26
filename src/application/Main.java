@@ -24,7 +24,7 @@ public class Main extends Application {
 		Scene s= new Scene(root);
 		primaryStage.setScene(s);
 		primaryStage.setResizable(false);
-		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logotest.png").toString()));
+		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 		
 		System.setProperty("prism.lcdtext", "false"); // 폰트파일 로드전에 실행
 

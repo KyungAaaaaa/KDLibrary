@@ -1,0 +1,15 @@
+HBox{
+	-fx-background-color:#f8ecc9;
+	
+}
+
+Button{
+	-fx-background-color:#a79c8e;
+	-fx-font-family: "NanumGothic";
+	
+}
+Label{
+	-fx-text-fill:black;
+	-fx-font-family: "NanumGothic";
+	-fx-font-size:12;
+}

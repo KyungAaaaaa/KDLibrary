@@ -8,14 +8,6 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="249.0" spacing="30.0">
-         <children>
-            <ImageView id="imgV" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-            <Button id="btnFileSelect" mnemonicParsing="false" text="이미지 파일 선택" />
-            <Button id="btnOk" mnemonicParsing="false" text="완료" />
-            <Button id="btnCancel" mnemonicParsing="false" text="취소" />
-         </children>
-      </VBox>
       <VBox prefHeight="400.0" prefWidth="343.0">
          <children>
             <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
@@ -60,6 +52,12 @@
                   <ComboBox id="cmbEtc" prefWidth="150.0" />
                </children>
             </HBox>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="249.0" spacing="30.0">
+         <children>
+            <Button id="btnOk" mnemonicParsing="false" text="완료" />
+            <Button id="btnCancel" mnemonicParsing="false" text="취소" />
          </children>
       </VBox>
    </children>

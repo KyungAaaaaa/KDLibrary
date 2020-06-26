@@ -12,6 +12,7 @@
    <children>
       <HBox layoutX="15.0" layoutY="29.0" prefHeight="100.0">
          <children>
+<<<<<<< HEAD
             <ImageView id="imgView" fitHeight="183.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
                   <Insets right="30.0" />
@@ -20,6 +21,8 @@
                   <Image url="@../../../../../../Users/user/Desktop/images/Daco_4079755.png" />
                </image>
             </ImageView>
+=======
+>>>>>>> exp1
             <VBox alignment="CENTER_LEFT" prefHeight="183.0" spacing="15.0">
                <children>
                   <HBox alignment="CENTER_LEFT">
@@ -97,6 +100,5 @@
             <Button id="btnNo" mnemonicParsing="false" text="취 소" />
          </children>
       </HBox>
-      <Button id="btnImgView" layoutX="78.0" layoutY="252.0" mnemonicParsing="false" text="이미지 파일 선택" />
    </children>
 </AnchorPane>

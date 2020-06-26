@@ -115,10 +115,6 @@ public class User_MainController implements Initializable {
 	private int tableViewselectedIndex;
 	public Stage stage2;
 
-	// String selectFileName;
-	public User_MainController() {
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// 로그인창으로 돌아감
@@ -179,6 +175,7 @@ public class User_MainController implements Initializable {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
 			Stage userModifyStage = new Stage(StageStyle.UTILITY);
+			// stage=userModifyStage;
 			Label lbTitle = (Label) scene.lookup("#lbTitle");
 			Label lbISBN = (Label) scene.lookup("#lbISBN");
 			Label lbWriter = (Label) scene.lookup("#lbWriter");
@@ -199,8 +196,8 @@ public class User_MainController implements Initializable {
 			String localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
 			imgV.setImage(new Image(localUrl));
 			// userModifyStage.initModality(Modality.WINDOW_MODAL);
-			userModifyStage.initOwner(stage2);
-			// userModifyStage.initOwner(this.stage);
+			// userModifyStage.initOwner(stage2);
+			userModifyStage.initOwner(this.stage);
 			userModifyStage.setScene(scene);
 			userModifyStage.setResizable(false);
 			userModifyStage.setTitle("책 정보");
@@ -258,6 +255,7 @@ public class User_MainController implements Initializable {
 		try {
 			mainView = FXMLLoader.load(getClass().getResource("/view/user_BookSearch.fxml"));
 			Scene scene = new Scene(mainView);
+			scene.getStylesheets().add(getClass().getResource("/css/User.css").toString());
 			mainStage = new Stage();
 			mainStage.setTitle("자료 검색");
 			mainStage.setScene(scene);
@@ -319,20 +317,17 @@ public class User_MainController implements Initializable {
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
 						TextField txtPass2 = (TextField) scene1.lookup("#txtPass");
 						TextField txtName2 = (TextField) scene1.lookup("#txtName");
-						TextField txtPhone2=(TextField) scene1.lookup("#txtPhone");
-						ImageView imgView = (ImageView) scene1.lookup("#imgView");
+						TextField txtPhone = (TextField) scene1.lookup("#txtPhone");
 						Button btnModifyNo2 = (Button) scene1.lookup("#btnNo");
 						Button btnModifyAdd2 = (Button) scene1.lookup("#btnAdd");
 
-						imgView.setImage(new Image("file:/C:/images/Library_MemberData/" + memberDao.m.getFileimg()));
 						lblId2.setText(memberDao.m.getId());
 						lblBirth2.setText(memberDao.m.getBirth());
 						txtPass2.setText(memberDao.m.getPass());
 						txtName2.setText(memberDao.m.getName());
-						txtPhone2.setText(memberDao.m.getPhoneNumber());
+						txtPhone.setText(memberDao.m.getPhoneNumber());
 
 						btnModifyAdd2.setOnAction(event2 -> {
-							// Member m = new Member(txtName2.getText(), txtPass2.getText());
 							Connection con = null;
 							PreparedStatement pstmt = null;
 							try {

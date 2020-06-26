@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,7 +35,7 @@ public class RootController implements Initializable {
 	@FXML
 	private Button btnExit;
 	@FXML
-	private Button btnSign;
+	private Label lbSign;
 	@FXML
 	private Button btnAdminLogin;
 	@FXML
@@ -56,7 +55,7 @@ public class RootController implements Initializable {
 		btnLogin.setOnAction(event -> handleBtnLoginAction(event));
 
 		// 회원가입
-		btnSign.setOnAction(event -> handleBtnSignAction(event));
+		lbSign.setOnMouseClicked(event -> handleBtnSignAction(event));
 
 		// 비밀번호 찾기
 		lblFindPass.setOnMouseClicked(event -> handleLblFindPassAction(event));
@@ -70,7 +69,7 @@ public class RootController implements Initializable {
 	}
 
 	// 회원가입
-		private void handleBtnSignAction(ActionEvent event) {
+		private void handleBtnSignAction(MouseEvent event) {
 
 			try {
 
@@ -245,7 +244,7 @@ public class RootController implements Initializable {
 						rs = pstmt.executeQuery();
 						while (rs.next()) {
 							mem = new Member(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-									rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
+									rs.getString(5), rs.getString(6), rs.getString(7));
 						}
 						if (mem == null)
 							throw new Exception();
@@ -350,7 +349,7 @@ public class RootController implements Initializable {
 
 			});
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 		}
 	}
 
@@ -364,16 +363,13 @@ public class RootController implements Initializable {
 		try {
 			if (txtId.getText().trim().equals("") || txtPass.getText().trim().equals(""))
 				throw new Exception();
-			//Parent root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
-			//Scene scene = new Scene(root);
-			//Stage user_MainStage = new Stage(StageStyle.UTILITY);
 //			scene.getStylesheets().add(getClass().getResource("/application/libraryCss.css").toString());
 			try {
 				Stage user_MainStage = new Stage(StageStyle.UTILITY);
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
 				Parent root = fxmlLoader.load();
 				User_MainController user_MainController = fxmlLoader.getController();
-				user_MainController.stage2 = user_MainStage;
+				user_MainController.stage = user_MainStage;
 				con = DBUtil.getConnection();
 				String query = "select * from memberTBL where Id = ? and pass = ?";
 				pstmt = con.prepareStatement(query);
@@ -382,14 +378,12 @@ public class RootController implements Initializable {
 				rs = pstmt.executeQuery();
 				while (rs.next()) {
 					memb = new Member(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-							rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
+							rs.getString(5), rs.getString(6), rs.getString(7));
 				}
 
 				if (memb == null)
 					throw new Exception();
 				MemberDAO dao = new MemberDAO();
-
-				
 				Scene scene = new Scene(root);
 				user_MainStage = new Stage();
 				user_MainStage.setTitle("메뉴");

@@ -6,8 +6,9 @@ AnchorPane{
 Button{
 	-fx-background-color:#a79c8e;
 	-fx-font-family: "NanumGothic";
-	
+	-fx-text-fill: gray;
 }
-Label:focused{
+.text:clicked{
 	-fx-text-fill:white;
+	-fx-font-family: "NanumGothic";
 }
