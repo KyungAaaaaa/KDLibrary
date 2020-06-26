@@ -12,17 +12,6 @@
    <children>
       <HBox layoutX="15.0" layoutY="29.0" prefHeight="100.0">
          <children>
-<<<<<<< HEAD
-            <ImageView id="imgView" fitHeight="183.0" fitWidth="220.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="30.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../../../../../Users/user/Desktop/images/Daco_4079755.png" />
-               </image>
-            </ImageView>
-=======
->>>>>>> exp1
             <VBox alignment="CENTER_LEFT" prefHeight="183.0" spacing="15.0">
                <children>
                   <HBox alignment="CENTER_LEFT">

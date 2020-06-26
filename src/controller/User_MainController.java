@@ -317,7 +317,7 @@ public class User_MainController implements Initializable {
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
 						TextField txtPass2 = (TextField) scene1.lookup("#txtPass");
 						TextField txtName2 = (TextField) scene1.lookup("#txtName");
-						TextField txtPhone = (TextField) scene1.lookup("#txtPhone");
+						TextField txtPhone2 = (TextField) scene1.lookup("#txtPhone");
 						Button btnModifyNo2 = (Button) scene1.lookup("#btnNo");
 						Button btnModifyAdd2 = (Button) scene1.lookup("#btnAdd");
 
@@ -325,7 +325,7 @@ public class User_MainController implements Initializable {
 						lblBirth2.setText(memberDao.m.getBirth());
 						txtPass2.setText(memberDao.m.getPass());
 						txtName2.setText(memberDao.m.getName());
-						txtPhone.setText(memberDao.m.getPhoneNumber());
+						txtPhone2.setText(memberDao.m.getPhoneNumber());
 
 						btnModifyAdd2.setOnAction(event2 -> {
 							Connection con = null;
