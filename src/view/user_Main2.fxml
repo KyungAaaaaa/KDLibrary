@@ -19,7 +19,7 @@
             </ImageView>
             <VBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Label text="이 름">
+                  <Label fx:id="lblName" text="이 름">
                      <font>
                         <Font size="15.0" />
                      </font>

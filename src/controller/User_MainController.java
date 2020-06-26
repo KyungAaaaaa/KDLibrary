@@ -87,6 +87,7 @@ import model.RequestBook;
 import model.Schedule;
 
 public class User_MainController implements Initializable {
+	
 	@FXML
 	private Button btnUserModify;
 	@FXML
@@ -105,6 +106,8 @@ public class User_MainController implements Initializable {
 	@FXML
 	private ImageView imgV;
 	@FXML
+	private Label lblName;
+	@FXML
 	private AnchorPane A;
 	MemberDAO memberDao = new MemberDAO();
 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy년 MM월 dd일");
@@ -120,6 +123,8 @@ public class User_MainController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		//lblName.setText(memberDao.m.getName());
+		
 		// 로그인창으로 돌아감
 		btnOut.setOnAction(event -> handlerBtnOut(event));
 
