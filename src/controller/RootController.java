@@ -73,93 +73,92 @@ public class RootController implements Initializable {
 	// 회원가입
 	private void handleBtnSignAction(MouseEvent event) {
 
-			try {
-				int randomPass = 0;
-				Parent root = FXMLLoader.load(getClass().getResource("/view/sign.fxml"));
-				Scene scene = new Scene(root);
-				Stage signStage = new Stage(StageStyle.UTILITY);
+		try {
+			int randomPass = 0;
+			Parent root = FXMLLoader.load(getClass().getResource("/view/sign.fxml"));
+			Scene scene = new Scene(root);
+			Stage signStage = new Stage(StageStyle.UTILITY);
 
-				TextField txtFieldSignName = (TextField) scene.lookup("#txtName");
-				TextField txtFieldSignId = (TextField) scene.lookup("#txtId");
-				TextField txtFieldSignPass = (TextField) scene.lookup("#txtPass");
-				TextField txtFieldSignPass2 = (TextField) scene.lookup("#txtPass2");
-				DatePicker datePickerSign = (DatePicker) scene.lookup("#datePicker");
-				TextField txtFieldSignPhoneNumber = (TextField) scene.lookup("#txtPhoneNumber");
-				TextField txtFieldSignSee = (TextField) scene.lookup("#txtSee");
-				ComboBox<String> cmbYear=(ComboBox) root.lookup("#cmbYear");
-				ComboBox<String> cmbMonth=(ComboBox) root.lookup("#cmbMonth");
-				ComboBox<String> cmbDay=(ComboBox) root.lookup("#cmbDay");
-				Button btnSignOk = (Button) scene.lookup("#btnOk");
-				Button btnSignNo = (Button) scene.lookup("#btnNo");
-				ImageView imgSignView = (ImageView) scene.lookup("#imgView");
-				scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-				
-				cmbYear.setItems(FXCollections.observableArrayList("1940",	"1941",	"1942",	"1943",	"1944",	"1945",	"1946",	"1947",	"1948",	"1949",	
-						"1950",	"1951",	"1952",	"1953",	"1954",	"1955",	"1956",	"1957",	"1958",	"1959",	
-						"1960",	"1961",	"1962",	"1963",	"1964",	"1965",	"1966",	"1967",	"1968",	"1969",	
-						"1970",	"1971",	"1972",	"1973",	"1974",	"1975",	"1976",	"1977",	"1978",	"1979",	
-						"1980",	"1981",	"1982",	"1983",	"1984",	"1985",	"1986",	"1987",	"1988",	"1989",	
-						"1990",	"1991",	"1992",	"1993",	"1994",	"1995",	"1996",	"1997",	"1998",	"1999",	
-						"2000",	"2001",	"2002",	"2003",	"2004",	"2005",	"2006",	"2007",	"2008",	"2009",	
-						"2010",	"2011",	"2012",	"2013",	"2014",	"2015",	"2016",	"2017",	"2018",	"2019",	"2020"));
-				cmbMonth.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12"));
-				cmbDay.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12",	"13",	"14",	"15",	"16",	"17",	"18",	"19",	"20",	"21",	"22",	"23",	"24",	"25",	"26",	"27",	"28",	"29",	"30",	"31"));
-				randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);
-				switch (randomPass) {
-				case 0:
-					img = new Image(getClass().getResource("/image/보안문자.png").toString());
-					see = "86182";
-					break;
-				case 1:
-					img = new Image(getClass().getResource("/image/보안문자2.png").toString());
-					see = "251531";
-					break;
-				case 2:
-					img = new Image(getClass().getResource("/image/보안문자3.png").toString());
-					see = "602125";
-					break;
-				case 3:
-					img = new Image(getClass().getResource("/image/보안문자4.png").toString());
-					see = "42626";
-					break;
-				case 4:
-					img = new Image(getClass().getResource("/image/보안문자5.png").toString());
-					see = "03358";
-					break;
-				}
-				imgSignView.setImage(img);
-		
-				btnSignOk.setOnAction(event1 -> {
-					Connection con = null;
-					PreparedStatement pstmt = null;
-					if (txtFieldSignSee.getText().equals(see)) {
-						if (!(txtFieldSignName.getText().equals("") || txtFieldSignId.getText().trim().equals("")||txtFieldSignPhoneNumber.getText().trim().equals(""))) {
-					if (txtFieldSignPass.getText().equals(txtFieldSignPass2.getText())) {
+			TextField txtFieldSignName = (TextField) scene.lookup("#txtName");
+			TextField txtFieldSignId = (TextField) scene.lookup("#txtId");
+			TextField txtFieldSignPass = (TextField) scene.lookup("#txtPass");
+			TextField txtFieldSignPass2 = (TextField) scene.lookup("#txtPass2");
+			DatePicker datePickerSign = (DatePicker) scene.lookup("#datePicker");
+			TextField txtFieldSignPhoneNumber = (TextField) scene.lookup("#txtPhoneNumber");
+			TextField txtFieldSignSee = (TextField) scene.lookup("#txtSee");
+			ComboBox<String> cmbYear = (ComboBox) root.lookup("#cmbYear");
+			ComboBox<String> cmbMonth = (ComboBox) root.lookup("#cmbMonth");
+			ComboBox<String> cmbDay = (ComboBox) root.lookup("#cmbDay");
+			Button btnSignOk = (Button) scene.lookup("#btnOk");
+			Button btnSignNo = (Button) scene.lookup("#btnNo");
+			ImageView imgSignView = (ImageView) scene.lookup("#imgView");
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+
+			cmbYear.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
+					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
+					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
+					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
+					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
+					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
+					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
+					"2019", "2020"));
+			cmbMonth.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12"));
+			cmbDay.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+					"26", "27", "28", "29", "30", "31"));
+			randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);
+			switch (randomPass) {
+			case 0:
+				img = new Image(getClass().getResource("/image/보안문자.png").toString());
+				see = "86182";
+				break;
+			case 1:
+				img = new Image(getClass().getResource("/image/보안문자2.png").toString());
+				see = "251531";
+				break;
+			case 2:
+				img = new Image(getClass().getResource("/image/보안문자3.png").toString());
+				see = "602125";
+				break;
+			case 3:
+				img = new Image(getClass().getResource("/image/보안문자4.png").toString());
+				see = "42626";
+				break;
+			case 4:
+				img = new Image(getClass().getResource("/image/보안문자5.png").toString());
+				see = "03358";
+				break;
+			}
+			imgSignView.setImage(img);
+
+			btnSignOk.setOnAction(event1 -> {
+				Connection con = null;
+				PreparedStatement pstmt = null;
+				if (txtFieldSignSee.getText().equals(see)) {
+					if (!(txtFieldSignName.getText().equals("") || txtFieldSignId.getText().trim().equals("")
+							|| txtFieldSignPhoneNumber.getText().trim().equals(""))) {
+						if (txtFieldSignPass.getText().equals(txtFieldSignPass2.getText())) {
 							try {
 								con = DBUtil.getConnection();
 
 								String query = "Insert into memberTBL(name,Id,Pass,phoneNumber,birth,etc) values(?, ?, ?, ?, ?,?)";
 								pstmt = con.prepareStatement(query);
-								/*
-								 * Member m = new Member(txtFieldSignName.getText(), txtFieldSignId.getText(),
-								 * txtFieldSignPass.getText(), txtFieldSignPhoneNumber.getText(),
-								 * datePickerSign.getValue().toString());
-								 */
 								Member m = new Member(txtFieldSignName.getText(), txtFieldSignId.getText(),
 										txtFieldSignPass.getText(), txtFieldSignPhoneNumber.getText(),
-										cmbYear.getValue()+"-"+cmbMonth.getValue()+"-"+cmbDay.getValue());
+										cmbYear.getValue() + "-" + cmbMonth.getValue() + "-" + cmbDay.getValue());
 								pstmt.setString(1, m.getName());
 								pstmt.setString(2, m.getId());
 								pstmt.setString(3, m.getPass());
 								pstmt.setString(4, m.getPhoneNumber());
 								pstmt.setString(5, m.getBirth());
 								pstmt.setString(6, "정상");
-								
+
 								try {
 									int signValue = pstmt.executeUpdate();
 									if (signValue != 0) {
 										Alert alert = new Alert(AlertType.INFORMATION);
-										alert.setTitle("삽입관련");
+										alert.setTitle("KDLibrary");
 										alert.setHeaderText(m.getName() + "님 회원가입 완료");
 										alert.setContentText("환영합니다!");
 										alert.showAndWait();
@@ -172,7 +171,7 @@ public class RootController implements Initializable {
 									}
 								} catch (Exception e) {
 									Alert alert = new Alert(AlertType.ERROR);
-									alert.setTitle("에러발생");
+									alert.setTitle("아이디 중복");
 									alert.setHeaderText("이미 존재하는 아이디입니다.");
 									alert.setContentText("다른 아이디를 입력하세요.");
 									alert.showAndWait();
@@ -189,34 +188,33 @@ public class RootController implements Initializable {
 							alert.setHeaderText("비밀번호가 일치하지 않습니다");
 							alert.showAndWait();
 						}
-						}else {
-							Alert alert = new Alert(AlertType.ERROR);
-							alert.setTitle("에러발생");
-							alert.setHeaderText("회원정보를 모두 입력해주시기 바랍니다");
-							alert.showAndWait();
-						}
 					} else {
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("에러발생");
-						alert.setHeaderText("보안문구가 일치하지 않습니다");
+						alert.setHeaderText("회원정보를 모두 입력해주시기 바랍니다");
 						alert.showAndWait();
 					}
-					
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("에러발생");
+					alert.setHeaderText("보안문구가 일치하지 않습니다");
+					alert.showAndWait();
+				}
 
-				});
-				signStage.initModality(Modality.WINDOW_MODAL);
-				signStage.initOwner(stage);
-				signStage.setScene(scene);
-				signStage.setResizable(false);
-				signStage.setTitle("회원가입");
-				signStage.show();
-				
-				btnSignNo.setOnAction(event1 -> signStage.close());
-			} catch (Exception e) {
+			});
+			signStage.initModality(Modality.WINDOW_MODAL);
+			signStage.initOwner(stage);
+			signStage.setScene(scene);
+			signStage.setResizable(false);
+			signStage.setTitle("회원가입");
+			signStage.show();
 
-			}
+			btnSignNo.setOnAction(event1 -> signStage.close());
+		} catch (Exception e) {
 
 		}
+
+	}
 
 	// 비밀번호 찾기
 	private void handleLblFindPassAction(MouseEvent event) {
@@ -238,6 +236,7 @@ public class RootController implements Initializable {
 			Button btnOk1 = (Button) scenePassReset.lookup("#btnOk");
 			Button btnNo1 = (Button) scenePassReset.lookup("#btnNo");
 
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			passStage.initModality(Modality.WINDOW_MODAL);
 			passStage.initOwner(stage);
 			passStage.setScene(scene);
@@ -270,7 +269,7 @@ public class RootController implements Initializable {
 						}
 						if (mem == null)
 							throw new Exception();
-
+						scenePassReset.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 						passStage.setScene(scenePassReset);
 						passStage.setResizable(false);
 						passStage.setTitle("새 비밀번호");
@@ -337,14 +336,14 @@ public class RootController implements Initializable {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminLogin.fxml"));
 			Scene scene = new Scene(root);
 			Stage adminStage = new Stage(StageStyle.UTILITY);
-
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			TextField txtAdminCode = (TextField) scene.lookup("#txtCode");
 			Button btnAdminOk = (Button) scene.lookup("#btnOk");
 			Button btnAdminNo = (Button) scene.lookup("#btnNo");
 
 			adminStage.initModality(Modality.WINDOW_MODAL);
 			adminStage.initOwner(stage);
-			//adminStage.initStyle(StageStyle.UNDECORATED); 제목표시줄 삭제
+			// adminStage.initStyle(StageStyle.UNDECORATED); 제목표시줄 삭제
 			adminStage.setScene(scene);
 			adminStage.setResizable(false);
 			adminStage.setTitle("관리자 로그인");
@@ -356,6 +355,7 @@ public class RootController implements Initializable {
 				try {
 					Parent root1 = FXMLLoader.load(getClass().getResource("/view/adminMain.fxml"));
 					Scene s = new Scene(root1);
+					s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 					adminMain = new Stage();
 					adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					adminMain.setTitle("KD Library-Admin");
@@ -406,10 +406,11 @@ public class RootController implements Initializable {
 					throw new Exception();
 				MemberDAO dao = new MemberDAO();
 				Scene scene = new Scene(root);
-				//scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
+				// scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
 				user_MainStage = new Stage();
 				user_MainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 				user_MainStage.setTitle("KD Library");
+				scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 				user_MainStage.setScene(scene);
 				user_MainStage.setResizable(false);
 				((Stage) btnLogin.getScene().getWindow()).close();
@@ -421,7 +422,7 @@ public class RootController implements Initializable {
 				alert.setHeaderText("존재하지 않는 계정입니다");
 				alert.showAndWait();
 			}
-			
+
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");

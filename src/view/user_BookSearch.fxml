@@ -8,146 +8,146 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_BookSearchController">
+<HBox fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_BookSearchController">
    <children>
-      <VBox prefHeight="905.0" prefWidth="960.0">
+      <VBox fillWidth="false" prefHeight="960.0" prefWidth="1164.0">
          <children>
-            <HBox fillHeight="false" prefHeight="817.0" prefWidth="790.0">
+            <HBox fillHeight="false" prefHeight="876.0" prefWidth="1042.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="616.0" prefWidth="179.0">
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefHeight="616.0" prefWidth="180.0">
                      <children>
-                        <Button fx:id="btnCategory1" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory11" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory12" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory13" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory14" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory15" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory16" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
-                        <Button fx:id="btnCategory17" mnemonicParsing="false" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #00ff0000;" text="장르1" />
+                        <Button fx:id="btnCategory1" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory11" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory12" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory13" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory14" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory15" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory16" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
+                        <Button fx:id="btnCategory17" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" text="장르1" />
                      </children>
                      <HBox.margin>
                         <Insets top="30.0" />
                      </HBox.margin>
                   </VBox>
-                  <VBox alignment="CENTER" fillWidth="false" prefHeight="840.0" prefWidth="967.0">
+                  <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="876.0" prefWidth="846.0">
                      <children>
-                        <HBox prefHeight="36.0" prefWidth="663.0">
+                        <HBox alignment="CENTER" prefHeight="23.0" prefWidth="867.0">
                            <children>
-                              <TextField fx:id="txtSearch" prefHeight="30.0" prefWidth="525.0" />
-                              <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="23.0" prefWidth="70.0" text="검색" />
+                              <TextField fx:id="txtSearch" prefHeight="30.0" prefWidth="525.0" promptText="검색할 책 제목을 입력하세요" />
+                              <Button fx:id="btnSearch" mnemonicParsing="false" prefHeight="23.0" prefWidth="70.0" styleClass="Btn" text="검색" />
                            </children>
                         </HBox>
-                        <HBox fx:id="bookBox" prefHeight="817.0" prefWidth="962.0">
+                        <HBox fx:id="bookBox" prefHeight="846.0" prefWidth="868.0">
                            <children>
                               <VBox alignment="CENTER" fillWidth="false" prefHeight="348.0" prefWidth="152.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="imgV11" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle11">
+                                    <Label fx:id="lbTitle11" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV21" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle21">
+                                    <Label fx:id="lbTitle21" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV31" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle31">
+                                    <Label fx:id="lbTitle31" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
                                  <HBox.margin>
-                                    <Insets left="30.0" right="20.0" />
+                                    <Insets left="30.0" right="20.0" top="10.0" />
                                  </HBox.margin>
                               </VBox>
                               <VBox alignment="CENTER" fillWidth="false" prefHeight="400.0" prefWidth="152.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="imgV12" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle12">
+                                    <Label fx:id="lbTitle12" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV22" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle22">
+                                    <Label fx:id="lbTitle22" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV32" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle32">
+                                    <Label fx:id="lbTitle32" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
                                  <HBox.margin>
-                                    <Insets right="20.0" />
+                                    <Insets right="20.0" top="10.0" />
                                  </HBox.margin>
                               </VBox>
                               <VBox alignment="CENTER" fillWidth="false" prefHeight="400.0" prefWidth="152.0" spacing="5.0">
                                  <children>
                                     <ImageView fx:id="imgV13" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle13">
+                                    <Label fx:id="lbTitle13" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV23" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle23">
+                                    <Label fx:id="lbTitle23" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                     <ImageView fx:id="imgV33" disable="true" fitHeight="240.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" />
-                                    <Label fx:id="lbTitle33">
+                                    <Label fx:id="lbTitle33" styleClass="bookLabel">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="5.0" />
+                                          <Insets bottom="8.0" />
                                        </VBox.margin>
                                     </Label>
                                  </children>
                                  <HBox.margin>
-                                    <Insets />
+                                    <Insets top="10.0" />
                                  </HBox.margin>
                               </VBox>
                               <VBox alignment="BOTTOM_RIGHT" prefHeight="817.0" prefWidth="204.0">
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="38.0" prefWidth="221.0" spacing="20.0" style="-fx-background-color: #00ff0000;">
                                        <children>
-                                          <Button fx:id="btnBack" disable="true" mnemonicParsing="false" text="Back" />
-                                          <Button fx:id="btnNext" disable="true" mnemonicParsing="false" text="Next" />
-                                          <Button fx:id="btnExit" mnemonicParsing="false" text="뒤로가기" />
+                                          <Button fx:id="btnBack" disable="true" mnemonicParsing="false" styleClass="Btn" text="Back" />
+                                          <Button fx:id="btnNext" disable="true" mnemonicParsing="false" styleClass="Btn" text="Next" />
+                                          <Button fx:id="btnExit" mnemonicParsing="false" styleClass="Btn" text="뒤로가기" />
                                        </children>
                                     </HBox>
                                  </children>

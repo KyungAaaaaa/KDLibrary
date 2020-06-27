@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: #f8ecc9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: #FDF0E4" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox layoutX="94.0" layoutY="86.0" prefHeight="516.0" prefWidth="312.0" spacing="5.0">
          <children>

@@ -41,12 +41,12 @@
          </children>
       </VBox>
       <Button fx:id="btnLogin" layoutX="274.0" layoutY="273.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="320.0" text="Login" />
-      <Label id="txtPass" fx:id="lblFindPass" layoutX="347.0" layoutY="353.0" styleClass="text" text="비밀번호 찾기 ">
+      <Label  fx:id="lblFindPass" layoutX="347.0" layoutY="353.0" styleClass="text" text="비밀번호 찾기 ">
          <font>
             <Font size="11.0" />
          </font></Label>
       <HBox layoutX="339.0" layoutY="503.0" spacing="10.0" />
-      <Label id="txtPass" fx:id="lbSign" layoutX="460.0" layoutY="353.0" styleClass="text" text="회원가입">
+      <Label  fx:id="lbSign" layoutX="460.0" layoutY="353.0" styleClass="text" text="회원가입">
          <font>
             <Font size="11.0" />
          </font>

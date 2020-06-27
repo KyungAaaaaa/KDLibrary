@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="420.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="420.0" prefWidth="400.0" style="-fx-background-color: #FDF0E4" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label layoutX="83.0" layoutY="60.0" text="NEW PASS" textFill="#005e11">
+      <Label layoutX="83.0" layoutY="60.0" styleClass="logo" text="NEW PASS">
          <font>
             <Font name="Arial Black" size="40.0" />
          </font>
@@ -19,7 +19,7 @@
          <children>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="새 비밀번호 : ">
+                  <Label styleClass="etcLabel" text="새 비밀번호 : ">
                      <HBox.margin>
                         <Insets right="45.0" />
                      </HBox.margin>
@@ -27,12 +27,12 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <PasswordField id="txtResetPass" />
+                  <PasswordField id="txtResetPass" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT">
                <children>
-                  <Label text="새 비밀번호 확인 : ">
+                  <Label styleClass="etcLabel" text="새 비밀번호 확인 : ">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -40,7 +40,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <PasswordField id="txtResetPass2" />
+                  <PasswordField id="txtResetPass2" styleClass="textField" />
                </children>
             </HBox>
          </children>

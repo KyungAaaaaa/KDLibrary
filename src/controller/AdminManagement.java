@@ -37,12 +37,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -106,23 +108,23 @@ public class AdminManagement implements Initializable {
 	@FXML
 	Button btnPieChart;
 	@FXML
-	Button btnLineChart;
-	@FXML
 	TextField txtBookSearch;
 	@FXML
 	TextField txtUserSearch;
-	@FXML
-	AreaChart areaChart;
+	
 	@FXML
 	BarChart barChart;
 	@FXML
 	PieChart pieChart;
 	@FXML
-	LineChart lineChart;
+	RadioButton rdoCartegory;
+	@FXML
+	RadioButton rdoMemberCount;
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
+	private ToggleGroup togglegroup;
 
 	///////////////////////////
 	private double tabWidth = 90.0;
@@ -142,13 +144,15 @@ public class AdminManagement implements Initializable {
 	private String selectFileName;
 	Image image = null;
 	BookDAO dao = new BookDAO();
-	boolean editImageFileSelect=false;
+	boolean editImageFileSelect = false;
+	int chart = 0;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// chartTab.setOnSelectionChanged(e->handelBtnBarChartAction(e));
-		btnBarChart.setOnAction((e -> handelBtnBarChartAction(e)));
-		btnPieChart.setOnAction((e -> handelBtnPieChartAction(e)));
-		btnLineChart.setOnAction((e -> handelBtnLineChartAction(e)));
+		btnBarChart.setOnAction((e -> barChart.setVisible(false)));
+		btnPieChart.setOnAction((e -> pieChart.setVisible(true)));
+		
 		setDirectorySaveImage();
 		tblUserColumnSetting();
 		tblBookColumnSetting();
@@ -156,7 +160,8 @@ public class AdminManagement implements Initializable {
 		tblUser.setOnMousePressed(e -> userTableSelectIndex = tblUser.getSelectionModel().getSelectedIndex());
 		tblBook.setOnMousePressed(e -> bookTableSelectIndex = tblBook.getSelectionModel().getSelectedIndex());
 		tblRequest.setOnMousePressed(e -> requestTableSelectIndex = tblRequest.getSelectionModel().getSelectedIndex());
-
+		// 라디오버튼 그룹화
+		toggleGroupInitialize();
 		// 요청 테이블 책 더블클릭시 내용창
 		tblRequest.setOnMouseClicked(e -> handelTblRequestDoubleClickAction(e));
 		// 요청테이블 삭제 버튼 이벤트
@@ -193,7 +198,26 @@ public class AdminManagement implements Initializable {
 		tabContainer.setTabMaxHeight(tabWidth);
 		tabContainer.setRotateGraphic(true);
 	}
+
 ///////////////////////////
+	// 라디오버튼 그룹화
+	private void toggleGroupInitialize() {
+		togglegroup = new ToggleGroup();
+		rdoMemberCount.setToggleGroup(togglegroup);
+		rdoCartegory.setToggleGroup(togglegroup);
+		rdoMemberCount.setSelected(true);
+		
+		
+		if(rdoCartegory.isSelected()) {
+			barChart.setVisible(false);
+			pieChart.setVisible(true);
+			handelBtnPieChartAction(null);
+		}else if (rdoMemberCount.isSelected()){
+			pieChart.setVisible(false);
+			barChart.setVisible(true);
+			handelBtnBarChartAction(null);
+		}
+	}
 
 	private void handleBtnRequestDeleteAction(ActionEvent e) {
 
@@ -243,7 +267,7 @@ public class AdminManagement implements Initializable {
 	// 유저 테이블 검색 버튼 이벤트
 	private void handleBtnUserSearchAction(ActionEvent e) {
 		MemberDAO dao = new MemberDAO();
-		//ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
+		// ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		obLMember.clear();
 		for (Member m : arrayList) {
@@ -282,67 +306,69 @@ public class AdminManagement implements Initializable {
 	private void handleBtnUserEditAction(ActionEvent e) {
 
 		try {
-			
+
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminEditUserPopup.fxml"));
 			Stage addPopup = new Stage(StageStyle.UTILITY);
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			addPopup.setScene(new Scene(root));
 			addPopup.setTitle("회원 정보 수정");
-		
-			
+
 			Button btnOk = (Button) root.lookup("#btnOk");
 			Button btnCancel = (Button) root.lookup("#btnCancel");
 			TextField txtId = (TextField) root.lookup("#txtId");
 			TextField txtName = (TextField) root.lookup("#txtName");
 			TextField txtPass = (TextField) root.lookup("#txtPass");
 			TextField txtPhoneNumber = (TextField) root.lookup("#txtPhoneNumber");
-			//DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
+			// DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
 			ComboBox cmbEtc = (ComboBox) root.lookup("#cmbEtc");
-			ComboBox<String> cmbYear=(ComboBox) root.lookup("#cmbYear");
-			ComboBox<String> cmbMonth=(ComboBox) root.lookup("#cmbMonth");
-			ComboBox<String> cmbDay=(ComboBox) root.lookup("#cmbDay");
+			ComboBox<String> cmbYear = (ComboBox) root.lookup("#cmbYear");
+			ComboBox<String> cmbMonth = (ComboBox) root.lookup("#cmbMonth");
+			ComboBox<String> cmbDay = (ComboBox) root.lookup("#cmbDay");
 			Label lbRentalBook = (Label) root.lookup("#lbRentalBook");
 			cmbEtc.setItems(FXCollections.observableArrayList("정상", "연체"));
-			
-			
 
 			Member selectUser = obLMember.get(userTableSelectIndex);
-			
-			
+
 			btnCancel.setOnAction(eve -> addPopup.close());
-			
+
 			txtId.setText(selectUser.getId());
 			txtName.setText(selectUser.getName());
 			txtPass.setText(selectUser.getPass());
 			txtPhoneNumber.setText(selectUser.getPhoneNumber());
-			if(selectUser.getRentalBook()==null)lbRentalBook.setText("대여중인 책 없음.");
-			else lbRentalBook.setText(selectUser.getRentalBook());
-			//dpBirth.setValue(selectUser.getBirth());
-			String[] birth=selectUser.getBirth().split("-");
+			if (selectUser.getRentalBook() == null)
+				lbRentalBook.setText("대여중인 책 없음.");
+			else
+				lbRentalBook.setText(selectUser.getRentalBook());
+			// dpBirth.setValue(selectUser.getBirth());
+			String[] birth = selectUser.getBirth().split("-");
 			cmbYear.setValue(birth[0]);
 			cmbMonth.setValue(birth[1]);
 			cmbDay.setValue(birth[2]);
 			cmbEtc.setValue(selectUser.getEtc());
-			cmbYear.setItems(FXCollections.observableArrayList("1940",	"1941",	"1942",	"1943",	"1944",	"1945",	"1946",	"1947",	"1948",	"1949",	
-					"1950",	"1951",	"1952",	"1953",	"1954",	"1955",	"1956",	"1957",	"1958",	"1959",	
-					"1960",	"1961",	"1962",	"1963",	"1964",	"1965",	"1966",	"1967",	"1968",	"1969",	
-					"1970",	"1971",	"1972",	"1973",	"1974",	"1975",	"1976",	"1977",	"1978",	"1979",	
-					"1980",	"1981",	"1982",	"1983",	"1984",	"1985",	"1986",	"1987",	"1988",	"1989",	
-					"1990",	"1991",	"1992",	"1993",	"1994",	"1995",	"1996",	"1997",	"1998",	"1999",	
-					"2000",	"2001",	"2002",	"2003",	"2004",	"2005",	"2006",	"2007",	"2008",	"2009",	
-					"2010",	"2011",	"2012",	"2013",	"2014",	"2015",	"2016",	"2017",	"2018",	"2019",	"2020"));
-			cmbMonth.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12"));
-			
-			cmbDay.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12",	"13",	"14",	"15",	"16",	"17",	"18",	"19",	"20",	"21",	"22",	"23",	"24",	"25",	"26",	"27",	"28",	"29",	"30",	"31"));
-			
+			cmbYear.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
+					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
+					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
+					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
+					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
+					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
+					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
+					"2019", "2020"));
+			cmbMonth.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12"));
+
+			cmbDay.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+					"26", "27", "28", "29", "30", "31"));
+
 			addPopup.show();
-			
+
 			btnOk.setOnAction(eve -> {
 				Connection con1 = null;
 				PreparedStatement preparedStatement = null;
 				try {
-					if (txtName.getText().trim().equals("")||txtPass.getText().trim().equals("")||txtPhoneNumber.getText().trim().equals(""))
+					if (txtName.getText().trim().equals("") || txtPass.getText().trim().equals("")
+							|| txtPhoneNumber.getText().trim().equals(""))
 						throw new Exception();
 					con1 = DBUtil.getConnection(); //
 					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,etc=? where Id=?";
@@ -351,14 +377,15 @@ public class AdminManagement implements Initializable {
 					preparedStatement.setString(1, txtName.getText());
 					preparedStatement.setString(2, txtPass.getText());
 					preparedStatement.setString(3, txtPhoneNumber.getText());
-					preparedStatement.setString(4, cmbYear.getValue()+"-"+cmbMonth.getValue()+"-"+cmbDay.getValue());
+					preparedStatement.setString(4,
+							cmbYear.getValue() + "-" + cmbMonth.getValue() + "-" + cmbDay.getValue());
 					preparedStatement.setString(5, cmbEtc.getValue().toString());
 					preparedStatement.setString(6, selectUser.getId());
 					selectUser.setName(txtName.getText());
 					selectUser.setPass(txtPass.getText());
 					selectUser.setPhoneNumber(txtPhoneNumber.getText());
-					//selectUser.setBirth(dpBirth.getValue().toString());
-					//selectUser.setRentalBook(lbRentalBook.getText());
+					// selectUser.setBirth(dpBirth.getValue().toString());
+					// selectUser.setRentalBook(lbRentalBook.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
 
 					if (preparedStatement.executeUpdate() != 0) {
@@ -377,7 +404,7 @@ public class AdminManagement implements Initializable {
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setHeaderText("모든 항목을 입력하세요.");
-					//alert.setContentText(e1.getMessage());
+					// alert.setContentText(e1.getMessage());
 					alert.showAndWait();
 				} finally {
 					// con,pstmt 반납
@@ -435,7 +462,7 @@ public class AdminManagement implements Initializable {
 
 	// 도서탭 수정 버튼 핸들러이벤트
 	private void handleBtnBookEditAction(ActionEvent e) {
-		
+
 		try {
 
 			if (bookTableSelectIndex == -1)
@@ -472,11 +499,11 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-			
+
 			btnFileSelect.setOnAction(eve1 -> {
 				image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
-				
+
 			});
 
 			btnOk.setOnAction(eve -> {
@@ -528,11 +555,11 @@ public class AdminManagement implements Initializable {
 						}
 					} catch (Exception e1) {
 						System.out.println("파일 복사에러 : " + e1.getMessage());
-						return; 
+						return;
 					} finally {
 						try {
 							book0.setFileimg(fileName);
-							
+
 							if (bis != null)
 								bis.close();
 							if (bos != null)
@@ -748,7 +775,7 @@ public class AdminManagement implements Initializable {
 				colInformation);
 		BookDAO dao = new BookDAO();
 
-		//ArrayList<Book> bookTBL = dao.getBookTbl();
+		// ArrayList<Book> bookTBL = dao.getBookTbl();
 		HashSet<Book> bookTBL = dao.getBookTbl();
 		for (Book b : bookTBL) {
 			obLBook.add(b);
@@ -920,7 +947,7 @@ public class AdminManagement implements Initializable {
 	// 바차트 막대그래프 출력
 	private void handelBtnBarChartAction(Event e) {
 		try {
-
+		
 			XYChart.Series series1 = new XYChart.Series();
 			series1.setName(dao.categoryList.get(0));
 			XYChart.Series series2 = new XYChart.Series();
@@ -980,23 +1007,31 @@ public class AdminManagement implements Initializable {
 	// 파이차트 출력
 	private void handelBtnPieChartAction(Event e) {
 		try {
-
+			XYChart.Series series1 = new XYChart.Series();
+			series1.setName(dao.categoryList.get(0));
+			XYChart.Series series2 = new XYChart.Series();
+			series2.setName(dao.categoryList.get(1));
+			XYChart.Series series3 = new XYChart.Series();
+			series3.setName(dao.categoryList.get(2));
+			XYChart.Series series4 = new XYChart.Series();
+			series4.setName(dao.categoryList.get(3));
+			XYChart.Series series5 = new XYChart.Series();
+			series5.setName(dao.categoryList.get(4));
+			XYChart.Series series6 = new XYChart.Series();
+			series6.setName(dao.categoryList.get(5));
+			XYChart.Series series7 = new XYChart.Series();
+			series7.setName(dao.categoryList.get(6));
 			ObservableList obLPie = FXCollections.observableArrayList();
-			/*
-			 * obLPie.add(new PieChart.Data(series1.getName(),
-			 * dao.searchBook(series1.getName(), "category").size())); obLPie.add(new
-			 * PieChart.Data(series2.getName(), dao.searchBook(series2.getName(),
-			 * "category").size())); obLPie.add(new PieChart.Data(series3.getName(),
-			 * dao.searchBook(series3.getName(), "category").size())); obLPie.add(new
-			 * PieChart.Data(series4.getName(), dao.searchBook(series4.getName(),
-			 * "category").size())); obLPie.add(new PieChart.Data(series5.getName(),
-			 * dao.searchBook(series5.getName(), "category").size())); obLPie.add(new
-			 * PieChart.Data(series6.getName(), dao.searchBook(series6.getName(),
-			 * "category").size())); obLPie.add(new PieChart.Data(series7.getName(),
-			 * dao.searchBook(series7.getName(), "category").size()));
-			 * 
-			 * pieChart.setData(obLPie);
-			 */
+
+			obLPie.add(new PieChart.Data(series1.getName(), dao.searchBook(series1.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series2.getName(), dao.searchBook(series2.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series3.getName(), dao.searchBook(series3.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series4.getName(), dao.searchBook(series4.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series5.getName(), dao.searchBook(series5.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series6.getName(), dao.searchBook(series6.getName(), "category").size()));
+			obLPie.add(new PieChart.Data(series7.getName(), dao.searchBook(series7.getName(), "category").size()));
+
+			pieChart.setData(obLPie);
 
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -1008,149 +1043,6 @@ public class AdminManagement implements Initializable {
 
 	}
 
-	// 라인차트 출력
-	private void handelBtnLineChartAction(ActionEvent e) {
-		try {
-
-			/*
-			 * XYChart.Series series1 = new XYChart.Series();
-			 * series1.setName(String.valueOf(LocalDate.now().getMonthValue()));
-			 * XYChart.Series series2 = new XYChart.Series();
-			 * series2.setName(String.valueOf("7")); //ArrayList<Statistical> rentalList =
-			 * dao.getAllRentalCount(); //int rentalCount = rentalList.size();
-			 * 
-			 * XYChart.Series series2 = new XYChart.Series();
-			 * series2.setName(LocalDate.now().toString()); XYChart.Series series3 = new
-			 * XYChart.Series(); series3.setName(dao.categoryList.get(2)); XYChart.Series
-			 * series4 = new XYChart.Series(); series4.setName(dao.categoryList.get(3));
-			 * XYChart.Series series5 = new XYChart.Series();
-			 * series5.setName(dao.categoryList.get(4));
-			 * 
-			 * 
-			 * ObservableList obL1 = FXCollections.observableArrayList(); ObservableList
-			 * obL2 = FXCollections.observableArrayList(); ObservableList obL3 =
-			 * FXCollections.observableArrayList(); ObservableList obL4 =
-			 * FXCollections.observableArrayList(); ObservableList obL5 =
-			 * FXCollections.observableArrayList();
-			 * 
-			 * obL1.add(new XYChart.Data(series1.getName(), 6)); obL1.add(new
-			 * XYChart.Data(series1.getName(), 9)); obL1.add(new
-			 * XYChart.Data(series1.getName(), 3)); obL2.add(new
-			 * XYChart.Data(series2.getName(), 9));
-			 * 
-			 * obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(),
-			 * "category").size())); obL3.add(new XYChart.Data("",
-			 * dao.searchBook(series3.getName(), "category").size())); obL4.add(new
-			 * XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
-			 * obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(),
-			 * "category").size()));
-			 * 
-			 * 
-			 * series1.setData(obL1); lineChart.getData().add(series1);
-			 * series2.setData(obL2); lineChart.getData().add(series2);
-			 * 
-			 * series2.setData(obL2); lineChart.getData().add(series2);
-			 * series3.setData(obL3); lineChart.getData().add(series3);
-			 * series4.setData(obL4); lineChart.getData().add(series4);
-			 * series5.setData(obL5); lineChart.getData().add(series5);
-			 */
-
-			ObservableList<XYChart.Series<Number, Number>> list = FXCollections.observableArrayList();
-			int[] monthArray = new int[12];
-
-			// for (int i = 0; i < dao.categoryList.size(); i++) {
-
-			// }
-			XYChart.Series series1 = new XYChart.Series();
-			XYChart.Series series2 = new XYChart.Series();
-			XYChart.Series series3 = new XYChart.Series();
-			XYChart.Series series4 = new XYChart.Series();
-			XYChart.Series series5 = new XYChart.Series();
-			XYChart.Series series6 = new XYChart.Series();
-			XYChart.Series series7 = new XYChart.Series();
-			XYChart.Series series8 = new XYChart.Series();
-			series1.setName(dao.categoryList.get(0));// 장르 그래프 표현 기준
-			series2.setName(dao.categoryList.get(1));
-			series3.setName(dao.categoryList.get(2));
-			series4.setName(dao.categoryList.get(3));
-			series5.setName(dao.categoryList.get(4));
-			series6.setName(dao.categoryList.get(5));
-			series7.setName(dao.categoryList.get(6));
-			series8.setName(dao.categoryList.get(7));
-
-			ArrayList<Statistical> a = null;
-			/*
-			 * series1.getData().add(new XYChart.Data(4, 3)); series1.getData().add(new
-			 * XYChart.Data(5, 2)); series1.getData().add(new XYChart.Data(6, 6));
-			 * 
-			 * series2.getData().add(new XYChart.Data(4, 1)); series2.getData().add(new
-			 * XYChart.Data(5, 4)); series2.getData().add(new XYChart.Data(6, 3));
-			 */
-
-			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-6").size());// 6월에 빌린 책의 장르갯수
-			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-6").get(0).getCartgory());// 장르 : 만화
-			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-" + "6").get(0).getCount());
-			/*
-			 * for (int i = 1; i <= 12; i++) { monthArray[i - 1] =
-			 * dao.getAllRentalCount(LocalDate.now().getYear() + "-" + i).get(0).getCount();
-			 * }
-			 */
-			for (int i = 1; i <=12; i++) {
-				try {
-					a = dao.getAllRentalCount(LocalDate.now().getYear() + "-" + i);
-					//if (a != null) {
-						System.out.println(i + "-"+a.get(0).getCartgory()+":" + a.get(0).getCount());
-						System.out.println(i + "-" + a.get(1).getCartgory()+":" + a.get(1).getCount());
-						System.out.println(i + "-" + a.get(2).getCartgory()+":" + a.get(2).getCount());
-						System.out.println(i + "-" + a.get(3).getCartgory()+":" + a.get(3).getCount());
-						System.out.println(i + "-" + a.get(4).getCartgory()+":" + a.get(4).getCount());
-						System.out.println(i + "-" + a.get(5).getCartgory()+":" + a.get(5).getCount());
-						System.out.println(i + "-" + a.get(6).getCartgory()+":" + a.get(6).getCount());
-						System.out.println(i + "-" + a.get(7).getCartgory()+":" + a.get(7).getCount());
-
-						/*
-						 * series1.getData().add(new XYChart.Data(i, a.get(0).getCount()));//
-						 * 1월,2월,3월~에// 경제경영이 몇개인지 series2.getData().add(new XYChart.Data(i,
-						 * a.get(1).getCount())); series3.getData().add(new XYChart.Data(i,
-						 * a.get(2).getCount())); series4.getData().add(new XYChart.Data(i,
-						 * a.get(3).getCount())); series5.getData().add(new XYChart.Data(i,
-						 * a.get(4).getCount())); series6.getData().add(new XYChart.Data(i,
-						 * a.get(5).getCount())); series7.getData().add(new XYChart.Data(i,
-						 * a.get(6).getCount())); series8.getData().add(new XYChart.Data(i,
-						 * a.get(7).getCount()));
-						  } else {
-						series1.getData().add(new XYChart.Data(i, 0));// 1월,2월,3월~에// 경제경영이 몇개인지
-						series2.getData().add(new XYChart.Data(i, 0));
-						series3.getData().add(new XYChart.Data(i, 0));
-						series4.getData().add(new XYChart.Data(i, 0));
-						series5.getData().add(new XYChart.Data(i, 0));
-						series6.getData().add(new XYChart.Data(i, 0));
-						series7.getData().add(new XYChart.Data(i, 0));
-						series8.getData().add(new XYChart.Data(i, 0));
-						}*/
-					
-				} catch (Exception e1) {
-					System.out.println(e1.getMessage());
-				}
-			}
-
-			list.addAll(series1, series2, series2, series3, series4, series5, series6, series7);
-
-			lineChart.setData(list);
-
-		}catch(
-
-	Exception e1)
-	{
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("데이터 에러");
-		alert.setHeaderText("데이터가 존재하지않습니다.");
-		alert.setContentText(e1.getMessage());
-		alert.showAndWait();
-	}
-
-	}
-
 	/* ========================서브함수들 ====================== */
 
 	// 이미지파일 삭제 메소드
@@ -1158,7 +1050,7 @@ public class AdminManagement implements Initializable {
 		boolean result = false;
 		File fileDelete = null;
 		try {
-				fileDelete = new File(directorySave.getAbsolutePath() + "\\" + fileName); // 삭제이미지 파일
+			fileDelete = new File(directorySave.getAbsolutePath() + "\\" + fileName); // 삭제이미지 파일
 			if (fileDelete.exists() && fileDelete.isFile()) {
 				result = fileDelete.delete();
 			}
@@ -1202,8 +1094,7 @@ public class AdminManagement implements Initializable {
 			directorySave.mkdir();
 			System.out.println("도서 디렉토리 생성");
 		}
-		
-		
+
 	}
 
 }

@@ -37,7 +37,7 @@
                               <Insets right="37.0" />
                            </padding>
                         </Label>
-                        <TextField id="txtName" />
+                        <Label id="lbName" text="Label" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT">

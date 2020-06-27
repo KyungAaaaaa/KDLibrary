@@ -23,10 +23,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -42,7 +43,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import model.Book;
 import model.Notice;
 import model.Schedule;
 import model.Statistical;
@@ -92,14 +92,15 @@ public class AdminController implements Initializable {
 
 	}
 
+	// 대여기록 확인 버튼 핸들러 함수
 	private void handleBtnRentalListAction(ActionEvent e) {
-		
+
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminRentalListPopUp.fxml"));
 			Scene scene = new Scene(root);
 			Stage adminRentalListPopUp = new Stage();
 			adminRentalListPopUp.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
-			adminRentalListPopUp.setTitle("도서관 이용 현황");
+			adminRentalListPopUp.setTitle("대여기록확인");
 			adminRentalListPopUp.setScene(scene);
 			adminRentalListPopUp.setResizable(true);
 			Button btnSearch = (Button) root.lookup("#btnSearch");
@@ -107,42 +108,9 @@ public class AdminController implements Initializable {
 			Button btnExit = (Button) root.lookup("#btnExit");
 			TableView tblRentalList = (TableView) root.lookup("#tblRentalList");
 			BarChart barChart = (BarChart) root.lookup("#barChart");
-
-			ComboBox<String> cmbYear1 = (ComboBox) root.lookup("#cmbYear1");
-			ComboBox<String> cmbMonth1 = (ComboBox) root.lookup("#cmbMonth1");
-			ComboBox<String> cmbDay1 = (ComboBox) root.lookup("#cmbDay1");
-			ComboBox<String> cmbYear2 = (ComboBox) root.lookup("#cmbYear2");
-			ComboBox<String> cmbMonth2 = (ComboBox) root.lookup("#cmbMonth2");
-			ComboBox<String> cmbDay2 = (ComboBox) root.lookup("#cmbDay2");
-
-			cmbYear1.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
-					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
-					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
-					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
-					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
-					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
-					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
-					"2019", "2020"));
-			cmbMonth1.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
-					"10", "11", "12"));
-
-			cmbDay1.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
-					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
-					"26", "27", "28", "29", "30", "31"));
-			cmbYear2.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
-					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
-					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
-					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
-					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
-					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
-					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
-					"2019", "2020"));
-			cmbMonth2.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
-					"10", "11", "12"));
-
-			cmbDay2.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
-					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
-					"26", "27", "28", "29", "30", "31"));
+			LineChart lineChart = (LineChart) root.lookup("#lineChart");
+			DatePicker dp1 = (DatePicker) root.lookup("#dp1");
+			DatePicker dp2 = (DatePicker) root.lookup("#dp2");
 
 			TableColumn colNo = new TableColumn("No");
 			colNo.setMaxWidth(30);
@@ -175,7 +143,7 @@ public class AdminController implements Initializable {
 			colCartgory.setCellValueFactory(new PropertyValueFactory("cartgory"));
 
 			tblRentalList.getColumns().addAll(colNo, colDate, colId, colIsbn, colTitle, colCartgory);
-			
+
 			btnAll.setOnAction(event -> {
 				obsListRentalList.clear();
 				ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
@@ -186,10 +154,9 @@ public class AdminController implements Initializable {
 				try {
 					con = DBUtil.getConnection();
 
-					query = "select No,Rentaldate,Id,ISBN,title,category from StatisticalTBL A inner join memberTBL B on A.Member_Id=B.Id\r\n"
-							+ "inner join BookTBL C on A.Book_ISBN=C.ISBN;";
+					query = "select No,Rentaldate,Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B on A.Member_Id=B.Id\r\n"
+							+ "Left join BookTBL C on A.Book_ISBN=C.ISBN;";
 					preparedStatement = con.prepareStatement(query);
-					// preparedStatement.setString(1, "%" + searchText + "%");
 
 					rs = preparedStatement.executeQuery();
 					while (rs.next()) {
@@ -217,15 +184,42 @@ public class AdminController implements Initializable {
 
 				tblRentalList.setItems(obsListRentalList);
 
+				///////////////////////////////////////////////////////////////////////////////////////////
+				try {
+					BookDAO dao = new BookDAO();
+					ArrayList monthList1 = dao.searchRentalBookList("06");
+					XYChart.Series series1 = new XYChart.Series();
+					series1.setName("대출 수");
+					series1.getData().add(new XYChart.Data(1, dao.searchRentalBookList("01").size()));
+					series1.getData().add(new XYChart.Data(2, dao.searchRentalBookList("02").size()));
+					series1.getData().add(new XYChart.Data(3, dao.searchRentalBookList("03").size()));
+					series1.getData().add(new XYChart.Data(4, dao.searchRentalBookList("04").size()));
+					series1.getData().add(new XYChart.Data(5, dao.searchRentalBookList("05").size()));
+					series1.getData().add(new XYChart.Data(6, dao.searchRentalBookList("06").size()));
+					series1.getData().add(new XYChart.Data(7, dao.searchRentalBookList("07").size()));
+					series1.getData().add(new XYChart.Data(8, dao.searchRentalBookList("08").size()));
+					series1.getData().add(new XYChart.Data(9, dao.searchRentalBookList("09").size()));
+					series1.getData().add(new XYChart.Data(10, dao.searchRentalBookList("10").size()));
+					series1.getData().add(new XYChart.Data(11, dao.searchRentalBookList("11").size()));
+					series1.getData().add(new XYChart.Data(11, dao.searchRentalBookList("12").size()));
+
+					ObservableList<XYChart.Series<Number, Number>> list = FXCollections.observableArrayList();
+					list.addAll(series1);
+					lineChart.setData(list);
+
+				} catch (Exception e1) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("데이터 에러");
+					alert.setHeaderText("데이터가 존재하지않습니다.");
+					alert.setContentText(e1.getMessage());
+					alert.showAndWait();
+				}
+				////////////////////////////////////////////////////////////////////////////////////////////////
 
 			});
 			btnSearch.setOnAction(e3 -> {
-				int month1 = Integer.parseInt(cmbMonth1.getValue());
-				int day1 = Integer.parseInt(cmbDay1.getValue());
-				System.out.println(cmbYear1.getValue() + "-" + month1 + "-" + day1);
-				
-				
-				
+				String[] date1 = dp1.getValue().toString().split("-");
+				String[] date2 = dp2.getValue().toString().split("-");
 				obsListRentalList.clear();
 				ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
 				Connection con = null;
@@ -235,10 +229,11 @@ public class AdminController implements Initializable {
 				try {
 					con = DBUtil.getConnection();
 
-					query = "select No,Rentaldate,Id,ISBN,title,category from StatisticalTBL A inner join memberTBL B on A.Member_Id=B.Id\r\n"
-							+ "inner join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate like '?';";
-					preparedStatement = con.prepareStatement(query);
-					//preparedStatement.setString(1, "%" + searchText + "%");
+					query = "select No,DATE_FORMAT(Rentaldate,'%Y-%m-%d '),Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B "
+							+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?)+1;";
+					preparedStatement = con.prepareStatement(query); //
+					preparedStatement.setInt(1, Integer.parseInt((date1[0] + date1[1] + date1[2]).trim()));
+					preparedStatement.setInt(2, Integer.parseInt((date2[0] + date2[1] + date2[2]).trim()));
 
 					rs = preparedStatement.executeQuery();
 					while (rs.next()) {
@@ -266,9 +261,6 @@ public class AdminController implements Initializable {
 
 				tblRentalList.setItems(obsListRentalList);
 
-				
-				
-				
 			});
 			adminRentalListPopUp.show();
 			btnExit.setOnAction(e3 -> adminRentalListPopUp.close());
@@ -605,15 +597,12 @@ public class AdminController implements Initializable {
 			ObservableList<String> obSchdule = FXCollections.observableArrayList();
 			DAO dao = new DAO();
 			schduleList = dao.getSchedule(date);
-//			schduleCount=schduleList.size();
-//			System.out.println(schduleCount);
 			if (schduleList.size() != 0) {
 				for (int i = 0; i < schduleList.size(); i++) {
 					obSchdule.add(schduleList.get(i).getContent());
 				}
 			}
 			listV.setItems(obSchdule);
-			System.out.println(schduleCount);
 			datePicker.setOnAction(e3 -> {
 				obSchdule.clear();
 				schduleList.clear();
@@ -656,13 +645,12 @@ public class AdminController implements Initializable {
 							if (txaContent.getText().trim().equals(""))
 								throw new Exception();
 							con1 = DBUtil.getConnection();
-							String query = "Insert into ScheduleTBL(`content`,`date`,`No`) values(?,?,?);";
+							String query = "Insert into ScheduleTBL(`content`,`date`,`No`) values(?,?,null);";
 							pstmt = con1.prepareStatement(query);
 
 							Schedule schedule = new Schedule(txaContent.getText(), date);
 							pstmt.setString(1, schedule.getContent());
 							pstmt.setString(2, schedule.getDate());
-							pstmt.setInt(3, schduleCount);
 
 							int resultValue = pstmt.executeUpdate();
 							if (resultValue != 0) {
@@ -708,55 +696,53 @@ public class AdminController implements Initializable {
 					Button btnEdit2 = (Button) scene.lookup("#btnEdit");
 					Label lbDate2 = (Label) scene.lookup("#lbDate");
 					TextArea txaContent2 = (TextArea) scene.lookup("#txaContent");
-
-					lbDate2.setText(date);
-
-					// No랑 인덱스값이랑 매치안됨 미완
+					Schedule sh = schduleList.get(tableViewselectedIndex2);
+					lbDate2.setText(sh.getDate());
+					txaContent2.setText(sh.getContent());
 					btnEdit2.setOnAction(eve2 -> {
 						Connection con2 = null;
 						PreparedStatement pstmt = null;
 						try {
 							con2 = DBUtil.getConnection();
-							String query = "update ScheduleTBL set content = ? where No = ?";
+							String query = "update ScheduleTBL set content = ? where no = ?";
 							pstmt = con2.prepareStatement(query);
-
-							Schedule sh = schduleList.get(tableViewselectedIndex2);
-
-							pstmt.setString(1, sh.getContent());
-							// pstmt.setInt(2, sh.getNo());
-							pstmt.setInt(2, 1);
+							pstmt.setString(1, txaContent2.getText());
+							pstmt.setInt(2, sh.getNo());
 							int ase = pstmt.executeUpdate();
 							if (ase != 0) {
 								sh.setContent(txaContent2.getText());
-								sh.setNo(tableViewselectedIndex2);
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("일정표 수정창");
 								alert.setHeaderText("수정이 완료되었습니다");
 								alert.showAndWait();
 								adminScheduleStage.close();
 							} else {
-								throw new Exception();
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("일정표 수정창");
+								alert.setHeaderText("오류11");
+								alert.showAndWait();
 							}
 
 						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							System.out.println(e1.getMessage());
+							Alert alert = new Alert(AlertType.INFORMATION);
+							alert.setTitle("일정표 수정창");
+							alert.setHeaderText("오류");
+							alert.setContentText(e1.getMessage());
+							alert.showAndWait();
 						}
 					});
-
 					adminScheduleStage.setScene(scene);
 					adminScheduleStage.setResizable(false);
 					adminScheduleStage.setTitle("일정표 수정");
 					adminScheduleStage.show();
 				} catch (IOException e1) {
-
+					System.out.println(e1.getMessage());
 				}
 			});
 
 			btnClose.setOnAction(e3 -> arg0.close());
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 

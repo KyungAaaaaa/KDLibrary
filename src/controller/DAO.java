@@ -24,7 +24,7 @@ public class DAO {
 			preparedStatement.setString(1, date);
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				schduleList.add(new Schedule(rs.getString("content"), rs.getString("date")));
+				schduleList.add(new Schedule(rs.getString("content"), rs.getString("date"),rs.getInt("no")));
 			}
 
 		} catch (Exception e31) {

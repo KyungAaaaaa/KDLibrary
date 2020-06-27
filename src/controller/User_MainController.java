@@ -1,48 +1,3 @@
-/*
- * package controller;
- * 
- * import java.net.URL; import java.util.ResourceBundle;
- * 
- * import javafx.event.ActionEvent; import javafx.event.EventHandler; import
- * javafx.fxml.FXML; import javafx.fxml.FXMLLoader; import
- * javafx.fxml.Initializable; import javafx.scene.Parent; import
- * javafx.scene.Scene; import javafx.scene.control.Alert; import
- * javafx.scene.control.Button; import javafx.scene.control.Alert.AlertType;
- * import javafx.stage.Stage;
- * 
- * public class User_MainController implements Initializable{
- * 
- * @FXML private Button btnUserModify;
- * 
- * @FXML private Button btnOut;
- * 
- * @FXML private Button btnBookSearch;
- * 
- * @FXML private Button btnBookApply;
- * 
- * @FXML private Button btnBookRental;
- * 
- * @FXML private Button btnNotice;
- * 
- * @FXML private Button btnCalendar; public Stage stage;
- * 
- * @Override public void initialize(URL location, ResourceBundle resources) { //
- * 로그인창으로 돌아감 btnOut.setOnAction(event -> handlerBtnOut(event));
- * 
- * }
- * 
- * 
- * // 로그인창으로 돌아감 private void handlerBtnOut(ActionEvent event) { Parent mainView
- * = null; Stage mainStage = null; try { mainView =
- * FXMLLoader.load(getClass().getResource("/view/login.fxml")); Scene scene =
- * new Scene(mainView); mainStage = new Stage(); mainStage.setTitle("메인");
- * mainStage.setScene(scene); mainStage.setResizable(true); ((Stage)
- * btnOut.getScene().getWindow()).close(); mainStage.show(); }catch(Exception e)
- * { Alert alert = new Alert(AlertType.ERROR); alert.setTitle("에러발생");
- * alert.setHeaderText("메인창 부르기 오류"); alert.showAndWait(); } }
- * 
- * }
- */
 
 package controller;
 
@@ -66,7 +21,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -74,9 +28,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -169,8 +125,8 @@ public class User_MainController implements Initializable {
 		try {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userModifyStage = new Stage(StageStyle.UTILITY);
-			// stage=userModifyStage;
 			Label lbTitle = (Label) scene.lookup("#lbTitle");
 			Label lbISBN = (Label) scene.lookup("#lbISBN");
 			Label lbWriter = (Label) scene.lookup("#lbWriter");
@@ -250,7 +206,7 @@ public class User_MainController implements Initializable {
 		try {
 			mainView = FXMLLoader.load(getClass().getResource("/view/user_BookSearch.fxml"));
 			Scene scene = new Scene(mainView);
-			scene.getStylesheets().add(getClass().getResource("/css/User.css").toString());
+			scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
 			mainStage = new Stage();
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			mainStage.setTitle("KD Library");
@@ -277,6 +233,7 @@ public class User_MainController implements Initializable {
 
 			mainStage = new Stage();
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
 			mainStage.setResizable(true);
@@ -290,59 +247,73 @@ public class User_MainController implements Initializable {
 		}
 	}
 
-	// 회원정보 수정
+	// 개인정보 수정
 	private void handlerBtnUserModify(ActionEvent event) {
 		try {
 
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_changingInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userModifyStage = new Stage(StageStyle.UTILITY);
+			
 			PasswordField txtPass = (PasswordField) scene.lookup("#txtPass");
 			Button btnUserModifyNo = (Button) scene.lookup("#btnNo");
 			Button btnUserModifyOk = (Button) scene.lookup("#btnOk");
 
 			btnUserModifyOk.setOnAction(event1 -> {
+				if(txtPass.getText().equals("")) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("비밀번호 미기입");
+					alert.setHeaderText("비밀번호를 입력하세요.");
+					alert.showAndWait();
+					return;
+				}
 				if (txtPass.getText().equals(memberDao.m.getPass())) {
 					userModifyStage.close();
 					try {
 						Parent userModifyView2 = FXMLLoader
 								.load(getClass().getResource("/view/user_changingInformation2.fxml"));
 						Scene scene1 = new Scene(userModifyView2);
+						scene1.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 						Stage userModifyStage2 = new Stage(StageStyle.UTILITY);
 
 						Label lblId2 = (Label) scene1.lookup("#lblId");
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
+						Label lbName = (Label) scene1.lookup("#lbName");
 						TextField txtPass2 = (TextField) scene1.lookup("#txtPass");
-						TextField txtName2 = (TextField) scene1.lookup("#txtName");
 						TextField txtPhone2 = (TextField) scene1.lookup("#txtPhone");
 						Button btnModifyNo2 = (Button) scene1.lookup("#btnNo");
 						Button btnModifyAdd2 = (Button) scene1.lookup("#btnAdd");
-
+						
 						lblId2.setText(memberDao.m.getId());
 						lblBirth2.setText(memberDao.m.getBirth());
 						txtPass2.setText(memberDao.m.getPass());
-						txtName2.setText(memberDao.m.getName());
+						lbName.setText(memberDao.m.getName());
 						txtPhone2.setText(memberDao.m.getPhoneNumber());
 
 						btnModifyAdd2.setOnAction(event2 -> {
+							if(txtPass2.getText().equals("")||txtPhone2.getText().equals("")) {
+								Alert alert = new Alert(AlertType.ERROR);
+								alert.setTitle("정보 미기입");
+								alert.setHeaderText("모든 항목을 입력하세요.");
+								alert.showAndWait();
+								return;
+							}
 							Connection con = null;
 							PreparedStatement pstmt = null;
 							try {
 								con = DBUtil.getConnection();
-								String query = "update memberTBL set name = ? ,pass = ?, phoneNumber = ? where id = ?";
+								String query = "update memberTBL set pass = ?, phoneNumber = ? where id = ?";
 								pstmt = con.prepareStatement(query);
-								pstmt.setString(1, txtName2.getText());
-								pstmt.setString(2, txtPass2.getText());
-								pstmt.setString(3, txtPhone2.getText());
-								pstmt.setString(4, memberDao.m.getId());
+								pstmt.setString(1, txtPass2.getText());
+								pstmt.setString(2, txtPhone2.getText());
+								pstmt.setString(3, memberDao.m.getId());
 
 								int userModify = pstmt.executeUpdate();
 
 								if (userModify != 0) {
-									memberDao.m.setName(txtName2.getText());
 									memberDao.m.setPass(txtPass2.getText());
 									memberDao.m.setPhoneNumber(txtPhone2.getText());
-
 									Alert alert = new Alert(AlertType.INFORMATION);
 									alert.setTitle("계정관리");
 									alert.setHeaderText("회원정보 수정이 완료되었습니다");
@@ -404,6 +375,7 @@ public class User_MainController implements Initializable {
 		try {
 			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule.fxml"));
 			Scene scene = new Scene(userScheduleView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userScheduleStage = new Stage(StageStyle.UTILITY);
 			TableView tblUserSchedule = (TableView) scene.lookup("#tblSchedule");
 			Button btnUserScheduleNo = (Button) scene.lookup("#btnNo");
@@ -470,6 +442,7 @@ public class User_MainController implements Initializable {
 		try {
 			Parent userNoticeView = FXMLLoader.load(getClass().getResource("/view/user_notice.fxml"));
 			Scene scene = new Scene(userNoticeView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userNoticeStage = new Stage(StageStyle.UTILITY);
 
 			TableView tblUserNotice = (TableView) scene.lookup("#tblNotice");
@@ -597,6 +570,7 @@ public class User_MainController implements Initializable {
 		try {
 			Parent userRequestPopUpView = FXMLLoader.load(getClass().getResource("/view/requestPopUp.fxml"));
 			Scene scene = new Scene(userRequestPopUpView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userRequestPopUpStage = new Stage(StageStyle.UTILITY);
 
 			Button btnUserPopUpAdd = (Button) scene.lookup("#btnAdd");

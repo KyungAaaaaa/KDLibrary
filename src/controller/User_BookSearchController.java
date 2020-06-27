@@ -7,11 +7,8 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,7 +50,6 @@ public class User_BookSearchController implements Initializable {
 	ImageView imgV32;
 	@FXML
 	ImageView imgV33;
-	// @FXML ListView<String> listV;
 	@FXML
 	Label lbTitle11;
 	@FXML
@@ -109,20 +105,12 @@ public class User_BookSearchController implements Initializable {
 	private String selectFileName;
 	private String localUrl;
 	private int bookCount;
-	private int selectBook = -1;
 	private int page = 0;
 	BookDAO dao = new BookDAO();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
-		// listV.setOnMousePressed(e -> listViewSelectIndexSetMethod());
-		// listV.setOnMouseClicked(e -> getCartegoryBook());
-		/*
-		 * btnCategory1.setOnAction(e -> { listViewSelectIndexSetMethod();
-		 * getCartegoryBook(); });
-		 */
-		// listV.setItems(dao.categoryList);
 		btnSearch.setOnAction(e -> handleBtnSearchAction(e));
 		btnExit.setOnAction(e -> handleBtnBackAction(e));
 		getBookSelectMethod();
@@ -149,7 +137,6 @@ public class User_BookSearchController implements Initializable {
 			}
 			if (bookCount > 9) {
 				bookList2 = bookList;
-				// bookCount-=9;
 			}
 			for (int i = 0; i < bookCount; i++) {
 				if (bookCount > 9) {
@@ -184,6 +171,7 @@ public class User_BookSearchController implements Initializable {
 						bookImageVList.get(i - 9).setDisable(false);
 
 					}
+					btnNext.setDisable(true);
 				});
 				btnBack.setOnAction(event -> {
 					for (int j = 0; j < 9; j++) {
@@ -203,9 +191,10 @@ public class User_BookSearchController implements Initializable {
 						bookImageVList.get(i).setDisable(false);
 					}
 					page--;
+					btnBack.setDisable(true);
+					btnNext.setDisable(false);
 				});
 				
-				btnBack.setDisable(true);
 
 			}
 		} catch (Exception e2) {
@@ -274,6 +263,7 @@ public class User_BookSearchController implements Initializable {
 		try {
 			root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			adminMain = new Stage();
 			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			adminMain.setTitle("KD Library");
@@ -286,7 +276,6 @@ public class User_BookSearchController implements Initializable {
 	}
 
 	private void listViewSelectIndexSetMethod(Button button) {
-		// listViewSelectItem = listV.getSelectionModel().getSelectedItem();
 		for (Button b : buttonList) {
 			b.setStyle("-fx-background-color:  #00ff0000");
 		}
@@ -313,7 +302,6 @@ public class User_BookSearchController implements Initializable {
 			}
 			if (bookCount > 9) {
 				bookList2 = bookList;
-				// bookCount-=9;
 			}
 			for (int i = 0; i < bookCount; i++) {
 				if (bookCount > 9) {
@@ -358,6 +346,7 @@ public class User_BookSearchController implements Initializable {
 		try {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage userModifyStage = new Stage(StageStyle.UTILITY);
 			Label lbTitle = (Label) scene.lookup("#lbTitle");
 			Label lbISBN = (Label) scene.lookup("#lbISBN");
@@ -415,7 +404,6 @@ public class User_BookSearchController implements Initializable {
 
 							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0
 									&& preparedStatement3.executeUpdate() != 0) {
-								// if (preparedStatement1.executeUpdate() != 0 ) {
 								dao.m.setRentalBook(b.getIsbn());
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("대여완료");

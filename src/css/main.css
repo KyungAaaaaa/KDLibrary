@@ -1,31 +1,28 @@
 AnchorPane{
-	-fx-background-color:#FDF0E4;
+	-fx-background-color:#f8ecc9;
+	
 }
-HBox{
-	-fx-background-color:#FDF0E4;
-}
+
 Button{
 	-fx-background-color:#a79c8e;
 	-fx-font-family: "NanumGothic";
-	
+	-fx-text-fill: gray;
 }
 .textLabel{
 	
 	-fx-font-family: "NanumGothic";
 }
 
+.cartegoryBtn{
+	-fx-text-size:40;
+}
 
 .logo{
 	-fx-text-fill: #724694;
 }
 .textField{
 	-fx-background-color:white;
-	-fx-font-family: "NanumGothic";
 }
 .cmb{
 	-fx-background-color:white;
-}
-
-.etcLabel{
-	-fx-font-family: "NanumGothic";
 }
