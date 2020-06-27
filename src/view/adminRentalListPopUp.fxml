@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" fillHeight="false" prefHeight="52.0" prefWidth="343.0">
+         <children>
+            <ComboBox id="cmbYear1" prefHeight="23.0" prefWidth="104.0" styleClass="cmb" />
+            <Label text=" 년 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox id="cmbMonth1" prefHeight="23.0" prefWidth="73.0" styleClass="cmb" />
+            <Label text=" 월 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox id="cmbDay1" prefHeight="23.0" prefWidth="68.0" styleClass="cmb" />
+            <Label text=" 일 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label text="  ~  ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox id="cmbYear2" prefHeight="23.0" prefWidth="104.0" styleClass="cmb" />
+            <Label text=" 년 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox id="cmbMonth2" prefHeight="23.0" prefWidth="73.0" styleClass="cmb" />
+            <Label text=" 월 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <ComboBox id="cmbDay2" prefHeight="23.0" prefWidth="68.0" styleClass="cmb" />
+            <Label text=" 일 ">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Button id="btnSearch" mnemonicParsing="false" text="검색" />
+            <Button id="btnAll" mnemonicParsing="false" text="전체보기" />
+         </children>
+      </HBox>
+      <HBox prefHeight="426.0" prefWidth="960.0" spacing="10.0">
+         <children>
+            <TableView id="tblRentalList" prefHeight="426.0" prefWidth="694.0" />
+            <BarChart id="barChart" prefHeight="369.0" prefWidth="403.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+            </BarChart>
+         </children>
+      </HBox>
+      <Button id="btnExit" mnemonicParsing="false" text="닫기">
+         <VBox.margin>
+            <Insets top="10.0" />
+         </VBox.margin>
+      </Button>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>
