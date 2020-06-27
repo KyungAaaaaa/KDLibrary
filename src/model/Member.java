@@ -7,7 +7,6 @@ public class Member {
 	private String phoneNumber;
 	private String birth;
 	private String rentalBook;
-	private String fileimg;
 	private String etc;
 	
 	// 1. 
@@ -101,13 +100,6 @@ public class Member {
 		this.rentalBook = rentalBook;
 	}
 
-	public String getFileimg() {
-		return fileimg;
-	}
-
-	public void setFileimg(String fileimg) {
-		this.fileimg = fileimg;
-	}
 
 	public String getEtc() {
 		return etc;
@@ -120,7 +112,7 @@ public class Member {
 	@Override
 	public String toString() {
 		return "Member [name=" + name + ", id=" + id + ", pass=" + pass + ", phoneNumber=" + phoneNumber + ", birth="
-				+ birth + ", rentalBook=" + rentalBook + ", fileimg=" + fileimg + ", etc=" + etc + "]";
+				+ birth + ", rentalBook=" + rentalBook + ", etc=" + etc + "]";
 	}
 	
 	

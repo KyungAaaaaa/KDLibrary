@@ -8,11 +8,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="650.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: #f8ecc9;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="146.0" layoutY="165.0">
+      <VBox layoutX="94.0" layoutY="86.0" prefHeight="516.0" prefWidth="312.0" spacing="5.0">
          <children>
-            <Label text="이름 : ">
+            <Label styleClass="textLabel" text="이름">
                <font>
                   <Font size="15.0" />
                </font>
@@ -20,16 +20,12 @@
                   <Insets right="25.0" />
                </padding>
             </Label>
-            <TextField id="txtName">
-               <HBox.margin>
-                  <Insets />
-               </HBox.margin>
+            <TextField id="txtName" styleClass="textField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
             </TextField>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="133.0" layoutY="200.0">
-         <children>
-            <Label text="아이디 : ">
+            <Label styleClass="textLabel" text="아이디">
                <font>
                   <Font size="15.0" />
                </font>
@@ -37,12 +33,11 @@
                   <Insets right="23.0" />
                </padding>
             </Label>
-            <TextField id="txtId" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="117.0" layoutY="239.0">
-         <children>
-            <Label text="비밀번호 :  ">
+            <TextField id="txtId" styleClass="textField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></TextField>
+            <Label styleClass="textLabel" text="비밀번호  ">
                <font>
                   <Font size="15.0" />
                </font>
@@ -50,35 +45,50 @@
                   <Insets right="20.0" />
                </padding>
             </Label>
-            <PasswordField id="txtPass" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="107.0" layoutY="275.0">
-         <children>
-            <Label text="비밀번호 확인 : ">
+            <PasswordField id="txtPass" styleClass="textField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></PasswordField>
+            <Label styleClass="textLabel" text="비밀번호 확인 ">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <PasswordField id="txtPass2" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="111.0" layoutY="310.0">
-         <children>
-            <Label text="생년월일 : ">
+            <PasswordField id="txtPass2" styleClass="textField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></PasswordField>
+            <Label styleClass="textLabel" text="생년월일">
                <font>
                   <Font size="15.0" />
                </font>
-               <padding>
-                  <Insets right="30.0" />
-               </padding>
             </Label>
-            <DatePicker id="datePicker" prefHeight="23.0" prefWidth="138.0" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="117.0" layoutY="343.0">
-         <children>
-            <Label text="휴대전화 : ">
+            <HBox alignment="CENTER" fillHeight="false">
+               <children>
+                  <ComboBox id="cmbYear" prefHeight="23.0" prefWidth="91.0" styleClass="cmb" />
+                  <Label text=" 년 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox id="cmbMonth" prefHeight="23.0" prefWidth="73.0" styleClass="cmb" />
+                  <Label text=" 월 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox id="cmbDay" prefHeight="23.0" prefWidth="68.0" styleClass="cmb" />
+                  <Label text=" 일 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </HBox>
+            <Label styleClass="textLabel" text="휴대전화">
                <font>
                   <Font size="15.0" />
                </font>
@@ -86,27 +96,27 @@
                   <Insets right="25.0" />
                </padding>
             </Label>
-            <TextField id="txtPhoneNumber" />
-         </children>
-      </HBox>
-      <VBox alignment="CENTER" layoutX="140.0" layoutY="391.0" spacing="20.0">
-         <children>
-            <ImageView id="imgView" fitHeight="76.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../../../../Users/user/Desktop/프로젝트소스/보안문자5.png" />
-               </image></ImageView>
-            <TextField id="txtSee" alignment="CENTER" promptText="보이는대로 입력하세요" />
+            <TextField id="txtPhoneNumber" styleClass="textField">
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin>
+            </TextField>
+            <VBox alignment="CENTER" fillWidth="false" prefHeight="153.0" prefWidth="332.0" spacing="20.0">
+               <children>
+                  <ImageView id="imgView" fitHeight="76.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true" />
+                  <TextField id="txtSee" alignment="CENTER" prefHeight="23.0" prefWidth="255.0" promptText="보이는대로 입력하세요" styleClass="textField" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER" spacing="50.0">
+               <children>
+                  <Button id="btnOk" mnemonicParsing="false" prefHeight="23.0" prefWidth="330.0" text="가입하기" />
+               </children>
+            </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER_LEFT" layoutX="175.0" layoutY="526.0" spacing="50.0">
-         <children>
-            <Button id="btnOk" mnemonicParsing="false" text="등 록" />
-            <Button id="btnNo" mnemonicParsing="false" text="취 소" />
-         </children>
-      </HBox>
-      <Label layoutX="104.0" layoutY="66.0" text="welcome !" textFill="#000003">
+      <Label id="logo" layoutX="124.0" layoutY="33.0" prefHeight="52.0" prefWidth="255.0" text="KDLIBRARY " textFill="#724694">
          <font>
-            <Font name="Arial Black" size="52.0" />
+            <Font name="Arial Black" size="35.0" />
          </font>
       </Label>
    </children>

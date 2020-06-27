@@ -8,7 +8,19 @@ Button{
 	-fx-font-family: "NanumGothic";
 	-fx-text-fill: gray;
 }
-.text:clicked{
-	-fx-text-fill:white;
+.textLabel{
+	
 	-fx-font-family: "NanumGothic";
+}
+
+
+
+.logo{
+	-fx-text-fill: #724694;
+}
+.textField{
+	-fx-background-color:white;
+}
+.cmb{
+	-fx-background-color:white;
 }

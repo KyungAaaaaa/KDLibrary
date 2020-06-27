@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #F2F2F2;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="controller.AdminController">
+<AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
       <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="673.0" prefWidth="440.0" style="-fx-background-color: #D9D9D9; -fx-border-width: 3; -fx-border-color: #0D0D0D;">
          <children>
@@ -38,7 +37,7 @@
             <Button fx:id="btnManagement" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #076873; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="관리메뉴" />
             <Button fx:id="btnNotice" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #F28B30; -fx-border-width: 2; -fx-border-color: #0D0D0D;" text="공지사항 전체보기" />
             <Button fx:id="btnSchedule" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #F23C13; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="일정 전체보기" />
-            <Button fx:id="btnAd" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #A65D56; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="광고, 베스트셀러 설정" />
+            <Button fx:id="btnReantalList" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #A65D56; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="대여 기록 확인" />
          </children>
       </VBox>
    </children>

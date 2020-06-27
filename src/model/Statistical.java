@@ -7,13 +7,32 @@ public class Statistical {
 	private int no;
 	private int count;
 	private String cartgory;
-
+	private String title;
+	
 	public Statistical(String isbn, String date, String id,int no) {
 		super();
 		this.isbn = isbn;
 		this.date = date;
 		this.id = id;
 		this.no= no;
+	}
+
+	public Statistical( int no,String date,  String id,String isbn,String title, String cartgory) {
+		super();
+		this.isbn = isbn;
+		this.date = date;
+		this.id = id;
+		this.no = no;
+		this.cartgory = cartgory;
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Statistical(String date,String cartgory,int count) {

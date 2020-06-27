@@ -142,7 +142,7 @@ public class AdminManagement implements Initializable {
 	private String selectFileName;
 	Image image = null;
 	BookDAO dao = new BookDAO();
-
+	boolean editImageFileSelect=false;
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// chartTab.setOnSelectionChanged(e->handelBtnBarChartAction(e));
@@ -256,16 +256,11 @@ public class AdminManagement implements Initializable {
 	private void handleBtnUserDeleteAction(ActionEvent e) {
 		try {
 			Member selectUser = obLMember.get(userTableSelectIndex);
-			selectFileName = selectUser.getFileimg();
-			localUrl = "file:/C:/images/Library_MemberData/" + selectFileName;
-			localImage = new Image(localUrl);
-
 			Connection con = DBUtil.getConnection();
 			String query = "delete from memberTBL where Id=?";
 			PreparedStatement preparedStatement = con.prepareStatement(query);
 			preparedStatement.setString(1, selectUser.getId());
 			if (preparedStatement.executeUpdate() != 0) {
-				imageDelete(selectFileName, "member");
 				obLMember.remove(userTableSelectIndex);
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setHeaderText("삭제 완료");
@@ -287,54 +282,83 @@ public class AdminManagement implements Initializable {
 	private void handleBtnUserEditAction(ActionEvent e) {
 
 		try {
-
+			
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminEditUserPopup.fxml"));
 			Stage addPopup = new Stage(StageStyle.UTILITY);
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			addPopup.setScene(new Scene(root));
-			addPopup.show();
+			addPopup.setTitle("회원 정보 수정");
+		
+			
 			Button btnOk = (Button) root.lookup("#btnOk");
 			Button btnCancel = (Button) root.lookup("#btnCancel");
-			Button btnFileSelect = (Button) root.lookup("#btnFileSelect");
 			TextField txtId = (TextField) root.lookup("#txtId");
 			TextField txtName = (TextField) root.lookup("#txtName");
 			TextField txtPass = (TextField) root.lookup("#txtPass");
 			TextField txtPhoneNumber = (TextField) root.lookup("#txtPhoneNumber");
-			DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
+			//DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
 			ComboBox cmbEtc = (ComboBox) root.lookup("#cmbEtc");
-			TextField txtRentalBook = (TextField) root.lookup("#txtRentalBook");
+			ComboBox<String> cmbYear=(ComboBox) root.lookup("#cmbYear");
+			ComboBox<String> cmbMonth=(ComboBox) root.lookup("#cmbMonth");
+			ComboBox<String> cmbDay=(ComboBox) root.lookup("#cmbDay");
+			Label lbRentalBook = (Label) root.lookup("#lbRentalBook");
 			cmbEtc.setItems(FXCollections.observableArrayList("정상", "연체"));
-			btnCancel.setOnAction(eve -> addPopup.close());
+			
+			
+
 			Member selectUser = obLMember.get(userTableSelectIndex);
+			
+			
+			btnCancel.setOnAction(eve -> addPopup.close());
+			
 			txtId.setText(selectUser.getId());
 			txtName.setText(selectUser.getName());
 			txtPass.setText(selectUser.getPass());
 			txtPhoneNumber.setText(selectUser.getPhoneNumber());
-			txtRentalBook.setText(selectUser.getRentalBook());
+			if(selectUser.getRentalBook()==null)lbRentalBook.setText("대여중인 책 없음.");
+			else lbRentalBook.setText(selectUser.getRentalBook());
+			//dpBirth.setValue(selectUser.getBirth());
+			String[] birth=selectUser.getBirth().split("-");
+			cmbYear.setValue(birth[0]);
+			cmbMonth.setValue(birth[1]);
+			cmbDay.setValue(birth[2]);
 			cmbEtc.setValue(selectUser.getEtc());
-
+			cmbYear.setItems(FXCollections.observableArrayList("1940",	"1941",	"1942",	"1943",	"1944",	"1945",	"1946",	"1947",	"1948",	"1949",	
+					"1950",	"1951",	"1952",	"1953",	"1954",	"1955",	"1956",	"1957",	"1958",	"1959",	
+					"1960",	"1961",	"1962",	"1963",	"1964",	"1965",	"1966",	"1967",	"1968",	"1969",	
+					"1970",	"1971",	"1972",	"1973",	"1974",	"1975",	"1976",	"1977",	"1978",	"1979",	
+					"1980",	"1981",	"1982",	"1983",	"1984",	"1985",	"1986",	"1987",	"1988",	"1989",	
+					"1990",	"1991",	"1992",	"1993",	"1994",	"1995",	"1996",	"1997",	"1998",	"1999",	
+					"2000",	"2001",	"2002",	"2003",	"2004",	"2005",	"2006",	"2007",	"2008",	"2009",	
+					"2010",	"2011",	"2012",	"2013",	"2014",	"2015",	"2016",	"2017",	"2018",	"2019",	"2020"));
+			cmbMonth.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12"));
+			
+			cmbDay.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12",	"13",	"14",	"15",	"16",	"17",	"18",	"19",	"20",	"21",	"22",	"23",	"24",	"25",	"26",	"27",	"28",	"29",	"30",	"31"));
+			
+			addPopup.show();
+			
 			btnOk.setOnAction(eve -> {
 				Connection con1 = null;
 				PreparedStatement preparedStatement = null;
 				try {
-
+					if (txtName.getText().trim().equals("")||txtPass.getText().trim().equals("")||txtPhoneNumber.getText().trim().equals(""))
+						throw new Exception();
 					con1 = DBUtil.getConnection(); //
-					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,rentalBook=?,etc=? where Id=?";
+					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,etc=? where Id=?";
 					preparedStatement = con1.prepareStatement(query);
 
 					preparedStatement.setString(1, txtName.getText());
 					preparedStatement.setString(2, txtPass.getText());
 					preparedStatement.setString(3, txtPhoneNumber.getText());
-					preparedStatement.setString(4, dpBirth.getValue().toString());
-					preparedStatement.setString(5, txtRentalBook.getText());
-					preparedStatement.setString(6, cmbEtc.getValue().toString());
-					preparedStatement.setString(7, selectUser.getId());
+					preparedStatement.setString(4, cmbYear.getValue()+"-"+cmbMonth.getValue()+"-"+cmbDay.getValue());
+					preparedStatement.setString(5, cmbEtc.getValue().toString());
+					preparedStatement.setString(6, selectUser.getId());
 					selectUser.setName(txtName.getText());
 					selectUser.setPass(txtPass.getText());
 					selectUser.setPhoneNumber(txtPhoneNumber.getText());
-					selectUser.setBirth(dpBirth.getValue().toString());
-					selectUser.setRentalBook(txtRentalBook.getText());
+					//selectUser.setBirth(dpBirth.getValue().toString());
+					//selectUser.setRentalBook(lbRentalBook.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
 
 					if (preparedStatement.executeUpdate() != 0) {
@@ -352,8 +376,8 @@ public class AdminManagement implements Initializable {
 
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setHeaderText("등록 실패 : DB에러");
-					alert.setContentText(e1.getMessage());
+					alert.setHeaderText("모든 항목을 입력하세요.");
+					//alert.setContentText(e1.getMessage());
 					alert.showAndWait();
 				} finally {
 					// con,pstmt 반납
@@ -411,7 +435,7 @@ public class AdminManagement implements Initializable {
 
 	// 도서탭 수정 버튼 핸들러이벤트
 	private void handleBtnBookEditAction(ActionEvent e) {
-
+		
 		try {
 
 			if (bookTableSelectIndex == -1)
@@ -448,10 +472,11 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-
+			
 			btnFileSelect.setOnAction(eve1 -> {
 				image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
+				
 			});
 
 			btnOk.setOnAction(eve -> {
@@ -479,12 +504,12 @@ public class AdminManagement implements Initializable {
 					book0.setDate(txtDate.getText());
 					book0.setInformation(txaInformation.getText());
 
-					if ((selectFile == null)) {
-						// selectFile = new File(directorySave.getAbsolutePath() + "\\" +
-						// selectFileName);
-						selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
-						// System.out.println(selectFileName);
-						// System.out.println(selectFile.toString());
+					if (selectFile == null) {
+						Alert alert = new Alert(AlertType.WARNING);
+						alert.setTitle("문제발생");
+						alert.setHeaderText("이미지 파일을 다시 선택하세요");
+						alert.showAndWait();
+						return;
 					}
 					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
@@ -503,11 +528,11 @@ public class AdminManagement implements Initializable {
 						}
 					} catch (Exception e1) {
 						System.out.println("파일 복사에러 : " + e1.getMessage());
-						return; // 파일 에러인데 밑에 저장하는과정을 실행하면안되기때문에 리턴으로 끝내버린다
+						return; 
 					} finally {
 						try {
 							book0.setFileimg(fileName);
-							imageDelete(selectFileName, "book");
+							
 							if (bis != null)
 								bis.close();
 							if (bos != null)
@@ -517,6 +542,7 @@ public class AdminManagement implements Initializable {
 					}
 
 					if (preparedStatement.executeUpdate() != 0) {
+						imageDelete(selectFileName);
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("등록 완료");
 						alert.showAndWait();
@@ -665,7 +691,7 @@ public class AdminManagement implements Initializable {
 		int returnValue = dao.deleteBook(selectBook);
 		if (returnValue != 0) {
 			// 이미지 파일 삭제
-			imageDelete(selectFileName, "book");
+			imageDelete(selectFileName);
 			obLBook.remove(bookTableSelectIndex);
 		} else {
 			System.out.println("실패");
@@ -1128,15 +1154,11 @@ public class AdminManagement implements Initializable {
 	/* ========================서브함수들 ====================== */
 
 	// 이미지파일 삭제 메소드
-	public boolean imageDelete(String fileName, String type) {
+	public boolean imageDelete(String fileName) {
 		boolean result = false;
 		File fileDelete = null;
 		try {
-			if (type.equals("book"))
 				fileDelete = new File(directorySave.getAbsolutePath() + "\\" + fileName); // 삭제이미지 파일
-			else if (type.equals("member"))
-				fileDelete = new File(directoryMemberSave.getAbsolutePath() + "\\" + fileName); // 삭제이미지 파일
-
 			if (fileDelete.exists() && fileDelete.isFile()) {
 				result = fileDelete.delete();
 			}
@@ -1180,12 +1202,8 @@ public class AdminManagement implements Initializable {
 			directorySave.mkdir();
 			System.out.println("도서 디렉토리 생성");
 		}
-		// 멤버 폴더
-		directoryMemberSave = new File("C:/images/Library_MemberData");
-		if (!directoryMemberSave.exists()) {
-			directoryMemberSave.mkdir();
-			System.out.println("유저 디렉토리 생성");
-		}
+		
+		
 	}
 
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,9 +22,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -38,12 +42,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.Book;
 import model.Notice;
 import model.Schedule;
+import model.Statistical;
 
 public class AdminController implements Initializable {
 	public Stage stage;
-	int schduleCount=0;
+	int schduleCount = 0;
 	@FXML
 	Button btnLogout;
 	@FXML
@@ -53,8 +59,9 @@ public class AdminController implements Initializable {
 	@FXML
 	Button btnSchedule;
 	@FXML
-	Button btnAd;
+	Button btnReantalList;
 	ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
+	private ObservableList<Statistical> obsListRentalList = FXCollections.observableArrayList();
 	private ObservableList<Notice> obsListN = FXCollections.observableArrayList();
 	private ObservableList<Schedule> obsListS = FXCollections.observableArrayList();
 	ArrayList<Notice> arrayList = null;
@@ -79,6 +86,197 @@ public class AdminController implements Initializable {
 
 		// 관리자 일정 버튼
 		btnSchedule.setOnAction(e -> handleBtnScheduleAction(e));
+
+		// 대여기록확인 버튼
+		btnReantalList.setOnAction(e -> handleBtnRentalListAction(e));
+
+	}
+
+	private void handleBtnRentalListAction(ActionEvent e) {
+		
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("/view/adminRentalListPopUp.fxml"));
+			Scene scene = new Scene(root);
+			Stage adminRentalListPopUp = new Stage();
+			adminRentalListPopUp.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			adminRentalListPopUp.setTitle("도서관 이용 현황");
+			adminRentalListPopUp.setScene(scene);
+			adminRentalListPopUp.setResizable(true);
+			Button btnSearch = (Button) root.lookup("#btnSearch");
+			Button btnAll = (Button) root.lookup("#btnAll");
+			Button btnExit = (Button) root.lookup("#btnExit");
+			TableView tblRentalList = (TableView) root.lookup("#tblRentalList");
+			BarChart barChart = (BarChart) root.lookup("#barChart");
+
+			ComboBox<String> cmbYear1 = (ComboBox) root.lookup("#cmbYear1");
+			ComboBox<String> cmbMonth1 = (ComboBox) root.lookup("#cmbMonth1");
+			ComboBox<String> cmbDay1 = (ComboBox) root.lookup("#cmbDay1");
+			ComboBox<String> cmbYear2 = (ComboBox) root.lookup("#cmbYear2");
+			ComboBox<String> cmbMonth2 = (ComboBox) root.lookup("#cmbMonth2");
+			ComboBox<String> cmbDay2 = (ComboBox) root.lookup("#cmbDay2");
+
+			cmbYear1.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
+					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
+					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
+					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
+					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
+					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
+					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
+					"2019", "2020"));
+			cmbMonth1.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12"));
+
+			cmbDay1.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+					"26", "27", "28", "29", "30", "31"));
+			cmbYear2.setItems(FXCollections.observableArrayList("1940", "1941", "1942", "1943", "1944", "1945", "1946",
+					"1947", "1948", "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957", "1958",
+					"1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966", "1967", "1968", "1969", "1970",
+					"1971", "1972", "1973", "1974", "1975", "1976", "1977", "1978", "1979", "1980", "1981", "1982",
+					"1983", "1984", "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993", "1994",
+					"1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006",
+					"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018",
+					"2019", "2020"));
+			cmbMonth2.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12"));
+
+			cmbDay2.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09",
+					"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+					"26", "27", "28", "29", "30", "31"));
+
+			TableColumn colNo = new TableColumn("No");
+			colNo.setMaxWidth(30);
+			colNo.setStyle("-fx-allignment: CENTER");
+			colNo.setCellValueFactory(new PropertyValueFactory("no"));
+
+			TableColumn colDate = new TableColumn("날짜");
+			colDate.setPrefWidth(90);
+			colDate.setStyle("-fx-allignment: CENTER");
+			colDate.setCellValueFactory(new PropertyValueFactory("date"));
+
+			TableColumn colId = new TableColumn("아이디");
+			colId.setPrefWidth(80);
+			colId.setStyle("-fx-allignment: CENTER");
+			colId.setCellValueFactory(new PropertyValueFactory("id"));
+
+			TableColumn colIsbn = new TableColumn("ISBN");
+			colIsbn.setPrefWidth(120);
+			colIsbn.setStyle("-fx-allignment: CENTER");
+			colIsbn.setCellValueFactory(new PropertyValueFactory("isbn"));
+
+			TableColumn colTitle = new TableColumn("제목");
+			colTitle.setPrefWidth(200);
+			colTitle.setStyle("-fx-allignment: CENTER");
+			colTitle.setCellValueFactory(new PropertyValueFactory("title"));
+
+			TableColumn colCartgory = new TableColumn("장르");
+			colCartgory.setPrefWidth(80);
+			colCartgory.setStyle("-fx-allignment: CENTER");
+			colCartgory.setCellValueFactory(new PropertyValueFactory("cartgory"));
+
+			tblRentalList.getColumns().addAll(colNo, colDate, colId, colIsbn, colTitle, colCartgory);
+			
+			btnAll.setOnAction(event -> {
+				obsListRentalList.clear();
+				ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
+				Connection con = null;
+				PreparedStatement preparedStatement = null;
+				ResultSet rs = null;
+				String query = null;
+				try {
+					con = DBUtil.getConnection();
+
+					query = "select No,Rentaldate,Id,ISBN,title,category from StatisticalTBL A inner join memberTBL B on A.Member_Id=B.Id\r\n"
+							+ "inner join BookTBL C on A.Book_ISBN=C.ISBN;";
+					preparedStatement = con.prepareStatement(query);
+					// preparedStatement.setString(1, "%" + searchText + "%");
+
+					rs = preparedStatement.executeQuery();
+					while (rs.next()) {
+						arrayList.add(new Statistical(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+								rs.getString(5), rs.getString(6)));
+					}
+
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				} finally {
+					try {
+						if (rs != null)
+							rs.close();
+						if (preparedStatement != null)
+							preparedStatement.close();
+						if (con != null)
+							con.close();
+					} catch (SQLException e1) {
+						System.out.println(e1.getMessage());
+					}
+				}
+				for (Statistical s : arrayList) {
+					obsListRentalList.add(s);
+				}
+
+				tblRentalList.setItems(obsListRentalList);
+
+
+			});
+			btnSearch.setOnAction(e3 -> {
+				int month1 = Integer.parseInt(cmbMonth1.getValue());
+				int day1 = Integer.parseInt(cmbDay1.getValue());
+				System.out.println(cmbYear1.getValue() + "-" + month1 + "-" + day1);
+				
+				
+				
+				obsListRentalList.clear();
+				ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
+				Connection con = null;
+				PreparedStatement preparedStatement = null;
+				ResultSet rs = null;
+				String query = null;
+				try {
+					con = DBUtil.getConnection();
+
+					query = "select No,Rentaldate,Id,ISBN,title,category from StatisticalTBL A inner join memberTBL B on A.Member_Id=B.Id\r\n"
+							+ "inner join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate like '?';";
+					preparedStatement = con.prepareStatement(query);
+					//preparedStatement.setString(1, "%" + searchText + "%");
+
+					rs = preparedStatement.executeQuery();
+					while (rs.next()) {
+						arrayList.add(new Statistical(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
+								rs.getString(5), rs.getString(6)));
+					}
+
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				} finally {
+					try {
+						if (rs != null)
+							rs.close();
+						if (preparedStatement != null)
+							preparedStatement.close();
+						if (con != null)
+							con.close();
+					} catch (SQLException e1) {
+						System.out.println(e1.getMessage());
+					}
+				}
+				for (Statistical s : arrayList) {
+					obsListRentalList.add(s);
+				}
+
+				tblRentalList.setItems(obsListRentalList);
+
+				
+				
+				
+			});
+			adminRentalListPopUp.show();
+			btnExit.setOnAction(e3 -> adminRentalListPopUp.close());
+		} catch (IOException e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("관리자-관리 화면 전환 실패 확인하세욘");
+			alert.showAndWait();
+		}
 
 	}
 
@@ -379,7 +577,7 @@ public class AdminController implements Initializable {
 	// 관리자 일정 버튼
 	private void handleBtnScheduleAction(ActionEvent e) {
 		try {
-			
+
 			HBox tab3 = FXMLLoader.load(getClass().getResource("/view/calender.fxml"));
 
 			Button btnAdd = (Button) tab3.lookup("#btnAdd");
@@ -468,7 +666,7 @@ public class AdminController implements Initializable {
 
 							int resultValue = pstmt.executeUpdate();
 							if (resultValue != 0) {
-								schduleCount+=1;
+								schduleCount += 1;
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("등록 완료");
 								alert.setHeaderText("일정 등록 완료");
