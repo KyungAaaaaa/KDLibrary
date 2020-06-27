@@ -31,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -88,7 +89,8 @@ public class AdminController implements Initializable {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/managementView.fxml"));
 			Scene scene = new Scene(root);
 			adminMain = new Stage();
-			adminMain.setTitle("관리");
+			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			adminMain.setTitle("Management");
 			adminMain.setScene(scene);
 			adminMain.setResizable(true);
 			((Stage) btnLogout.getScene().getWindow()).close();
@@ -109,7 +111,8 @@ public class AdminController implements Initializable {
 			mainView = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
 			Scene scene = new Scene(mainView);
 			mainStage = new Stage();
-			mainStage.setTitle("메인");
+			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
 			mainStage.setResizable(true);
 			((Stage) btnLogout.getScene().getWindow()).close();

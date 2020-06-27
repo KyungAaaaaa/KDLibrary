@@ -7,8 +7,11 @@ import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +23,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -86,10 +90,19 @@ public class User_BookSearchController implements Initializable {
 	Button btnCategory16;
 	@FXML
 	Button btnCategory17;
+	@FXML
+	Button btnNext;
+	@FXML
+	Button btnExit;
+	@FXML
+	Button btnSearch;
+	@FXML
+	TextField txtSearch;
 	private String listViewSelectItem;
 	String wkdfm = null;
 	public Stage stage;
 	ArrayList<Book> bookList;
+	ArrayList<Book> bookList2;
 	ArrayList<Label> bookTitleList = new ArrayList<Label>();
 	ArrayList<ImageView> bookImageVList = new ArrayList<ImageView>();
 	ArrayList<Button> buttonList = new ArrayList<Button>();
@@ -97,6 +110,7 @@ public class User_BookSearchController implements Initializable {
 	private String localUrl;
 	private int bookCount;
 	private int selectBook = -1;
+	private int page = 0;
 	BookDAO dao = new BookDAO();
 
 	@Override
@@ -109,12 +123,97 @@ public class User_BookSearchController implements Initializable {
 		 * getCartegoryBook(); });
 		 */
 		// listV.setItems(dao.categoryList);
-		btnBack.setOnAction(e -> handleBtnBackAction(e));
+		btnSearch.setOnAction(e -> handleBtnSearchAction(e));
+		btnExit.setOnAction(e -> handleBtnBackAction(e));
 		getBookSelectMethod();
+
+		// 장르선택 이벤트
 		getCategorySelectMethod();
-		
+
 	}
 
+	private void handleBtnSearchAction(ActionEvent e) {
+
+		BookDAO dao = new BookDAO();
+		bookList = dao.searchBook(txtSearch.getText(), "title");
+		bookCount = bookList.size();
+		bookTitleList.addAll(FXCollections.observableArrayList(lbTitle11, lbTitle12, lbTitle13, lbTitle21, lbTitle22,
+				lbTitle23, lbTitle31, lbTitle32, lbTitle33));
+		bookImageVList.addAll(FXCollections.observableArrayList(imgV11, imgV12, imgV13, imgV21, imgV22, imgV23, imgV31,
+				imgV32, imgV33));
+		try {
+			for (int j = 0; j < 9; j++) {
+				bookTitleList.get(j).setText("");
+				bookImageVList.get(j).setImage(null);
+				bookImageVList.get(j).setDisable(true);
+			}
+			if (bookCount > 9) {
+				bookList2 = bookList;
+				// bookCount-=9;
+			}
+			for (int i = 0; i < bookCount; i++) {
+				if (bookCount > 9) {
+					bookCount = 9;
+				}
+				Book b = bookList.get(i);
+				selectFileName = b.getFileimg();
+				localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+				bookTitleList.get(i).setText(b.getTitle());
+				bookImageVList.get(i).setImage(new Image(localUrl));
+				bookImageVList.get(i).setDisable(false);
+			}
+
+			if (bookList2.size() > 9) {
+				btnNext.setDisable(false);
+				btnNext.setOnAction(event -> {
+					page++;
+					btnBack.setDisable(false);
+					for (int j = 0; j < 9; j++) {
+						bookTitleList.get(j).setText("");
+						bookImageVList.get(j).setImage(null);
+						bookImageVList.get(j).setDisable(true);
+					}
+
+					for (int i = 9; i < bookList2.size(); i++) {
+
+						Book b = bookList.get(i);
+						selectFileName = b.getFileimg();
+						localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+						bookTitleList.get(i - 9).setText(b.getTitle());
+						bookImageVList.get(i - 9).setImage(new Image(localUrl));
+						bookImageVList.get(i - 9).setDisable(false);
+
+					}
+				});
+				btnBack.setOnAction(event -> {
+					for (int j = 0; j < 9; j++) {
+						bookTitleList.get(j).setText("");
+						bookImageVList.get(j).setImage(null);
+						bookImageVList.get(j).setDisable(true);
+					}
+					for (int i = 0; i < bookCount; i++) {
+						if (bookCount > 9) {
+							bookCount = 9;
+						}
+						Book b = bookList.get(i);
+						selectFileName = b.getFileimg();
+						localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+						bookTitleList.get(i).setText(b.getTitle());
+						bookImageVList.get(i).setImage(new Image(localUrl));
+						bookImageVList.get(i).setDisable(false);
+					}
+					page--;
+				});
+				
+				btnBack.setDisable(true);
+
+			}
+		} catch (Exception e2) {
+			System.out.println(e2.getMessage());
+		}
+	}
+
+	// 장르선택 이벤트
 	private void getCategorySelectMethod() {
 		btnCategory1.setOnAction(e -> {
 			listViewSelectIndexSetMethod(btnCategory1);
@@ -151,20 +250,20 @@ public class User_BookSearchController implements Initializable {
 	}
 
 	private void getBookSelectMethod() {
-		buttonList.addAll(FXCollections.observableArrayList(btnCategory1,btnCategory11,btnCategory12
-				,btnCategory13,btnCategory14,btnCategory15,btnCategory16,btnCategory17));
-		for(Button b:buttonList) {
+		buttonList.addAll(FXCollections.observableArrayList(btnCategory1, btnCategory11, btnCategory12, btnCategory13,
+				btnCategory14, btnCategory15, btnCategory16, btnCategory17));
+		for (Button b : buttonList) {
 			b.setText(BookDAO.categoryList.get(buttonList.indexOf(b)));
 		}
-		imgV11.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(0)));
-		imgV12.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(1)));
-		imgV13.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(2)));
-		imgV21.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(3)));
-		imgV22.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(4)));
-		imgV23.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(5)));
-		imgV31.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(6)));
-		imgV32.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(7)));
-		imgV33.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(8)));
+		imgV11.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(0 + (page * 9))));
+		imgV12.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(1 + (page * 9))));
+		imgV13.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(2 + (page * 9))));
+		imgV21.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(3 + (page * 9))));
+		imgV22.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(4 + (page * 9))));
+		imgV23.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(5 + (page * 9))));
+		imgV31.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(6 + (page * 9))));
+		imgV32.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(7 + (page * 9))));
+		imgV33.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(8 + (page * 9))));
 
 	}
 
@@ -176,7 +275,8 @@ public class User_BookSearchController implements Initializable {
 			root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
 			Scene scene = new Scene(root);
 			adminMain = new Stage();
-			adminMain.setTitle("유저 메인");
+			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			adminMain.setTitle("KD Library");
 			adminMain.setScene(scene);
 			adminMain.setResizable(true);
 			((Stage) btnBack.getScene().getWindow()).close();
@@ -187,14 +287,13 @@ public class User_BookSearchController implements Initializable {
 
 	private void listViewSelectIndexSetMethod(Button button) {
 		// listViewSelectItem = listV.getSelectionModel().getSelectedItem();
-		for(Button b:buttonList) {
+		for (Button b : buttonList) {
 			b.setStyle("-fx-background-color:  #00ff0000");
 		}
 		wkdfm = button.getText();
 		listViewSelectItem = wkdfm;
 		button.setStyle("-fx-background-color:#dedcee");
 	}
-	
 
 	// 장르 선택시 책 진열
 	private void getCartegoryBook() {
@@ -206,21 +305,51 @@ public class User_BookSearchController implements Initializable {
 				lbTitle23, lbTitle31, lbTitle32, lbTitle33));
 		bookImageVList.addAll(FXCollections.observableArrayList(imgV11, imgV12, imgV13, imgV21, imgV22, imgV23, imgV31,
 				imgV32, imgV33));
+		try {
+			for (int j = 0; j < 9; j++) {
+				bookTitleList.get(j).setText("");
+				bookImageVList.get(j).setImage(null);
+				bookImageVList.get(j).setDisable(true);
+			}
+			if (bookCount > 9) {
+				bookList2 = bookList;
+				// bookCount-=9;
+			}
+			for (int i = 0; i < bookCount; i++) {
+				if (bookCount > 9) {
+					bookCount = 9;
+				}
+				Book b = bookList.get(i);
+				selectFileName = b.getFileimg();
+				localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+				bookTitleList.get(i).setText(b.getTitle());
+				bookImageVList.get(i).setImage(new Image(localUrl));
+				bookImageVList.get(i).setDisable(false);
+			}
 
-		for (int j = 0; j < bookImageVList.size(); j++) {
-			bookTitleList.get(j).setText("");
-			bookImageVList.get(j).setImage(null);
-			bookImageVList.get(j).setDisable(true);
-		}
+			if (bookList2.size() > 9) {
+				btnNext.setDisable(false);
+				btnNext.setOnAction(event -> {
+					page++;
+					for (int j = 0; j < 9; j++) {
+						bookTitleList.get(j).setText("");
+						bookImageVList.get(j).setImage(null);
+						bookImageVList.get(j).setDisable(true);
+					}
 
-		for (int i = 0; i < bookCount; i++) {
+					for (int i = 9; i < bookList2.size(); i++) {
 
-			Book b = bookList.get(i);
-			selectFileName = b.getFileimg();
-			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
-			bookTitleList.get(i).setText(b.getTitle());
-			bookImageVList.get(i).setImage(new Image(localUrl));
-			bookImageVList.get(i).setDisable(false);
+						Book b = bookList.get(i);
+						selectFileName = b.getFileimg();
+						localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+						bookTitleList.get(i - 9).setText(b.getTitle());
+						bookImageVList.get(i - 9).setImage(new Image(localUrl));
+						bookImageVList.get(i - 9).setDisable(false);
+
+					}
+				});
+			}
+		} catch (Exception e2) {
 		}
 
 	}
@@ -268,27 +397,25 @@ public class User_BookSearchController implements Initializable {
 							con1 = DBUtil.getConnection(); //
 							String query1 = "update memberTBL set rentalBook=? where Id=?";
 							String query2 = "update BookTBL set rental=? where ISBN=?";
-							String query3 = "insert into StatisticalTBL values (?,?,?)";
+							String query3 = "insert into StatisticalTBL values (?,?,?,null)";
 							preparedStatement1 = con1.prepareStatement(query1);
 							preparedStatement2 = con1.prepareStatement(query2);
 							preparedStatement3 = con1.prepareStatement(query3);
 
 							preparedStatement1.setString(1, b.getIsbn());
 							preparedStatement1.setString(2, dao.m.getId());
-							
+
 							preparedStatement2.setBoolean(1, true);
-							
 							preparedStatement2.setString(2, b.getIsbn());
-							
-							
+
 							preparedStatement3.setString(1, b.getIsbn());
-							
-						preparedStatement3.setString(2, LocalDate.now().toString());
-							//preparedStatement3.setString(2, "asd");
+							preparedStatement3.setString(2, LocalDate.now().getYear() + "-"
+									+ LocalDate.now().getMonthValue() + "-" + LocalDate.now().getDayOfMonth());
 							preparedStatement3.setString(3, dao.m.getId());
 
-							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0&& preparedStatement3.executeUpdate() != 0) {
-								//if (preparedStatement1.executeUpdate() != 0 ) {
+							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0
+									&& preparedStatement3.executeUpdate() != 0) {
+								// if (preparedStatement1.executeUpdate() != 0 ) {
 								dao.m.setRentalBook(b.getIsbn());
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("대여완료");
@@ -297,7 +424,7 @@ public class User_BookSearchController implements Initializable {
 							} else {
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("등록 실패");
-								
+
 								alert.showAndWait();
 								throw new Exception();
 							}

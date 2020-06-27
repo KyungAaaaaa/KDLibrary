@@ -8,80 +8,114 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="750.0" prefWidth="970.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminManagement">
-   <children>
-      <Button fx:id="btnBack" layoutX="889.0" layoutY="698.0" mnemonicParsing="false" text="뒤로가기" />
-      <TabPane fx:id="tabContainer" layoutX="7.0" layoutY="14.0" prefHeight="672.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab fx:id="memberTab" text="회원관리">
-            <content>
-              <AnchorPane fx:id="memberContainer" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <TableView fx:id="tblUser" layoutX="10.0" layoutY="56.0" prefHeight="500.0" prefWidth="940.0" />
-                        <Button fx:id="btnUserEdit" layoutX="50.0" layoutY="600.0" mnemonicParsing="false" text="수정" />
-                        <Button fx:id="btnUserDelete" layoutX="100.0" layoutY="600.0" mnemonicParsing="false" text="삭제" />
-                        <Button fx:id="btnUserSearch" layoutX="495.0" layoutY="17.0" mnemonicParsing="false" text="검색" />
-                        <TextField fx:id="txtUserSearch" layoutX="10.0" layoutY="16.0" prefHeight="25.0" prefWidth="480.0" promptText="이름을 입력하세요" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-          <Tab fx:id="bookTab" text="도서관리">
-            <content>
-              <AnchorPane fx:id="bookContainer" minHeight="0.0" minWidth="0.0" prefHeight="718.0" prefWidth="966.0">
-                     <children>
-                        <TableView fx:id="tblBook" layoutX="10.0" layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
-                        <TextField fx:id="txtBookSearch" layoutX="10.0" layoutY="16.0" prefHeight="25.0" prefWidth="480.0" promptText="책 이름을 입력하세요" />
-                        <Button fx:id="btnBookSearch" layoutX="495.0" layoutY="17.0" mnemonicParsing="false" text="검색" />
-                        <Button fx:id="btnBookEdit" layoutX="100.0" layoutY="600.0" mnemonicParsing="false" text="수정" />
-                        <Button fx:id="btnBookDelete" layoutX="150.0" layoutY="600.0" mnemonicParsing="false" text="삭제" />
-                        <Button fx:id="btnBookAdd" layoutX="50.0" layoutY="600.0" mnemonicParsing="false" text="추가" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </Tab>
-            <Tab fx:id="requestTab" text="자료신청목록">
-               <content>
-                  <AnchorPane fx:id="requestContainer" minHeight="0.0" minWidth="0.0" prefHeight="653.0" prefWidth="966.0">
-                     <children>
-                        <TableView fx:id="tblRequest" layoutX="10.0" layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
-                        <Button fx:id="btnRequestDelete" layoutX="904.0" layoutY="600.0" mnemonicParsing="false" text="삭제" />
-                     </children>
-                  </AnchorPane>
-               </content>
-            </Tab>
-            <Tab fx:id="chartTab" text="통계">
-               <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="btnBarChart" layoutX="749.0" layoutY="99.0" mnemonicParsing="false" text="장르별 도서 갯수 확인" />
-                        <StackPane layoutX="27.0" layoutY="36.0" prefHeight="582.0" prefWidth="666.0">
-                           <children>
-                              <LineChart fx:id="lineChart">
-                                <xAxis>
-                                  <CategoryAxis side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                  <NumberAxis side="LEFT" />
-                                </yAxis>
-                              </LineChart>
-                           </children>
-                        </StackPane>
-                        <Button fx:id="btnPieChart" layoutX="749.0" layoutY="143.0" mnemonicParsing="false" text="파이차트" />
-                        <Button fx:id="btnLineChart" layoutX="749.0" layoutY="190.0" mnemonicParsing="false" text="라인차트" />
-                        <PieChart fx:id="pieChart" layoutX="454.0" layoutY="246.0" />
-                     </children></AnchorPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
-      <BarChart fx:id="barChart" barGap="1.0" categoryGap="2.0" layoutX="14.0" layoutY="674.0" prefHeight="244.0" prefWidth="268.0">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis minorTickCount="1" side="LEFT" tickLength="5.0" upperBound="15.0" />
-        </yAxis>
-      </BarChart>
-   </children>
+<AnchorPane prefHeight="750.0" prefWidth="970.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.AdminManagement">
+	<children>
+		<Button fx:id="btnBack" layoutX="889.0" layoutY="698.0"
+			mnemonicParsing="false" text="뒤로가기" />
+		<TabPane fx:id="tabContainer" layoutX="7.0" layoutY="14.0"
+			prefHeight="672.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
+			<tabs>
+				<Tab fx:id="memberTab" text="회원관리">
+					<content>
+						<AnchorPane fx:id="memberContainer" minHeight="0.0"
+							minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+							<children>
+								<TableView fx:id="tblUser" layoutX="10.0"
+									layoutY="56.0" prefHeight="500.0" prefWidth="940.0" />
+								<Button fx:id="btnUserEdit" layoutX="50.0"
+									layoutY="600.0" mnemonicParsing="false" text="수정" />
+								<Button fx:id="btnUserDelete" layoutX="100.0"
+									layoutY="600.0" mnemonicParsing="false" text="삭제" />
+								<Button fx:id="btnUserSearch" layoutX="495.0"
+									layoutY="17.0" mnemonicParsing="false" text="검색" />
+								<TextField fx:id="txtUserSearch" layoutX="10.0"
+									layoutY="16.0" prefHeight="25.0" prefWidth="480.0"
+									promptText="이름을 입력하세요" />
+							</children>
+						</AnchorPane>
+					</content>
+				</Tab>
+				<Tab fx:id="bookTab" text="도서관리">
+					<content>
+						<AnchorPane fx:id="bookContainer" minHeight="0.0"
+							minWidth="0.0" prefHeight="718.0" prefWidth="966.0">
+							<children>
+								<TableView fx:id="tblBook" layoutX="10.0"
+									layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
+								<TextField fx:id="txtBookSearch" layoutX="10.0"
+									layoutY="16.0" prefHeight="25.0" prefWidth="480.0"
+									promptText="책 이름을 입력하세요" />
+								<Button fx:id="btnBookSearch" layoutX="495.0"
+									layoutY="17.0" mnemonicParsing="false" text="검색" />
+								<Button fx:id="btnBookEdit" layoutX="100.0"
+									layoutY="600.0" mnemonicParsing="false" text="수정" />
+								<Button fx:id="btnBookDelete" layoutX="150.0"
+									layoutY="600.0" mnemonicParsing="false" text="삭제" />
+								<Button fx:id="btnBookAdd" layoutX="50.0" layoutY="600.0"
+									mnemonicParsing="false" text="추가" />
+							</children>
+						</AnchorPane>
+					</content>
+				</Tab>
+				<Tab fx:id="requestTab" text="자료신청목록">
+					<content>
+						<AnchorPane fx:id="requestContainer" minHeight="0.0"
+							minWidth="0.0" prefHeight="653.0" prefWidth="966.0">
+							<children>
+								<TableView fx:id="tblRequest" layoutX="10.0"
+									layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
+								<Button fx:id="btnRequestDelete" layoutX="904.0"
+									layoutY="600.0" mnemonicParsing="false" text="삭제" />
+							</children>
+						</AnchorPane>
+					</content>
+				</Tab>
+				<Tab fx:id="chartTab" text="통계">
+					<content>
+						<AnchorPane minHeight="0.0" minWidth="0.0"
+							prefHeight="180.0" prefWidth="200.0">
+							<children>
+								<Button fx:id="btnBarChart" layoutX="749.0"
+									layoutY="99.0" mnemonicParsing="false" text="장르별 도서 갯수 확인" />
+								<StackPane layoutX="27.0" layoutY="36.0"
+									prefHeight="582.0" prefWidth="666.0">
+									<children>
+										<LineChart fx:id="lineChart">
+											<xAxis>
+												<NumberAxis lowerBound="1" upperBound="12" tickUnit="1" fx:id="xAxis" autoRanging="false" />
+											</xAxis>
+											<yAxis>
+												<NumberAxis lowerBound="0" upperBound="10"
+													tickUnit="4" fx:id="yAxis" autoRanging="false"/>
+											</yAxis>
+
+
+										</LineChart>
+									</children>
+								</StackPane>
+								<Button fx:id="btnPieChart" layoutX="749.0"
+									layoutY="143.0" mnemonicParsing="false" text="파이차트" />
+								<Button fx:id="btnLineChart" layoutX="749.0"
+									layoutY="190.0" mnemonicParsing="false" text="라인차트" />
+								<PieChart fx:id="pieChart" layoutX="454.0"
+									layoutY="246.0" />
+							</children>
+						</AnchorPane>
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+		<BarChart fx:id="barChart" barGap="1.0" categoryGap="2.0"
+			layoutX="14.0" layoutY="674.0" prefHeight="244.0" prefWidth="268.0">
+			<xAxis>
+				<CategoryAxis side="BOTTOM" />
+			</xAxis>
+			<yAxis>
+				<NumberAxis fx:id="xAxis" minorTickCount="1" side="LEFT"
+					tickLength="5.0" upperBound="15.0" />
+			</yAxis>
+		</BarChart>
+	</children>
 </AnchorPane>

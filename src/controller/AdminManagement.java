@@ -11,7 +11,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -26,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
@@ -116,6 +119,11 @@ public class AdminManagement implements Initializable {
 	PieChart pieChart;
 	@FXML
 	LineChart lineChart;
+	@FXML
+	private NumberAxis xAxis;
+	@FXML
+	private NumberAxis yAxis;
+
 	///////////////////////////
 	private double tabWidth = 90.0;
 	public static int lastSelectedTabIndex = 0;
@@ -220,7 +228,8 @@ public class AdminManagement implements Initializable {
 			root = FXMLLoader.load(getClass().getResource("/view/adminMain.fxml"));
 			Scene scene = new Scene(root);
 			adminMain = new Stage();
-			adminMain.setTitle("관리자 메인");
+			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			adminMain.setTitle("KD Library-Admin");
 			adminMain.setScene(scene);
 			adminMain.setResizable(true);
 			((Stage) btnBack.getScene().getWindow()).close();
@@ -234,6 +243,7 @@ public class AdminManagement implements Initializable {
 	// 유저 테이블 검색 버튼 이벤트
 	private void handleBtnUserSearchAction(ActionEvent e) {
 		MemberDAO dao = new MemberDAO();
+		//ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		obLMember.clear();
 		for (Member m : arrayList) {
@@ -712,7 +722,8 @@ public class AdminManagement implements Initializable {
 				colInformation);
 		BookDAO dao = new BookDAO();
 
-		ArrayList<Book> bookTBL = dao.getBookTbl();
+		//ArrayList<Book> bookTBL = dao.getBookTbl();
+		HashSet<Book> bookTBL = dao.getBookTbl();
 		for (Book b : bookTBL) {
 			obLBook.add(b);
 		}
@@ -974,52 +985,143 @@ public class AdminManagement implements Initializable {
 	// 라인차트 출력
 	private void handelBtnLineChartAction(ActionEvent e) {
 		try {
-			ArrayList<Statistical> rentalList = dao.getAllRentalCount();
-			int rentalCount = rentalList.size();
 
+			/*
+			 * XYChart.Series series1 = new XYChart.Series();
+			 * series1.setName(String.valueOf(LocalDate.now().getMonthValue()));
+			 * XYChart.Series series2 = new XYChart.Series();
+			 * series2.setName(String.valueOf("7")); //ArrayList<Statistical> rentalList =
+			 * dao.getAllRentalCount(); //int rentalCount = rentalList.size();
+			 * 
+			 * XYChart.Series series2 = new XYChart.Series();
+			 * series2.setName(LocalDate.now().toString()); XYChart.Series series3 = new
+			 * XYChart.Series(); series3.setName(dao.categoryList.get(2)); XYChart.Series
+			 * series4 = new XYChart.Series(); series4.setName(dao.categoryList.get(3));
+			 * XYChart.Series series5 = new XYChart.Series();
+			 * series5.setName(dao.categoryList.get(4));
+			 * 
+			 * 
+			 * ObservableList obL1 = FXCollections.observableArrayList(); ObservableList
+			 * obL2 = FXCollections.observableArrayList(); ObservableList obL3 =
+			 * FXCollections.observableArrayList(); ObservableList obL4 =
+			 * FXCollections.observableArrayList(); ObservableList obL5 =
+			 * FXCollections.observableArrayList();
+			 * 
+			 * obL1.add(new XYChart.Data(series1.getName(), 6)); obL1.add(new
+			 * XYChart.Data(series1.getName(), 9)); obL1.add(new
+			 * XYChart.Data(series1.getName(), 3)); obL2.add(new
+			 * XYChart.Data(series2.getName(), 9));
+			 * 
+			 * obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(),
+			 * "category").size())); obL3.add(new XYChart.Data("",
+			 * dao.searchBook(series3.getName(), "category").size())); obL4.add(new
+			 * XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
+			 * obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(),
+			 * "category").size()));
+			 * 
+			 * 
+			 * series1.setData(obL1); lineChart.getData().add(series1);
+			 * series2.setData(obL2); lineChart.getData().add(series2);
+			 * 
+			 * series2.setData(obL2); lineChart.getData().add(series2);
+			 * series3.setData(obL3); lineChart.getData().add(series3);
+			 * series4.setData(obL4); lineChart.getData().add(series4);
+			 * series5.setData(obL5); lineChart.getData().add(series5);
+			 */
+
+			ObservableList<XYChart.Series<Number, Number>> list = FXCollections.observableArrayList();
+			int[] monthArray = new int[12];
+
+			// for (int i = 0; i < dao.categoryList.size(); i++) {
+
+			// }
 			XYChart.Series series1 = new XYChart.Series();
-			series1.setName(dao.categoryList.get(0));
 			XYChart.Series series2 = new XYChart.Series();
-			series2.setName(dao.categoryList.get(1));
 			XYChart.Series series3 = new XYChart.Series();
-			series3.setName(dao.categoryList.get(2));
 			XYChart.Series series4 = new XYChart.Series();
-			series4.setName(dao.categoryList.get(3));
 			XYChart.Series series5 = new XYChart.Series();
+			XYChart.Series series6 = new XYChart.Series();
+			XYChart.Series series7 = new XYChart.Series();
+			XYChart.Series series8 = new XYChart.Series();
+			series1.setName(dao.categoryList.get(0));// 장르 그래프 표현 기준
+			series2.setName(dao.categoryList.get(1));
+			series3.setName(dao.categoryList.get(2));
+			series4.setName(dao.categoryList.get(3));
 			series5.setName(dao.categoryList.get(4));
+			series6.setName(dao.categoryList.get(5));
+			series7.setName(dao.categoryList.get(6));
+			series8.setName(dao.categoryList.get(7));
 
-			ObservableList obL1 = FXCollections.observableArrayList();
-			ObservableList obL2 = FXCollections.observableArrayList();
-			ObservableList obL3 = FXCollections.observableArrayList();
-			ObservableList obL4 = FXCollections.observableArrayList();
-			ObservableList obL5 = FXCollections.observableArrayList();
+			ArrayList<Statistical> a = null;
+			/*
+			 * series1.getData().add(new XYChart.Data(4, 3)); series1.getData().add(new
+			 * XYChart.Data(5, 2)); series1.getData().add(new XYChart.Data(6, 6));
+			 * 
+			 * series2.getData().add(new XYChart.Data(4, 1)); series2.getData().add(new
+			 * XYChart.Data(5, 4)); series2.getData().add(new XYChart.Data(6, 3));
+			 */
 
-			obL1.add(new XYChart.Data("", dao.searchBook(series1.getName(), "category").size()));
-			obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(), "category").size()));
-			obL3.add(new XYChart.Data("", dao.searchBook(series3.getName(), "category").size()));
-			obL4.add(new XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
-			obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(), "category").size()));
+			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-6").size());// 6월에 빌린 책의 장르갯수
+			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-6").get(0).getCartgory());// 장르 : 만화
+			//System.out.println(dao.getAllRentalCount(LocalDate.now().getYear() + "-" + "6").get(0).getCount());
+			/*
+			 * for (int i = 1; i <= 12; i++) { monthArray[i - 1] =
+			 * dao.getAllRentalCount(LocalDate.now().getYear() + "-" + i).get(0).getCount();
+			 * }
+			 */
+			for (int i = 1; i <=12; i++) {
+				try {
+					a = dao.getAllRentalCount(LocalDate.now().getYear() + "-" + i);
+					//if (a != null) {
+						System.out.println(i + "-"+a.get(0).getCartgory()+":" + a.get(0).getCount());
+						System.out.println(i + "-" + a.get(1).getCartgory()+":" + a.get(1).getCount());
+						System.out.println(i + "-" + a.get(2).getCartgory()+":" + a.get(2).getCount());
+						System.out.println(i + "-" + a.get(3).getCartgory()+":" + a.get(3).getCount());
+						System.out.println(i + "-" + a.get(4).getCartgory()+":" + a.get(4).getCount());
+						System.out.println(i + "-" + a.get(5).getCartgory()+":" + a.get(5).getCount());
+						System.out.println(i + "-" + a.get(6).getCartgory()+":" + a.get(6).getCount());
+						System.out.println(i + "-" + a.get(7).getCartgory()+":" + a.get(7).getCount());
 
-			series1.setData(obL1);
-			barChart.getData().add(series1);
-			series2.setData(obL2);
-			barChart.getData().add(series2);
-			series3.setData(obL3);
-			barChart.getData().add(series3);
-			series4.setData(obL4);
-			barChart.getData().add(series4);
-			series5.setData(obL5);
-			barChart.getData().add(series5);
+						/*
+						 * series1.getData().add(new XYChart.Data(i, a.get(0).getCount()));//
+						 * 1월,2월,3월~에// 경제경영이 몇개인지 series2.getData().add(new XYChart.Data(i,
+						 * a.get(1).getCount())); series3.getData().add(new XYChart.Data(i,
+						 * a.get(2).getCount())); series4.getData().add(new XYChart.Data(i,
+						 * a.get(3).getCount())); series5.getData().add(new XYChart.Data(i,
+						 * a.get(4).getCount())); series6.getData().add(new XYChart.Data(i,
+						 * a.get(5).getCount())); series7.getData().add(new XYChart.Data(i,
+						 * a.get(6).getCount())); series8.getData().add(new XYChart.Data(i,
+						 * a.get(7).getCount()));
+						  } else {
+						series1.getData().add(new XYChart.Data(i, 0));// 1월,2월,3월~에// 경제경영이 몇개인지
+						series2.getData().add(new XYChart.Data(i, 0));
+						series3.getData().add(new XYChart.Data(i, 0));
+						series4.getData().add(new XYChart.Data(i, 0));
+						series5.getData().add(new XYChart.Data(i, 0));
+						series6.getData().add(new XYChart.Data(i, 0));
+						series7.getData().add(new XYChart.Data(i, 0));
+						series8.getData().add(new XYChart.Data(i, 0));
+						}*/
+					
+				} catch (Exception e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
 
-		} catch (
+			list.addAll(series1, series2, series2, series3, series4, series5, series6, series7);
 
-		Exception e1) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("데이터 에러");
-			alert.setHeaderText("데이터가 존재하지않습니다.");
-			alert.setContentText(e1.getMessage());
-			alert.showAndWait();
-		}
+			lineChart.setData(list);
+
+		}catch(
+
+	Exception e1)
+	{
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("데이터 에러");
+		alert.setHeaderText("데이터가 존재하지않습니다.");
+		alert.setContentText(e1.getMessage());
+		alert.showAndWait();
+	}
 
 	}
 

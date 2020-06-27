@@ -24,14 +24,14 @@ public class Main extends Application {
 		Scene s= new Scene(root);
 		primaryStage.setScene(s);
 		primaryStage.setResizable(false);
-		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+	
 		
 		System.setProperty("prism.lcdtext", "false"); // 폰트파일 로드전에 실행
 
 		Font.loadFont(getClass().getResourceAsStream("/resources/NanumSquareR.ttf"), 10);
 		Font.loadFont(getClass().getResourceAsStream("/resources/NanumGothic.ttf"), 10);
 		s.getStylesheets().add(getClass().getResource("main.css").toString());
-		
+		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 		primaryStage.setTitle("KD Library");
 		primaryStage.show();
 		

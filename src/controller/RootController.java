@@ -335,7 +335,8 @@ public class RootController implements Initializable {
 					Parent root1 = FXMLLoader.load(getClass().getResource("/view/adminMain.fxml"));
 					Scene s = new Scene(root1);
 					adminMain = new Stage();
-					adminMain.setTitle("관리자 메인");
+					adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+					adminMain.setTitle("KD Library-Admin");
 					adminMain.setScene(s);
 					adminMain.setResizable(true);
 					((Stage) btnLogin.getScene().getWindow()).close();
@@ -385,7 +386,8 @@ public class RootController implements Initializable {
 				Scene scene = new Scene(root);
 				//scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
 				user_MainStage = new Stage();
-				user_MainStage.setTitle("메뉴");
+				user_MainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+				user_MainStage.setTitle("KD Library");
 				user_MainStage.setScene(scene);
 				user_MainStage.setResizable(false);
 				((Stage) btnLogin.getScene().getWindow()).close();

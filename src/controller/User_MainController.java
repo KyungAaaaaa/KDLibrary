@@ -265,7 +265,8 @@ public class User_MainController implements Initializable {
 			Scene scene = new Scene(mainView);
 			scene.getStylesheets().add(getClass().getResource("/css/User.css").toString());
 			mainStage = new Stage();
-			mainStage.setTitle("자료 검색");
+			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
 			mainStage.setResizable(true);
 			((Stage) btnOut.getScene().getWindow()).close();
@@ -288,7 +289,8 @@ public class User_MainController implements Initializable {
 			Scene scene = new Scene(mainView);
 
 			mainStage = new Stage();
-			mainStage.setTitle("메인");
+			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
 			mainStage.setResizable(true);
 			((Stage) btnOut.getScene().getWindow()).close();

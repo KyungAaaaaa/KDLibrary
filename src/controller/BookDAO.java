@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,11 +16,14 @@ import model.Book;
 import model.Statistical;
 
 public class BookDAO {
-	public static ObservableList<String> categoryList=FXCollections.observableArrayList("경제 경영", "동화", "만화","소설","요리","인물","자기계발","종교");
+	public static ObservableList<String> categoryList = FXCollections.observableArrayList("경제 경영", "동화", "만화", "소설",
+			"요리", "인물", "자기계발", "종교");
 
 	// 도서 테이블 전체보기
-	public ArrayList<Book> getBookTbl() {
-		ArrayList<Book> arrayList = new ArrayList<Book>();
+	//public ArrayList<Book> getBookTbl() {
+		public HashSet<Book> getBookTbl() {
+		HashSet<Book> hashSet = new HashSet<Book>();
+		//ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
@@ -28,7 +33,7 @@ public class BookDAO {
 			preparedStatement = con.prepareStatement(query);
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				arrayList.add(new Book(rs.getString("ISBN"), rs.getString("title"), rs.getString("category"),
+				hashSet.add(new Book(rs.getString("ISBN"), rs.getString("title"), rs.getString("category"),
 						rs.getString("writer"), rs.getString("company"), rs.getString("date"), rs.getString("fileimg"),
 						rs.getString("information"), rs.getBoolean("rental")));
 			}
@@ -48,7 +53,7 @@ public class BookDAO {
 			}
 		}
 
-		return arrayList;
+		return hashSet;
 
 	}
 
@@ -102,6 +107,7 @@ public class BookDAO {
 
 	// 도서 검색 메소드
 	public ArrayList<Book> searchBook(String searchText, String type) {
+		//public ArrayList<Book> searchBook(String searchText, String type) {
 		ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
@@ -113,17 +119,15 @@ public class BookDAO {
 				query = "select * from BookTBL where title like ?;";
 				preparedStatement = con.prepareStatement(query);
 				preparedStatement.setString(1, "%" + searchText + "%");
-			
-			}
-			else if (type.equals("category")) {
+
+			} else if (type.equals("category")) {
 				query = "select * from BookTBL where category like ?;";
 				preparedStatement = con.prepareStatement(query);
 				preparedStatement.setString(1, "%" + searchText + "%");
-				}
-			else if (type.equals("ISBN")) {
+			} else if (type.equals("ISBN")) {
 				query = "select * from BookTBL where ISBN like ?;";
 				preparedStatement = con.prepareStatement(query);
-				preparedStatement.setString(1,"%" + searchText + "%" );
+				preparedStatement.setString(1, "%" + searchText + "%");
 			}
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
@@ -178,21 +182,21 @@ public class BookDAO {
 		return returnValue;
 	}
 
-	
-	
-//누적 이용수 (대출 수)
-	public ArrayList<Statistical> getAllRentalCount() {
+	// 누적 이용수 (대출 수)
+		public ArrayList<Statistical> getAllRentalCount(String month) {
 		ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
 		try {
 			con = DBUtil.getConnection();
-			String query = "select * from BookTBL;";
+			//String query = "select * from StatisticalTBL where date like ?;";
+			String query = "select Rentaldate,category,count(category) from StatisticalTBL A left join BookTBL B on A.Book_ISBN=B.ISBN group by category having Rentaldate like ?;";
 			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, "%" + month + "%");
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {
-				arrayList.add(new Statistical(rs.getString("ISBN"),rs.getString("date"), rs.getString("id")));
+				arrayList.add(new Statistical(rs.getString(1), rs.getString(2), rs.getInt(3)));
 			}
 
 		} catch (Exception e) {
@@ -209,7 +213,45 @@ public class BookDAO {
 				System.out.println(e1.getMessage());
 			}
 		}
-		
 		return arrayList;
 	}
+	
+	
+	// 도서 검색 메소드
+		public ArrayList<Book> searchRentalBook(String searchText) {
+			ArrayList<Book> arrayList = new ArrayList<Book>();
+			Connection con = null;
+			PreparedStatement preparedStatement = null;
+			ResultSet rs = null;
+			String query = null;
+			try {
+				con = DBUtil.getConnection();
+					query = "select * from BookTBL where title like ?;";
+					preparedStatement = con.prepareStatement(query);
+					preparedStatement.setString(1, "%" + searchText + "%");
+
+			
+				rs = preparedStatement.executeQuery();
+				while (rs.next()) {
+					arrayList.add(new Book(rs.getString("ISBN"), rs.getString("title"), rs.getString("category"),
+							rs.getString("writer"), rs.getString("company"), rs.getString("date"), rs.getString("fileimg"),
+							rs.getString("information"), rs.getBoolean("rental")));
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (rs != null)
+						rs.close();
+					if (preparedStatement != null)
+						preparedStatement.close();
+					if (con != null)
+						con.close();
+				} catch (SQLException e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
+			return arrayList;
+		}
 }
