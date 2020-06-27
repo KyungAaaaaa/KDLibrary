@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -8,51 +10,71 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox prefHeight="400.0" prefWidth="343.0">
+      <VBox prefHeight="400.0" prefWidth="491.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="ID : " />
+                  <Label prefWidth="80.0" text="ID " />
                   <TextField id="txtId" disable="true" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="이름 : " />
+                  <Label prefWidth="80.0" text="이름 " />
                   <TextField id="txtName" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="비밀번호 : " />
+                  <Label prefWidth="80.0" text="비밀번호 " />
                   <TextField id="txtPass" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="휴대전화 : " />
+                  <Label prefWidth="80.0" text="휴대전화 " />
                   <TextField id="txtPhoneNumber" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="생년월일 : " />
-                  <DatePicker id="dpBirth" />
+                  <Label prefWidth="80.0" text="생년월일 " />
+                  <ComboBox id="cmbYear" prefHeight="23.0" prefWidth="104.0" styleClass="cmb" />
+                  <Label text=" 년 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox id="cmbMonth" prefHeight="23.0" prefWidth="73.0" styleClass="cmb" />
+                  <Label text=" 월 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+                  <ComboBox id="cmbDay" prefHeight="23.0" prefWidth="68.0" styleClass="cmb" />
+                  <Label text=" 일 ">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="대여중인 책 : " />
-                  <TextField id="txtRentalBook" />
+                  <Label prefWidth="80.0" text="대여중인 책  " />
+                  <Label id="lbRentalBook" text="Label" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="343.0" spacing="20.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
-                  <Label text="비고 : " />
+                  <Label prefWidth="80.0" text="상태" />
                   <ComboBox id="cmbEtc" prefWidth="150.0" />
                </children>
             </HBox>
          </children>
+         <HBox.margin>
+            <Insets left="30.0" />
+         </HBox.margin>
       </VBox>
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="249.0" spacing="30.0">
          <children>

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -69,7 +71,7 @@ public class RootController implements Initializable {
 	}
 
 	// 회원가입
-		private void handleBtnSignAction(MouseEvent event) {
+	private void handleBtnSignAction(MouseEvent event) {
 
 			try {
 				int randomPass = 0;
@@ -84,10 +86,24 @@ public class RootController implements Initializable {
 				DatePicker datePickerSign = (DatePicker) scene.lookup("#datePicker");
 				TextField txtFieldSignPhoneNumber = (TextField) scene.lookup("#txtPhoneNumber");
 				TextField txtFieldSignSee = (TextField) scene.lookup("#txtSee");
+				ComboBox<String> cmbYear=(ComboBox) root.lookup("#cmbYear");
+				ComboBox<String> cmbMonth=(ComboBox) root.lookup("#cmbMonth");
+				ComboBox<String> cmbDay=(ComboBox) root.lookup("#cmbDay");
 				Button btnSignOk = (Button) scene.lookup("#btnOk");
 				Button btnSignNo = (Button) scene.lookup("#btnNo");
 				ImageView imgSignView = (ImageView) scene.lookup("#imgView");
-			
+				scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+				
+				cmbYear.setItems(FXCollections.observableArrayList("1940",	"1941",	"1942",	"1943",	"1944",	"1945",	"1946",	"1947",	"1948",	"1949",	
+						"1950",	"1951",	"1952",	"1953",	"1954",	"1955",	"1956",	"1957",	"1958",	"1959",	
+						"1960",	"1961",	"1962",	"1963",	"1964",	"1965",	"1966",	"1967",	"1968",	"1969",	
+						"1970",	"1971",	"1972",	"1973",	"1974",	"1975",	"1976",	"1977",	"1978",	"1979",	
+						"1980",	"1981",	"1982",	"1983",	"1984",	"1985",	"1986",	"1987",	"1988",	"1989",	
+						"1990",	"1991",	"1992",	"1993",	"1994",	"1995",	"1996",	"1997",	"1998",	"1999",	
+						"2000",	"2001",	"2002",	"2003",	"2004",	"2005",	"2006",	"2007",	"2008",	"2009",	
+						"2010",	"2011",	"2012",	"2013",	"2014",	"2015",	"2016",	"2017",	"2018",	"2019",	"2020"));
+				cmbMonth.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12"));
+				cmbDay.setItems(FXCollections.observableArrayList("01",	"02",	"03",	"04",	"05",	"06",	"07",	"08",	"09",	"10",	"11",	"12",	"13",	"14",	"15",	"16",	"17",	"18",	"19",	"20",	"21",	"22",	"23",	"24",	"25",	"26",	"27",	"28",	"29",	"30",	"31"));
 				randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);
 				switch (randomPass) {
 				case 0:
@@ -122,30 +138,36 @@ public class RootController implements Initializable {
 							try {
 								con = DBUtil.getConnection();
 
-								String query = "Insert into memberTBL(name,Id,Pass,phoneNumber,birth) values(?, ?, ?, ?, ?)";
+								String query = "Insert into memberTBL(name,Id,Pass,phoneNumber,birth,etc) values(?, ?, ?, ?, ?,?)";
 								pstmt = con.prepareStatement(query);
+								/*
+								 * Member m = new Member(txtFieldSignName.getText(), txtFieldSignId.getText(),
+								 * txtFieldSignPass.getText(), txtFieldSignPhoneNumber.getText(),
+								 * datePickerSign.getValue().toString());
+								 */
 								Member m = new Member(txtFieldSignName.getText(), txtFieldSignId.getText(),
 										txtFieldSignPass.getText(), txtFieldSignPhoneNumber.getText(),
-										datePickerSign.getValue().toString());
+										cmbYear.getValue()+"-"+cmbMonth.getValue()+"-"+cmbDay.getValue());
 								pstmt.setString(1, m.getName());
 								pstmt.setString(2, m.getId());
 								pstmt.setString(3, m.getPass());
 								pstmt.setString(4, m.getPhoneNumber());
 								pstmt.setString(5, m.getBirth());
+								pstmt.setString(6, "정상");
 								
 								try {
 									int signValue = pstmt.executeUpdate();
 									if (signValue != 0) {
 										Alert alert = new Alert(AlertType.INFORMATION);
 										alert.setTitle("삽입관련");
-										alert.setHeaderText(m.getName() + "번 삽입 완료");
-										alert.setContentText("삽입을 성공적으로 진행하였습니다");
+										alert.setHeaderText(m.getName() + "님 회원가입 완료");
+										alert.setContentText("환영합니다!");
 										alert.showAndWait();
 										signStage.close();
 									} else {
 										Alert alert = new Alert(AlertType.ERROR);
 										alert.setTitle("에러발생");
-										alert.setHeaderText("삽입사항을 점검하세요");
+										alert.setHeaderText("관리자에게 문의하세요");
 										alert.showAndWait();
 									}
 								} catch (Exception e) {
@@ -158,7 +180,7 @@ public class RootController implements Initializable {
 							} catch (Exception e) {
 								Alert alert = new Alert(AlertType.ERROR);
 								alert.setTitle("에러발생");
-								alert.setHeaderText("DB를 확익해주세요");
+								alert.setHeaderText("DB를 확인해주세요");
 								alert.showAndWait();
 							}
 						} else {
@@ -176,7 +198,7 @@ public class RootController implements Initializable {
 					} else {
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setTitle("에러발생");
-						alert.setHeaderText("문구가 일치하지 않습니다");
+						alert.setHeaderText("보안문구가 일치하지 않습니다");
 						alert.showAndWait();
 					}
 					

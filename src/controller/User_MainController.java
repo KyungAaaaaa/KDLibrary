@@ -162,20 +162,7 @@ public class User_MainController implements Initializable {
 
 	}
 
-	private void setProfilImage() {
-		try {
-			String selectFileName = memberDao.m.getFileimg();
-			String localUrl = "file:/C:/images/Library_MemberData/" + selectFileName;
-			imgV.setImage(new Image(localUrl));
 
-		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setHeaderText("이미지오류");
-			alert.setContentText(e.getMessage());
-			alert.showAndWait();
-		}
-
-	}
 
 	// 대여중인 도서 정보(반납)
 	private void getRentalBookInformationPopup(Book b) {
