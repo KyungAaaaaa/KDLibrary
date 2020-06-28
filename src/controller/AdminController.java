@@ -146,6 +146,8 @@ public class AdminController implements Initializable {
 			tblRentalList.getColumns().addAll(colNo, colDate, colId, colIsbn, colTitle, colCartgory);
 
 			btnAll.setOnAction(event -> {
+				dp1.setValue(null);
+				dp2.setValue(null);
 				obsListRentalList.clear();
 				ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
 				Connection con = null;
@@ -219,6 +221,12 @@ public class AdminController implements Initializable {
 
 			});
 			btnSearch.setOnAction(e3 -> {
+				if(dp1.getValue()==null||dp2.getValue()==null) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText("날짜를 선택하세요.");
+					alert.showAndWait();
+					return;
+				}
 				String[] date1 = dp1.getValue().toString().split("-");
 				String[] date2 = dp2.getValue().toString().split("-");
 				obsListRentalList.clear();

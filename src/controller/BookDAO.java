@@ -265,8 +265,13 @@ public class BookDAO {
 			query = "select No,DATE_FORMAT(Rentaldate,'%Y-%m-%d '),Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B "
 					+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?)+1;";
 			preparedStatement = con.prepareStatement(query); //
-			preparedStatement.setString(1, LocalDate.now().getYear()+searchText+"01");
-			preparedStatement.setString(2, LocalDate.now().getYear()+searchText+"30");
+			if (searchText != "02") {
+				preparedStatement.setString(1, LocalDate.now().getYear() + searchText + "01");
+				preparedStatement.setString(2, LocalDate.now().getYear() + searchText + "30");
+			} else {
+				preparedStatement.setString(1, LocalDate.now().getYear() + searchText + "01");
+				preparedStatement.setString(2, LocalDate.now().getYear() + searchText + "28");
+			}
 
 			rs = preparedStatement.executeQuery();
 			while (rs.next()) {

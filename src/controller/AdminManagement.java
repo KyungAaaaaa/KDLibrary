@@ -137,11 +137,6 @@ public class AdminManagement implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		btnBookCategory.setOnAction(e -> handelBtnBarChartAction(e));
-		//btnBarChart.setOnAction((e -> handelBtnBarChartAction(e)));
-		//btnPieChart.setOnAction((e -> pieChart.setVisible(true)));
-
-		// 라디오버튼 그룹화
-		//toggleGroupInitialize();
 		// 도서 이미지 저장 디렉토리 생성 이벤트
 		setDirectorySaveImage();
 		// 회원 테이블 셋팅 이벤트
@@ -198,17 +193,7 @@ public class AdminManagement implements Initializable {
 		tabContainer.setRotateGraphic(true);
 	}
 
-	/*
-	 * // 라디오버튼 그룹화 private void toggleGroupInitialize() { togglegroup = new
-	 * ToggleGroup(); rdoMemberCount.setToggleGroup(togglegroup);
-	 * rdoCartegory.setToggleGroup(togglegroup); rdoMemberCount.setSelected(true);
-	 * 
-	 * if (rdoCartegory.isSelected()) { barChart.setVisible(false);
-	 * pieChart.setVisible(true); handelBtnPieChartAction(null); } else if
-	 * (rdoMemberCount.isSelected()) { pieChart.setVisible(false);
-	 * barChart.setVisible(true); handelBtnBarChartAction(null); } }
-	 */
-
+	
 	// 뒤로가기 버튼 핸들러 이벤트
 	private void handleBtnBackAction(ActionEvent e) {
 		Stage adminMain = null;
@@ -772,11 +757,11 @@ public class AdminManagement implements Initializable {
 		colNo.setCellValueFactory(new PropertyValueFactory("no"));
 
 		TableColumn colContent = new TableColumn("내용");
-		colContent.setMaxWidth(80);
+		colContent.setPrefWidth(300);
 		colContent.setCellValueFactory(new PropertyValueFactory("content"));
 
 		TableColumn colTitle = new TableColumn("제목");
-		colTitle.setMaxWidth(80);
+		colTitle.setPrefWidth(250);
 		colTitle.setCellValueFactory(new PropertyValueFactory("title"));
 		TableColumn colDate = new TableColumn("날짜");
 		colDate.setMaxWidth(200);

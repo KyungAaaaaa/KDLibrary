@@ -110,13 +110,13 @@ public class User_BookSearchController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		//검색 버튼 이벤트
+		// 검색 버튼 이벤트
 		btnSearch.setOnAction(e -> handleBtnSearchAction(e));
-		
-		//뒤로가기 버튼 이벤트
+
+		// 뒤로가기 버튼 이벤트
 		btnExit.setOnAction(e -> handleBtnBackAction(e));
-		
-		//도서 선택 이벤트
+
+		// 도서 선택 이벤트
 		getBookSelectMethod();
 
 		// 장르선택 이벤트
@@ -124,18 +124,26 @@ public class User_BookSearchController implements Initializable {
 
 	}
 	/////////////////////////////////////////////////////////////////
-	
-	//제목 검색 버튼 이벤트
-	private void handleBtnSearchAction(ActionEvent e) {
 
-		BookDAO dao = new BookDAO();
-		bookList = dao.searchBook(txtSearch.getText(), "title");
-		bookCount = bookList.size();
-		bookTitleList.addAll(FXCollections.observableArrayList(lbTitle11, lbTitle12, lbTitle13, lbTitle21, lbTitle22,
-				lbTitle23, lbTitle31, lbTitle32, lbTitle33));
-		bookImageVList.addAll(FXCollections.observableArrayList(imgV11, imgV12, imgV13, imgV21, imgV22, imgV23, imgV31,
-				imgV32, imgV33));
+	// 제목 검색 버튼 이벤트
+	private void handleBtnSearchAction(ActionEvent e) {
+		
 		try {
+			if (txtSearch.getText().trim().equals("")) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("검색 오류");
+				alert.setHeaderText("검색할 책 제목을 입력하세요.");
+				alert.showAndWait();
+				return;
+			}
+			BookDAO dao = new BookDAO();
+
+			bookList = dao.searchBook(txtSearch.getText(), "title");
+			bookCount = bookList.size();
+			bookTitleList.addAll(FXCollections.observableArrayList(lbTitle11, lbTitle12, lbTitle13, lbTitle21,
+					lbTitle22, lbTitle23, lbTitle31, lbTitle32, lbTitle33));
+			bookImageVList.addAll(FXCollections.observableArrayList(imgV11, imgV12, imgV13, imgV21, imgV22, imgV23,
+					imgV31, imgV32, imgV33));
 			for (int j = 0; j < 9; j++) {
 				bookTitleList.get(j).setText("");
 				bookImageVList.get(j).setImage(null);
@@ -200,7 +208,6 @@ public class User_BookSearchController implements Initializable {
 					btnBack.setDisable(true);
 					btnNext.setDisable(false);
 				});
-				
 
 			}
 		} catch (Exception e2) {
@@ -243,8 +250,6 @@ public class User_BookSearchController implements Initializable {
 			getCartegoryBook();
 		});
 	}
-	
-	
 
 	// 뒤로가기
 	private void handleBtnBackAction(ActionEvent e) {
@@ -265,7 +270,7 @@ public class User_BookSearchController implements Initializable {
 		}
 	}
 
-	//버튼(장르) 셋팅 & 꾸미기
+	// 버튼(장르) 셋팅 & 꾸미기
 	private void listViewSelectIndexSetMethod(Button button) {
 		for (Button b : buttonList) {
 			b.setStyle("-fx-background-color:  #00ff0000");
@@ -332,8 +337,8 @@ public class User_BookSearchController implements Initializable {
 		}
 
 	}
-	
-	//도서 선택 핸들러 함수
+
+	// 도서 선택 핸들러 함수
 	private void getBookSelectMethod() {
 		buttonList.addAll(FXCollections.observableArrayList(btnCategory1, btnCategory11, btnCategory12, btnCategory13,
 				btnCategory14, btnCategory15, btnCategory16, btnCategory17));
@@ -351,8 +356,8 @@ public class User_BookSearchController implements Initializable {
 		imgV33.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(8 + (page * 9))));
 
 	}
-	
-	//도서 정보 창셋팅 메소드
+
+	// 도서 정보 창셋팅 메소드
 	private void getBookInformationPopup(Book b) {
 		try {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
