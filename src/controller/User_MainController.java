@@ -372,62 +372,52 @@ public class User_MainController implements Initializable {
 
 	// 일정표
 	private void handlerBtnCalendar(ActionEvent event) {
+		Stage userScheduleStage=null;
 		try {
-			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule.fxml"));
+			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule2.fxml"));
 			Scene scene = new Scene(userScheduleView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userScheduleStage = new Stage(StageStyle.UTILITY);
-			TableView tblUserSchedule = (TableView) scene.lookup("#tblSchedule");
-			Button btnUserScheduleNo = (Button) scene.lookup("#btnNo");
-			
-			TableColumn colDate = new TableColumn("날 짜");
-			colDate.setMaxWidth(115);
-			colDate.setStyle("-fx-allignment: CENTER");
-			colDate.setCellValueFactory(new PropertyValueFactory("date"));
-
-			TableColumn colContent = new TableColumn("내 용");
-			colContent.setPrefWidth(550);
-			colContent.setStyle("-fx-allignment: CENTER");
-			colContent.setCellValueFactory(new PropertyValueFactory("content"));
-			tblUserSchedule.getColumns().addAll(colDate,colContent);
-			
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			try {
-				con=DBUtil.getConnection();
-				String query = "SELECT * FROM ScheduleTBL";
-				pstmt = con.prepareStatement(query);
-				rs=pstmt.executeQuery();
+			userScheduleStage = new Stage(StageStyle.UTILITY);
+			//TableView tblUserSchedule = (TableView) scene.lookup("#tblSchedule");
+			//Button btnUserScheduleNo = (Button) scene.lookup("#btnNo");
+			/*
+			 * TableColumn colDate = new TableColumn("날 짜"); colDate.setMaxWidth(115);
+			 * colDate.setStyle("-fx-allignment: CENTER"); colDate.setCellValueFactory(new
+			 * PropertyValueFactory("date"));
+			 * 
+			 * TableColumn colContent = new TableColumn("내 용");
+			 * colContent.setPrefWidth(550); colContent.setStyle("-fx-allignment: CENTER");
+			 * colContent.setCellValueFactory(new PropertyValueFactory("content"));
+			 * tblUserSchedule.getColumns().addAll(colDate,colContent);
+			 * 
+			 * Connection con = null; PreparedStatement pstmt = null; ResultSet rs = null;
+			 * try { con=DBUtil.getConnection(); String query = "SELECT * FROM ScheduleTBL";
+			 * pstmt = con.prepareStatement(query); rs=pstmt.executeQuery();
+			 * 
+			 * while(rs.next()) { Schedule schedule = new
+			 * Schedule(rs.getString("content"),rs.getString("date"));
+			 * schList.add(schedule); }
+			 * 
+			 * for(int i=0; i<schList.size(); i++) { Schedule s = schList.get(i);
+			 * obsListS.add(s); }
+			 * 
+			 * tblUserSchedule.setItems(obsListS);
+			 */
 				
-				while(rs.next()) {
-					Schedule schedule = new Schedule(rs.getString("content"),rs.getString("date"));
-					schList.add(schedule);
-				}
-				
-				for(int i=0; i<schList.size(); i++) {
-					Schedule s = schList.get(i);
-					obsListS.add(s);
-				}
-				
-				tblUserSchedule.setItems(obsListS);
-				
-			} catch (Exception e) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("에러발생");
-				alert.setHeaderText("일정표 불러오기 오류");
-				alert.setContentText(e.getMessage());
-				alert.showAndWait();
-			}
-			
-			
 			userScheduleStage.initModality(Modality.WINDOW_MODAL);
 			userScheduleStage.initOwner(stage);
 			userScheduleStage.setScene(scene);
 			userScheduleStage.setResizable(false);
 			userScheduleStage.setTitle("일정표");
 			userScheduleStage.show();
-			btnUserScheduleNo.setOnAction(event1 -> userScheduleStage.close());
+			//btnUserScheduleNo.setOnAction(event1 -> userScheduleStage.close());
+			/*
+			 * } catch (Exception e) { Alert alert = new Alert(AlertType.ERROR);
+			 * alert.setTitle("에러발생"); alert.setHeaderText("일정표 불러오기 오류");
+			 * alert.setContentText(e.getMessage()); alert.showAndWait(); }
+			 */
+			
+			
 		} catch (IOException e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");

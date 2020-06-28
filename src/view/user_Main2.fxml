@@ -8,16 +8,106 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="600" prefWidth="900" style="-fx-background-color: FDF0E4;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_MainController">
+<AnchorPane prefHeight="680.0" prefWidth="890.0" style="-fx-background-color: #CEF2F2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.User_MainController">
    <children>
-      <Label layoutX="41.0" layoutY="32.0" text="KD LIBRARY" textFill="#262626">
+      <ImageView fitHeight="767.0" fitWidth="933.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/프젝.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="102.0" fitWidth="122.0" layoutX="455.0" layoutY="265.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../image/PinClipart.com_speech-clip-art_802595.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="485.0" layoutY="278.0" text="안녕하세요!" />
+      <Label layoutX="342.0" layoutY="69.0" text="KD LIBRARY" textFill="#262626">
          <font>
             <Font name="Sitka Small Bold" size="55.0" />
          </font>
       </Label>
-      <VBox layoutX="864.0" layoutY="25.0" spacing="9.0">
+      <Label layoutX="26.0" layoutY="14.0" text="WELCOME to" textFill="#262626">
+         <font>
+            <Font name="Sitka Small Bold" size="55.0" />
+         </font>
+      </Label>
+      <HBox layoutX="63.0" layoutY="546.0" spacing="30.0">
          <children>
-            <Button fx:id="btnUserModify" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="계정관리">
+            <Button fx:id="btnBookSearch" alignment="CENTER" mnemonicParsing="false" prefHeight="130.0" prefWidth="140.0" style="-fx-background-color: #F2B705; -fx-border-color: #5086F2;">
+               <graphic>
+                  <VBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/book.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="자료검색" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnBookApply" alignment="CENTER" mnemonicParsing="false" prefHeight="130.0" prefWidth="140.0" style="-fx-background-color: #F2B705; -fx-border-color: #5086F2;">
+               <graphic>
+                  <VBox alignment="CENTER" spacing="7.0">
+                     <children>
+                        <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/book%20(1).png" />
+                           </image>
+                        </ImageView>
+                        <Label text="자료신청" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnNotice" mnemonicParsing="false" prefHeight="130.0" prefWidth="140.0" style="-fx-background-color: #F2B705; -fx-border-color: #5086F2;">
+               <graphic>
+                  <VBox alignment="CENTER" spacing="6.0">
+                     <children>
+                        <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/book%20(2).png" />
+                           </image>
+                        </ImageView>
+                        <Label text="공지사항" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnCalendar" mnemonicParsing="false" prefHeight="130.0" prefWidth="140.0" style="-fx-background-color: #F2B705; -fx-border-color: #5086F2;">
+               <graphic>
+                  <VBox alignment="CENTER" spacing="6.0">
+                     <children>
+                        <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/calendar.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="일정표" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+            <Button fx:id="btnBookRental" mnemonicParsing="false" prefHeight="130.0" prefWidth="140.0" style="-fx-background-color: #F2B705; -fx-border-color: #5086F2;">
+               <graphic>
+                  <VBox alignment="CENTER" spacing="5.0">
+                     <children>
+                        <ImageView fitWidth="89.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/book%20(3).png" />
+                           </image>
+                        </ImageView>
+                        <Label text="대여 도서" />
+                     </children>
+                  </VBox>
+               </graphic>
+            </Button>
+         </children>
+      </HBox>
+      <VBox layoutX="836.0" layoutY="13.0" spacing="9.0">
+         <children>
+            <Button fx:id="btnUserModify" mnemonicParsing="false" style="-fx-background-color: #F2E0D0; -fx-border-color: #BF24A5; -fx-background-radius: 10; -fx-border-radius: 10;" text="계정관리">
                <graphic>
                   <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -26,7 +116,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btnOut" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="로그아웃">
+            <Button fx:id="btnOut" mnemonicParsing="false" style="-fx-background-color: #F2E0D0; -fx-border-color: #BF24A5; -fx-border-radius: 10; -fx-background-radius: 10;" text="로그아웃">
                <graphic>
                   <ImageView fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -42,75 +132,11 @@
             <HBox />
          </children>
       </VBox>
-      <Button fx:id="btnNotice" layoutX="702.0" layoutY="359.0" mnemonicParsing="false" prefHeight="230.0" prefWidth="230.0" style="-fx-background-color: #82C5AF;">
-         <graphic>
-            <VBox alignment="CENTER" spacing="6.0">
-               <children>
-                  <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/book%20(2).png" />
-                     </image>
-                  </ImageView>
-                  <Label text="공지사항" />
-               </children>
-            </VBox>
-         </graphic>
-      </Button>
-      <Button fx:id="btnCalendar" layoutX="702.0" layoutY="118.0" mnemonicParsing="false" prefHeight="230.0" prefWidth="230.0" style="-fx-background-color: #EAA69A;">
-         <graphic>
-            <VBox alignment="CENTER" spacing="6.0">
-               <children>
-                  <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/calendar.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="일정표" />
-               </children>
-            </VBox>
-         </graphic>
-      </Button>
-      <Button fx:id="btnBookRental" layoutX="220.0" layoutY="359.0" mnemonicParsing="false" prefHeight="230.0" prefWidth="230.0" style="-fx-background-color: #788EBC;">
-         <graphic>
-            <VBox alignment="CENTER" spacing="5.0">
-               <children>
-                  <ImageView fitWidth="89.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/book%20(3).png" />
-                     </image>
-                  </ImageView>
-                  <Label text="대여 도서" />
-               </children>
-            </VBox>
-         </graphic>
-      </Button>
-      <Button fx:id="btnBookApply" alignment="CENTER" layoutX="463.0" layoutY="359.0" mnemonicParsing="false" prefHeight="230.0" prefWidth="230.0" style="-fx-background-color: #D8E2E9;">
-         <graphic>
-            <VBox alignment="CENTER" spacing="7.0">
-               <children>
-                  <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/book.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="자료신청" />
-               </children>
-            </VBox>
-         </graphic>
-      </Button>
-      <Button fx:id="btnBookSearch" alignment="CENTER" layoutX="16.0" layoutY="118.0" mnemonicParsing="false" prefHeight="230.0" prefWidth="677.0" style="-fx-background-color: #E6D4E4;">
-         <graphic>
-            <VBox alignment="CENTER" spacing="5.0">
-               <children>
-                  <ImageView fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../image/book%20(1).png" />
-                     </image>
-                  </ImageView>
-                  <Label text="자료검색" />
-               </children>
-            </VBox>
-         </graphic>
-      </Button>
+      <Label fx:id="lblName" layoutX="473.0" layoutY="303.0" text="회원이름">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="543.0" layoutY="305.0" text="님!" />
    </children>
 </AnchorPane>
