@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -9,35 +10,108 @@
 
 <AnchorPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
    <children>
-      <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="673.0" prefWidth="440.0" style="-fx-background-color: #D9D9D9; -fx-border-width: 3; -fx-border-color: #0D0D0D;">
+      <AnchorPane layoutX="27.0" layoutY="14.0" prefHeight="673.0" prefWidth="440.0" style="-fx-background-color: #FFFFF3; -fx-border-width: 1; -fx-border-color: #0D0D0D;">
          <children>
-            <Label layoutX="59.0" layoutY="26.0" text="Administrator" textAlignment="RIGHT" textFill="#0d0d0d">
+            <Label layoutX="32.0" layoutY="84.0" text="Administrator" textAlignment="RIGHT" textFill="#0d0d0d">
                <font>
                   <Font name="Arial Black" size="43.0" />
                </font>
             </Label>
-            <Button fx:id="btnLogout" layoutX="168.0" layoutY="589.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="104.0" style="-fx-border-color: #0D0D0D; -fx-border-width: 1;" text="로그아웃">
-               <graphic>
-                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../Users/user/Desktop/images/power.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Label layoutX="159.0" layoutY="91.0" text="Rights" textAlignment="RIGHT" textFill="#0d0d0d">
+            <Button fx:id="btnLogout" layoutX="168.0" layoutY="589.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="104.0" style="-fx-background-color: #00ff0000;" text="로그아웃" />
+            <Label layoutX="32.0" layoutY="24.0" prefHeight="75.0" prefWidth="376.0" text="KDLIBRARY" textAlignment="RIGHT" textFill="#0d0d0d">
                <font>
-                  <Font name="Arial Black" size="35.0" />
+                  <Font name="Arial Black" size="50.0" />
                </font>
             </Label>
+            <ImageView fitHeight="354.0" fitWidth="351.0" layoutX="45.0" layoutY="202.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../image/logo.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
-      <VBox layoutX="477.0" layoutY="16.0" spacing="23.0">
+      <VBox layoutX="477.0" layoutY="16.0" spacing="9.0">
          <children>
-            <Button fx:id="btnManagement" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #076873; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="관리메뉴" />
-            <Button fx:id="btnNotice" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #F28B30; -fx-border-width: 2; -fx-border-color: #0D0D0D;" text="공지사항 전체보기" />
-            <Button fx:id="btnSchedule" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #F23C13; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="일정 전체보기" />
-            <Button fx:id="btnReantalList" mnemonicParsing="false" prefHeight="150.0" prefWidth="400.0" style="-fx-background-color: #A65D56; -fx-border-color: #0D0D0D; -fx-border-width: 2;" text="대여 기록 확인" />
+            <Button fx:id="btnManagement" mnemonicParsing="false" prefHeight="160.0" prefWidth="400.0" style="-fx-background-color: #67D5B5; -fx-border-color: #0D0D0D; -fx-border-width: 1;">
+               <graphic>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ImageView fitHeight="95.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/gear.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="textLabel" text="관리">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+               </graphic></Button>
+            <Button fx:id="btnNotice" mnemonicParsing="false" prefHeight="160.0" prefWidth="400.0" style="-fx-background-color: #F6B352; -fx-border-width: 1; -fx-border-color: #0D0D0D;">
+               <graphic>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ImageView fitHeight="95.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/error.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="textLabel" text="공지사항">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </graphic></Button>
+            <Button fx:id="btnSchedule" mnemonicParsing="false" prefHeight="160.0" prefWidth="400.0" style="-fx-background-color: #EE7785; -fx-border-color: #0D0D0D; -fx-border-width: 1;">
+               <graphic>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ImageView fitHeight="95.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/calendar1.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="textLabel" text="일정">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </graphic></Button>
+            <Button fx:id="btnReantalList" mnemonicParsing="false" prefHeight="160.0" prefWidth="400.0" style="-fx-background-color: #A593E0; -fx-border-color: #0D0D0D; -fx-border-width: 1;">
+               <graphic>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ImageView fitHeight="95.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../image/list.png" />
+                           </image>
+                        </ImageView>
+                        <Label styleClass="textLabel" text="대여 기록">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                     </children>
+                  </VBox>
+               </graphic></Button>
          </children>
       </VBox>
    </children>

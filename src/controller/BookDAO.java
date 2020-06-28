@@ -107,7 +107,6 @@ public class BookDAO {
 
 	// 도서 검색 메소드
 	public ArrayList<Book> searchBook(String searchText, String type) {
-		// public ArrayList<Book> searchBook(String searchText, String type) {
 		ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;

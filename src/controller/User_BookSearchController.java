@@ -110,16 +110,22 @@ public class User_BookSearchController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
+		//검색 버튼 이벤트
 		btnSearch.setOnAction(e -> handleBtnSearchAction(e));
+		
+		//뒤로가기 버튼 이벤트
 		btnExit.setOnAction(e -> handleBtnBackAction(e));
+		
+		//도서 선택 이벤트
 		getBookSelectMethod();
 
 		// 장르선택 이벤트
 		getCategorySelectMethod();
 
 	}
-
+	/////////////////////////////////////////////////////////////////
+	
+	//제목 검색 버튼 이벤트
 	private void handleBtnSearchAction(ActionEvent e) {
 
 		BookDAO dao = new BookDAO();
@@ -198,7 +204,7 @@ public class User_BookSearchController implements Initializable {
 
 			}
 		} catch (Exception e2) {
-			System.out.println(e2.getMessage());
+			
 		}
 	}
 
@@ -237,24 +243,8 @@ public class User_BookSearchController implements Initializable {
 			getCartegoryBook();
 		});
 	}
-
-	private void getBookSelectMethod() {
-		buttonList.addAll(FXCollections.observableArrayList(btnCategory1, btnCategory11, btnCategory12, btnCategory13,
-				btnCategory14, btnCategory15, btnCategory16, btnCategory17));
-		for (Button b : buttonList) {
-			b.setText(BookDAO.categoryList.get(buttonList.indexOf(b)));
-		}
-		imgV11.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(0 + (page * 9))));
-		imgV12.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(1 + (page * 9))));
-		imgV13.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(2 + (page * 9))));
-		imgV21.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(3 + (page * 9))));
-		imgV22.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(4 + (page * 9))));
-		imgV23.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(5 + (page * 9))));
-		imgV31.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(6 + (page * 9))));
-		imgV32.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(7 + (page * 9))));
-		imgV33.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(8 + (page * 9))));
-
-	}
+	
+	
 
 	// 뒤로가기
 	private void handleBtnBackAction(ActionEvent e) {
@@ -275,6 +265,7 @@ public class User_BookSearchController implements Initializable {
 		}
 	}
 
+	//버튼(장르) 셋팅 & 꾸미기
 	private void listViewSelectIndexSetMethod(Button button) {
 		for (Button b : buttonList) {
 			b.setStyle("-fx-background-color:  #00ff0000");
@@ -341,7 +332,27 @@ public class User_BookSearchController implements Initializable {
 		}
 
 	}
+	
+	//도서 선택 핸들러 함수
+	private void getBookSelectMethod() {
+		buttonList.addAll(FXCollections.observableArrayList(btnCategory1, btnCategory11, btnCategory12, btnCategory13,
+				btnCategory14, btnCategory15, btnCategory16, btnCategory17));
+		for (Button b : buttonList) {
+			b.setText(BookDAO.categoryList.get(buttonList.indexOf(b)));
+		}
+		imgV11.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(0 + (page * 9))));
+		imgV12.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(1 + (page * 9))));
+		imgV13.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(2 + (page * 9))));
+		imgV21.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(3 + (page * 9))));
+		imgV22.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(4 + (page * 9))));
+		imgV23.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(5 + (page * 9))));
+		imgV31.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(6 + (page * 9))));
+		imgV32.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(7 + (page * 9))));
+		imgV33.setOnMouseClicked(e -> getBookInformationPopup(bookList.get(8 + (page * 9))));
 
+	}
+	
+	//도서 정보 창셋팅 메소드
 	private void getBookInformationPopup(Book b) {
 		try {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));

@@ -75,16 +75,16 @@ public class AdminController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// 로그아웃 버튼 : 로그인화면으로 돌아가기
+		// 로그아웃 버튼
 		btnLogout.setOnAction(e -> handleBtnLogoutAction(e));
 
-		// 관리 버튼 : 미완성
+		// 관리 버튼
 		btnManagement.setOnAction(e -> handleBtnManagementAction(e));
 
-		// 관리자 공지사항버튼
+		// 공지사항 버튼
 		btnNotice.setOnAction(e -> handleBtnNoticeAction(e));
 
-		// 관리자 일정 버튼
+		// 일정 버튼
 		btnSchedule.setOnAction(e -> handleBtnScheduleAction(e));
 
 		// 대여기록확인 버튼
@@ -92,6 +92,7 @@ public class AdminController implements Initializable {
 
 	}
 
+	
 	// 대여기록 확인 버튼 핸들러 함수
 	private void handleBtnRentalListAction(ActionEvent e) {
 
@@ -185,9 +186,9 @@ public class AdminController implements Initializable {
 				tblRentalList.setItems(obsListRentalList);
 
 				///////////////////////////////////////////////////////////////////////////////////////////
+				//2020년 월별 대여기록 차트
 				try {
 					BookDAO dao = new BookDAO();
-					ArrayList monthList1 = dao.searchRentalBookList("06");
 					XYChart.Series series1 = new XYChart.Series();
 					series1.setName("대출 수");
 					series1.getData().add(new XYChart.Data(1, dao.searchRentalBookList("01").size()));
@@ -228,19 +229,16 @@ public class AdminController implements Initializable {
 				String query = null;
 				try {
 					con = DBUtil.getConnection();
-
 					query = "select No,DATE_FORMAT(Rentaldate,'%Y-%m-%d '),Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B "
 							+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?)+1;";
 					preparedStatement = con.prepareStatement(query); //
 					preparedStatement.setInt(1, Integer.parseInt((date1[0] + date1[1] + date1[2]).trim()));
 					preparedStatement.setInt(2, Integer.parseInt((date2[0] + date2[1] + date2[2]).trim()));
-
 					rs = preparedStatement.executeQuery();
 					while (rs.next()) {
 						arrayList.add(new Statistical(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
 								rs.getString(5), rs.getString(6)));
 					}
-
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				} finally {
@@ -258,9 +256,7 @@ public class AdminController implements Initializable {
 				for (Statistical s : arrayList) {
 					obsListRentalList.add(s);
 				}
-
 				tblRentalList.setItems(obsListRentalList);
-
 			});
 			adminRentalListPopUp.show();
 			btnExit.setOnAction(e3 -> adminRentalListPopUp.close());
@@ -269,10 +265,9 @@ public class AdminController implements Initializable {
 			alert.setHeaderText("관리자-관리 화면 전환 실패 확인하세욘");
 			alert.showAndWait();
 		}
-
 	}
 
-	// 관리 버튼 : 미완성
+	// 관리 버튼 핸들러 함수 : 관리페이지로 전환
 	private void handleBtnManagementAction(ActionEvent e) {
 		Stage adminMain = null;
 		try {
@@ -292,7 +287,7 @@ public class AdminController implements Initializable {
 		}
 	}
 
-	// 관리자창 로그아웃 버튼 핸들러이벤트
+	// 관리자창 로그아웃 버튼 핸들러이벤트 : 로그인화면으로 전환
 	private void handleBtnLogoutAction(ActionEvent e) {
 
 		Parent mainView = null;
@@ -315,7 +310,7 @@ public class AdminController implements Initializable {
 
 	}
 
-	// 관리자 공지사항버튼
+	// 관리자 공지사항버튼 
 	private void handleBtnNoticeAction(ActionEvent e) {
 		try {
 			obsListN.clear();
@@ -380,7 +375,6 @@ public class AdminController implements Initializable {
 					} else {
 						throw new Exception();
 					}
-
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("에러발생");
@@ -388,7 +382,6 @@ public class AdminController implements Initializable {
 					alert.setContentText(e1.getMessage());
 					alert.showAndWait();
 				}
-
 			});
 
 			// 등록창 버튼
@@ -419,17 +412,13 @@ public class AdminController implements Initializable {
 							con1 = DBUtil.getConnection();
 
 							String query = "Insert into noticeTBL (No, title, content,date) values(NULL, ?, ?, ?)";
-
 							pstmt1 = con1.prepareStatement(query);
-
 							Notice n = new Notice(txtAdminAddTitle.getText(), txaAdminAddContent.getText(),
 									lblAdminAddDate.getText());
 							pstmt1.setString(1, n.getTitle());
 							pstmt1.setString(2, n.getContent());
 							pstmt1.setString(3, n.getDate());
-
 							int v = pstmt1.executeUpdate();
-
 							if (v != 0) {
 								obsListN.clear();
 								Alert alert = new Alert(AlertType.INFORMATION);
@@ -454,7 +443,6 @@ public class AdminController implements Initializable {
 							return;
 						}
 					});
-
 					btnAdminAddNo.setOnAction(event2 -> adminNotAddStage.close());
 					lblAdminAddDate.setText(Noticetime);
 
@@ -463,7 +451,6 @@ public class AdminController implements Initializable {
 					alert.setTitle("수정 에러발생");
 					alert.setHeaderText(e1.getMessage());
 				}
-
 			});
 
 			// 테이블뷰에서 선택한 인덱스를 정수값으로 받아오는 이벤트

@@ -12,6 +12,7 @@ import model.Notice;
 import model.Schedule;
 
 public class DAO {
+	// 일정 전체보기
 	public ArrayList<Schedule> getSchedule(String date) {
 		ArrayList<Schedule> schduleList=new ArrayList<Schedule>();
 		Connection con = null;
@@ -43,6 +44,8 @@ public class DAO {
 		}
 		return schduleList;
 	}
+	
+	//공지 전체보기
 	public ArrayList<Notice> getNotice() {
 		ArrayList<Notice> arrayList = new ArrayList<Notice>();
 		Connection con = null;

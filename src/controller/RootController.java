@@ -26,6 +26,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -136,7 +137,7 @@ public class RootController implements Initializable {
 				Connection con = null;
 				PreparedStatement pstmt = null;
 				if (txtFieldSignSee.getText().equals(see)) {
-					if (!(txtFieldSignName.getText().equals("") || txtFieldSignId.getText().trim().equals("")
+					if (!(txtFieldSignName.getText().equals("") ||cmbYear.getValue()==null||cmbMonth.getValue()==null||cmbDay.getValue()==null|| txtFieldSignId.getText().trim().equals("")
 							|| txtFieldSignPhoneNumber.getText().trim().equals(""))) {
 						if (txtFieldSignPass.getText().equals(txtFieldSignPass2.getText())) {
 							try {
@@ -222,7 +223,7 @@ public class RootController implements Initializable {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/passFind.fxml"));
 			Scene scene = new Scene(root);
 			Stage passStage = new Stage(StageStyle.UTILITY);
-
+			passStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			TextField txtId = (TextField) scene.lookup("#txtId");
 			TextField txtPhoneNumber = (TextField) scene.lookup("#txtPhoneNumber");
 			Button btnOk = (Button) scene.lookup("#btnOk");
@@ -279,6 +280,14 @@ public class RootController implements Initializable {
 							PreparedStatement pstmt1 = null;
 							Connection con1 = null;
 							try {
+								if (txtpwResetPass.getText().trim().equals("")
+										|| txtpwResetPass2.getText().trim().equals("")) {
+									Alert alert = new Alert(AlertType.ERROR);
+									alert.setTitle("에러발생");
+									alert.setHeaderText("모든 항목을 입력하세요.");
+									alert.showAndWait();
+									return;
+								}
 								if (txtpwResetPass.getText().trim().equals(txtpwResetPass2.getText().trim())) {
 									con1 = DBUtil.getConnection();
 									String query1 = "Update memberTBL set pass = ? where Id = ?";
@@ -289,18 +298,15 @@ public class RootController implements Initializable {
 									int newPassGet = pstmt1.executeUpdate();
 									if (newPassGet != 0) {
 										Alert alert = new Alert(AlertType.INFORMATION);
-										alert.setTitle("삽입관련");
-										alert.setContentText("삽입을 성공적으로 진행하였습니다");
+										alert.setTitle("비밀번호 변경");
+										alert.setContentText("비밀번호가 변경되었습니다.");
 										alert.showAndWait();
 										passStage.close();
 									} else {
 										throw new Exception("문제발생");
 									}
 								} else {
-									Alert alert = new Alert(AlertType.ERROR);
-									alert.setTitle("에러발생");
-									alert.setHeaderText("비밀번호가 서로 일치하지 않습니다");
-									alert.showAndWait();
+									throw new Exception();
 								}
 							} catch (Exception e) {
 								Alert alert = new Alert(AlertType.ERROR);
@@ -311,16 +317,17 @@ public class RootController implements Initializable {
 						});
 					} catch (Exception e) {
 						Alert alert = new Alert(AlertType.ERROR);
-						alert.setTitle("에러발생");
-						alert.setHeaderText("존재하지 않는 계정입니다");
+						alert.setTitle("계정 오류");
+						alert.setHeaderText("존재하지 않는 계정입니다.");
 						alert.showAndWait();
 					}
 
 				} catch (Exception e) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("에러발생");
-					alert.setHeaderText("입력창을 점검하세요");
+					alert.setHeaderText("모든 항목을 입력하세요.");
 					alert.showAndWait();
+					return;
 				}
 
 			});
@@ -390,7 +397,7 @@ public class RootController implements Initializable {
 				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
 				Parent root = fxmlLoader.load();
 				User_MainController user_MainController = fxmlLoader.getController();
-				user_MainController.stage = user_MainStage;
+				user_MainController.stage = stage;
 				con = DBUtil.getConnection();
 				String query = "select * from memberTBL where Id = ? and pass = ?";
 				pstmt = con.prepareStatement(query);
@@ -406,11 +413,10 @@ public class RootController implements Initializable {
 					throw new Exception();
 				MemberDAO dao = new MemberDAO();
 				Scene scene = new Scene(root);
-				// scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
 				user_MainStage = new Stage();
 				user_MainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 				user_MainStage.setTitle("KD Library");
-				scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+				scene.getStylesheets().add(getClass().getResource("/css/main.css").toString());
 				user_MainStage.setScene(scene);
 				user_MainStage.setResizable(false);
 				((Stage) btnLogin.getScene().getWindow()).close();
@@ -432,4 +438,6 @@ public class RootController implements Initializable {
 		}
 	}
 
+
+	
 }

@@ -81,9 +81,8 @@ public class AdminManagement implements Initializable {
 	@FXML
 	Tab requestTab;
 	@FXML
-	Tab chartTab;
-	@FXML
 	AnchorPane requestContainer;
+
 ///////////////////////////
 	@FXML
 	Button btnBookAdd;
@@ -104,6 +103,8 @@ public class AdminManagement implements Initializable {
 	@FXML
 	Button btnRequestDelete;
 	@FXML
+	Button btnBookCategory;
+	@FXML
 	Button btnBarChart;
 	@FXML
 	Button btnPieChart;
@@ -111,61 +112,47 @@ public class AdminManagement implements Initializable {
 	TextField txtBookSearch;
 	@FXML
 	TextField txtUserSearch;
-	
-	@FXML
-	BarChart barChart;
-	@FXML
-	PieChart pieChart;
-	@FXML
-	RadioButton rdoCartegory;
-	@FXML
-	RadioButton rdoMemberCount;
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
 	private NumberAxis yAxis;
-	private ToggleGroup togglegroup;
-
-	///////////////////////////
 	private double tabWidth = 90.0;
 	public static int lastSelectedTabIndex = 0;
-	////////////////////////////////
+	private ToggleGroup togglegroup;
 	private File selectFile;
 	private File directorySave;
-	private File directoryMemberSave;
-	ObservableList<Book> obLBook = FXCollections.observableArrayList();
-	ObservableList<RequestBook> obLRequest = FXCollections.observableArrayList();
-	ObservableList<Member> obLMember = FXCollections.observableArrayList();
 	private int bookTableSelectIndex = -1;
-	private int requestTableSelectIndex;
-	private int userTableSelectIndex;
+	private int requestTableSelectIndex=-1;
+	private int userTableSelectIndex=-1;
 	private String localUrl;
 	private Image localImage;
 	private String selectFileName;
-	Image image = null;
-	BookDAO dao = new BookDAO();
-	boolean editImageFileSelect = false;
+	private Image image = null;
+	private ObservableList<Book> obLBook = FXCollections.observableArrayList();
+	private ObservableList<RequestBook> obLRequest = FXCollections.observableArrayList();
+	private ObservableList<Member> obLMember = FXCollections.observableArrayList();
+	private BookDAO dao = new BookDAO();
 	int chart = 0;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// chartTab.setOnSelectionChanged(e->handelBtnBarChartAction(e));
-		btnBarChart.setOnAction((e -> barChart.setVisible(false)));
-		btnPieChart.setOnAction((e -> pieChart.setVisible(true)));
-		
-		setDirectorySaveImage();
-		tblUserColumnSetting();
-		tblBookColumnSetting();
-		tblRequestColumnSetting();
-		tblUser.setOnMousePressed(e -> userTableSelectIndex = tblUser.getSelectionModel().getSelectedIndex());
-		tblBook.setOnMousePressed(e -> bookTableSelectIndex = tblBook.getSelectionModel().getSelectedIndex());
-		tblRequest.setOnMousePressed(e -> requestTableSelectIndex = tblRequest.getSelectionModel().getSelectedIndex());
+		btnBookCategory.setOnAction(e -> handelBtnBarChartAction(e));
+		//btnBarChart.setOnAction((e -> handelBtnBarChartAction(e)));
+		//btnPieChart.setOnAction((e -> pieChart.setVisible(true)));
+
 		// 라디오버튼 그룹화
-		toggleGroupInitialize();
-		// 요청 테이블 책 더블클릭시 내용창
-		tblRequest.setOnMouseClicked(e -> handelTblRequestDoubleClickAction(e));
-		// 요청테이블 삭제 버튼 이벤트
-		btnRequestDelete.setOnAction(e -> handleBtnRequestDeleteAction(e));
+		//toggleGroupInitialize();
+		// 도서 이미지 저장 디렉토리 생성 이벤트
+		setDirectorySaveImage();
+		// 회원 테이블 셋팅 이벤트
+		tblUserColumnSetting();
+		// 도서 테이블 셋팅 이벤트
+		tblBookColumnSetting();
+		// 자료요청 테이블 셋팅 이벤트
+		tblRequestColumnSetting();
+
+		// 도서 테이블 선택 인덱스 반환 이벤트
+		tblBook.setOnMousePressed(e -> bookTableSelectIndex = tblBook.getSelectionModel().getSelectedIndex());
 		// 도서 테이블 추가 버튼 이벤트
 		btnBookAdd.setOnAction(e -> handleBtnBookAddAction(e));
 		// 도서테이블 수정 버튼 이벤트
@@ -177,19 +164,31 @@ public class AdminManagement implements Initializable {
 		// 도서 테이블 검색 버튼 이벤트
 		btnBookSearch.setOnAction(e -> handleBtnBookSearchAction(e));
 
-		// 유저 테이블 검색 버튼 이벤트
+		// 회원 테이블 선택 인덱스 반환 이벤트
+		tblUser.setOnMousePressed(e -> userTableSelectIndex = tblUser.getSelectionModel().getSelectedIndex());
+		// 회원 테이블 검색 버튼 이벤트
 		btnUserSearch.setOnAction(e -> handleBtnUserSearchAction(e));
-		// 유저테이블 수정 버튼 이벤트
+		// 회원 테이블 수정 버튼 이벤트
 		btnUserEdit.setOnAction(e -> handleBtnUserEditAction(e));
-		// 유저 테이블 삭제 버튼 이벤트
+		// 회원 테이블 삭제 버튼 이벤트
 		btnUserDelete.setOnAction(e -> handleBtnUserDeleteAction(e));
+
+		// 자료요청 테이블 선택 인덱스 반환 이벤트
+		tblRequest.setOnMousePressed(e -> requestTableSelectIndex = tblRequest.getSelectionModel().getSelectedIndex());
+		// 요청 테이블 책 더블클릭시 내용창
+		tblRequest.setOnMouseClicked(e -> handelTblRequestDoubleClickAction(e));
+		// 요청테이블 삭제 버튼 이벤트
+		btnRequestDelete.setOnAction(e -> handleBtnRequestDeleteAction(e));
+
 		// 관리페이지 뒤로가기
 		btnBack.setOnAction(e -> handleBtnBackAction(e));
 
-		// configureView();
+		configureView();
 	}
 
-///////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// 탭페인 디자인 메소드
 	private void configureView() {
 
 		tabContainer.setTabMinWidth(tabWidth);
@@ -199,50 +198,16 @@ public class AdminManagement implements Initializable {
 		tabContainer.setRotateGraphic(true);
 	}
 
-///////////////////////////
-	// 라디오버튼 그룹화
-	private void toggleGroupInitialize() {
-		togglegroup = new ToggleGroup();
-		rdoMemberCount.setToggleGroup(togglegroup);
-		rdoCartegory.setToggleGroup(togglegroup);
-		rdoMemberCount.setSelected(true);
-		
-		
-		if(rdoCartegory.isSelected()) {
-			barChart.setVisible(false);
-			pieChart.setVisible(true);
-			handelBtnPieChartAction(null);
-		}else if (rdoMemberCount.isSelected()){
-			pieChart.setVisible(false);
-			barChart.setVisible(true);
-			handelBtnBarChartAction(null);
-		}
-	}
-
-	private void handleBtnRequestDeleteAction(ActionEvent e) {
-
-		try {
-			RequestBook selectRequest = obLRequest.get(requestTableSelectIndex);
-			Connection con = DBUtil.getConnection();
-			String query = "delete from RequestTBL where No=?";
-			PreparedStatement preparedStatement = con.prepareStatement(query);
-			preparedStatement.setInt(1, selectRequest.getNo());
-			if (preparedStatement.executeUpdate() != 0) {
-				obLRequest.remove(requestTableSelectIndex);
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 완료");
-				alert.showAndWait();
-			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 실패");
-				alert.showAndWait();
-			}
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-	}
+	/*
+	 * // 라디오버튼 그룹화 private void toggleGroupInitialize() { togglegroup = new
+	 * ToggleGroup(); rdoMemberCount.setToggleGroup(togglegroup);
+	 * rdoCartegory.setToggleGroup(togglegroup); rdoMemberCount.setSelected(true);
+	 * 
+	 * if (rdoCartegory.isSelected()) { barChart.setVisible(false);
+	 * pieChart.setVisible(true); handelBtnPieChartAction(null); } else if
+	 * (rdoMemberCount.isSelected()) { pieChart.setVisible(false);
+	 * barChart.setVisible(true); handelBtnBarChartAction(null); } }
+	 */
 
 	// 뒤로가기 버튼 핸들러 이벤트
 	private void handleBtnBackAction(ActionEvent e) {
@@ -306,7 +271,8 @@ public class AdminManagement implements Initializable {
 	private void handleBtnUserEditAction(ActionEvent e) {
 
 		try {
-
+			if (userTableSelectIndex == -1)
+				throw new Exception("수정할 데이터를 선택하세요.");
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminEditUserPopup.fxml"));
 			Stage addPopup = new Stage(StageStyle.UTILITY);
 			addPopup.initModality(Modality.WINDOW_MODAL);
@@ -417,9 +383,14 @@ public class AdminManagement implements Initializable {
 						System.out.println("RootController edit-save : " + e1.getMessage());
 					}
 				}
-
+				tblUser.getSelectionModel().clearSelection();
+				userTableSelectIndex = -1;
 			});
 		} catch (Exception e1) {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setHeaderText("데이터 미선택");
+					alert.setContentText("수정할 데이터를 선택하세요.");
+					alert.showAndWait();
 		}
 
 	}
@@ -471,6 +442,7 @@ public class AdminManagement implements Initializable {
 			Stage addPopup = new Stage(StageStyle.UTILITY);
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
+			addPopup.setTitle("도서 수정");
 			addPopup.setScene(new Scene(root));
 			addPopup.show();
 			Button btnOk = (Button) root.lookup("#btnOk");
@@ -617,6 +589,7 @@ public class AdminManagement implements Initializable {
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			Scene s = new Scene(root);
 			addPopup.setScene(s);
+			addPopup.setTitle("도서 추가");
 			addPopup.show();
 
 			Button btnOk = (Button) s.lookup("#btnOk");
@@ -842,6 +815,7 @@ public class AdminManagement implements Initializable {
 			txtTitle.setEditable(false);
 			lbDate.setText(request.getDate());
 			txaContent.setEditable(false);
+			addPopup.setTitle("자료 요청 내용");
 			addPopup.setScene(new Scene(root));
 			addPopup.show();
 
@@ -852,6 +826,7 @@ public class AdminManagement implements Initializable {
 					addPopup1.initModality(Modality.NONE);
 					addPopup1.initOwner(btnAdd.getScene().getWindow());
 					Scene s = new Scene(root1);
+					addPopup1.setTitle("도서 추가");
 					addPopup1.setScene(s);
 					addPopup1.show();
 					Button btnOk = (Button) s.lookup("#btnOk");
@@ -942,12 +917,48 @@ public class AdminManagement implements Initializable {
 
 	}
 
+	// 요청테이블 삭제 버튼 이벤트
+	private void handleBtnRequestDeleteAction(ActionEvent e) {
+
+		try {
+			RequestBook selectRequest = obLRequest.get(requestTableSelectIndex);
+			Connection con = DBUtil.getConnection();
+			String query = "delete from RequestTBL where No=?";
+			PreparedStatement preparedStatement = con.prepareStatement(query);
+			preparedStatement.setInt(1, selectRequest.getNo());
+			if (preparedStatement.executeUpdate() != 0) {
+				obLRequest.remove(requestTableSelectIndex);
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText("삭제 완료");
+				alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText("삭제 실패");
+				alert.showAndWait();
+			}
+
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+	}
+
 	/* ========================통계====================== */
 
 	// 바차트 막대그래프 출력
 	private void handelBtnBarChartAction(Event e) {
-		try {
-		
+			Parent root;
+			try {
+				root = FXMLLoader.load(getClass().getResource("/view/chart.fxml"));
+				Stage addPopup = new Stage(StageStyle.UTILITY);
+				BarChart barChart=(BarChart) root.lookup("#barChart");
+				Button btnExit = (Button) root.lookup("#btnExit");
+				addPopup.initModality(Modality.WINDOW_MODAL);
+				addPopup.initOwner(btnBookAdd.getScene().getWindow());
+				addPopup.setTitle("장르별 도서 권 수");
+				addPopup.setScene(new Scene(root));
+				btnExit.setOnAction(e1->addPopup.close());
+
 			XYChart.Series series1 = new XYChart.Series();
 			series1.setName(dao.categoryList.get(0));
 			XYChart.Series series2 = new XYChart.Series();
@@ -993,7 +1004,7 @@ public class AdminManagement implements Initializable {
 			barChart.getData().add(series6);
 			series7.setData(obL7);
 			barChart.getData().add(series7);
-
+			addPopup.show();
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("데이터 에러");
@@ -1031,7 +1042,7 @@ public class AdminManagement implements Initializable {
 			obLPie.add(new PieChart.Data(series6.getName(), dao.searchBook(series6.getName(), "category").size()));
 			obLPie.add(new PieChart.Data(series7.getName(), dao.searchBook(series7.getName(), "category").size()));
 
-			pieChart.setData(obLPie);
+			//pieChart.setData(obLPie);
 
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.ERROR);
