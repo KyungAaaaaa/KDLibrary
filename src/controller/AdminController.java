@@ -275,6 +275,7 @@ public class AdminController implements Initializable {
 			Scene scene = new Scene(root);
 			adminMain = new Stage();
 			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			
 			adminMain.setTitle("Management");
 			adminMain.setScene(scene);
 			adminMain.setResizable(true);
@@ -297,6 +298,7 @@ public class AdminController implements Initializable {
 			Scene scene = new Scene(mainView);
 			mainStage = new Stage();
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
 			mainStage.setResizable(true);

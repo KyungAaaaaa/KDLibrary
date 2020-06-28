@@ -218,6 +218,7 @@ public class AdminManagement implements Initializable {
 			Scene scene = new Scene(root);
 			adminMain = new Stage();
 			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			adminMain.setTitle("KD Library-Admin");
 			adminMain.setScene(scene);
 			adminMain.setResizable(true);
