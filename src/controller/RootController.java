@@ -297,7 +297,7 @@ public class RootController implements Initializable {
 									if (newPassGet != 0) {
 										Alert alert = new Alert(AlertType.INFORMATION);
 										alert.setTitle("비밀번호 변경");
-										alert.setContentText("비밀번호가 변경되었습니다.");
+										alert.setHeaderText("비밀번호가 변경되었습니다.");
 										alert.showAndWait();
 										passStage.close();
 									} else {
