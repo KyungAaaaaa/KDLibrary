@@ -11,7 +11,6 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -25,19 +24,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -54,11 +48,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.Book;
 import model.Member;
 import model.RequestBook;
-import model.Statistical;
 
 public class AdminManagement implements Initializable {
 	@FXML
@@ -115,6 +107,7 @@ public class AdminManagement implements Initializable {
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
+	public Stage stage;
 	private NumberAxis yAxis;
 	private double tabWidth = 90.0;
 	public static int lastSelectedTabIndex = 0;
@@ -122,8 +115,8 @@ public class AdminManagement implements Initializable {
 	private File selectFile;
 	private File directorySave;
 	private int bookTableSelectIndex = -1;
-	private int requestTableSelectIndex=-1;
-	private int userTableSelectIndex=-1;
+	private int requestTableSelectIndex = -1;
+	private int userTableSelectIndex = -1;
 	private String localUrl;
 	private Image localImage;
 	private String selectFileName;
@@ -185,7 +178,7 @@ public class AdminManagement implements Initializable {
 
 	// 탭페인 디자인 메소드
 	private void configureView() {
-
+		memberTab.setStyle("-fx-background-color:pink;");
 		tabContainer.setTabMinWidth(tabWidth);
 		tabContainer.setTabMaxWidth(tabWidth);
 		tabContainer.setTabMinHeight(tabWidth);
@@ -193,15 +186,18 @@ public class AdminManagement implements Initializable {
 		tabContainer.setRotateGraphic(true);
 	}
 
-	
 	// 뒤로가기 버튼 핸들러 이벤트
 	private void handleBtnBackAction(ActionEvent e) {
-		Stage adminMain = null;
-		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("/view/adminMain.fxml"));
+			
+			Stage adminMain = new Stage();
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/adminMain.fxml"));
+			Parent root = fxmlLoader.load();
+			AdminController adminController= fxmlLoader.getController();
+			adminController.stage = adminMain;
+			adminMain.initOwner(stage);
+			
 			Scene scene = new Scene(root);
-			adminMain = new Stage();
 			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			adminMain.setTitle("KD Library-Admin");
@@ -231,24 +227,14 @@ public class AdminManagement implements Initializable {
 	private void handleBtnUserDeleteAction(ActionEvent e) {
 		try {
 			Member selectUser = obLMember.get(userTableSelectIndex);
-			Connection con = DBUtil.getConnection();
-			String query = "delete from memberTBL where Id=?";
-			PreparedStatement preparedStatement = con.prepareStatement(query);
-			preparedStatement.setString(1, selectUser.getId());
-			if (preparedStatement.executeUpdate() != 0) {
-				obLMember.remove(userTableSelectIndex);
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 완료");
-				alert.showAndWait();
-			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 실패");
-				alert.showAndWait();
-			}
+			MemberDAO dao = new MemberDAO();
 
+			int returnValue = dao.deleteUser(selectUser);
+			if (returnValue != 0) {
+				obLMember.remove(userTableSelectIndex);
+
+			}
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
 		}
 
 	}
@@ -260,10 +246,13 @@ public class AdminManagement implements Initializable {
 			if (userTableSelectIndex == -1)
 				throw new Exception("수정할 데이터를 선택하세요.");
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminEditUserPopup.fxml"));
-			Stage addPopup = new Stage(StageStyle.UTILITY);
+			Scene s = new Scene(root);
+			Stage addPopup = new Stage();
+			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
-			addPopup.setScene(new Scene(root));
+			addPopup.setScene(s);
 			addPopup.setTitle("회원 정보 수정");
 
 			Button btnOk = (Button) root.lookup("#btnOk");
@@ -336,8 +325,6 @@ public class AdminManagement implements Initializable {
 					selectUser.setName(txtName.getText());
 					selectUser.setPass(txtPass.getText());
 					selectUser.setPhoneNumber(txtPhoneNumber.getText());
-					// selectUser.setBirth(dpBirth.getValue().toString());
-					// selectUser.setRentalBook(lbRentalBook.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
 
 					if (preparedStatement.executeUpdate() != 0) {
@@ -356,10 +343,8 @@ public class AdminManagement implements Initializable {
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setHeaderText("모든 항목을 입력하세요.");
-					// alert.setContentText(e1.getMessage());
 					alert.showAndWait();
 				} finally {
-					// con,pstmt 반납
 					try {
 						if (preparedStatement != null)
 							preparedStatement.close();
@@ -373,10 +358,10 @@ public class AdminManagement implements Initializable {
 				userTableSelectIndex = -1;
 			});
 		} catch (Exception e1) {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setHeaderText("데이터 미선택");
-					alert.setContentText("수정할 데이터를 선택하세요.");
-					alert.showAndWait();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("데이터 미선택");
+			alert.setContentText("수정할 데이터를 선택하세요.");
+			alert.showAndWait();
 		}
 
 	}
@@ -425,11 +410,14 @@ public class AdminManagement implements Initializable {
 			if (bookTableSelectIndex == -1)
 				throw new Exception("수정할 데이터를 선택하세요.");
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
-			Stage addPopup = new Stage(StageStyle.UTILITY);
+			Scene s = new Scene(root);
+			Stage addPopup = new Stage();
+			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			addPopup.setTitle("도서 수정");
-			addPopup.setScene(new Scene(root));
+			addPopup.setScene(s);
 			addPopup.show();
 			Button btnOk = (Button) root.lookup("#btnOk");
 			Button btnCancel = (Button) root.lookup("#btnCancel");
@@ -570,10 +558,12 @@ public class AdminManagement implements Initializable {
 	private void handleBtnBookAddAction(ActionEvent e) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
-			Stage addPopup = new Stage(StageStyle.UTILITY);
+			Stage addPopup = new Stage();
+			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			Scene s = new Scene(root);
+			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			addPopup.setScene(s);
 			addPopup.setTitle("도서 추가");
 			addPopup.show();
@@ -630,14 +620,14 @@ public class AdminManagement implements Initializable {
 							bis = new BufferedInputStream(new FileInputStream(selectFile));
 							bos = new BufferedOutputStream(
 									new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
-							int data = -1;// -1더이상 읽을값이 없다는 의미
-							while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
-								bos.write(data); // 파일 복사
-								bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
+							int data = -1;
+							while ((data = bis.read()) != -1) {
+								bos.write(data);
+								bos.flush();
 							}
 						} catch (Exception e1) {
 							System.out.println("파일 복사에러 : " + e1.getMessage());
-							return; // 파일 에러인데 밑에 저장하는과정을 실행하면안되기때문에 리턴으로 끝내버린다
+							return;
 						} finally {
 							try {
 								book1.setFileimg(fileName);
@@ -663,7 +653,6 @@ public class AdminManagement implements Initializable {
 			});
 			btnCancel.setOnAction(eve -> addPopup.close());
 		} catch (Exception e1) {
-			// TODO: handle exception
 		}
 	}
 
@@ -676,11 +665,8 @@ public class AdminManagement implements Initializable {
 		BookDAO dao = new BookDAO();
 		int returnValue = dao.deleteBook(selectBook);
 		if (returnValue != 0) {
-			// 이미지 파일 삭제
 			imageDelete(selectFileName);
 			obLBook.remove(bookTableSelectIndex);
-		} else {
-			System.out.println("실패");
 		}
 	}
 
@@ -734,12 +720,75 @@ public class AdminManagement implements Initializable {
 				colInformation);
 		BookDAO dao = new BookDAO();
 
-		// ArrayList<Book> bookTBL = dao.getBookTbl();
 		HashSet<Book> bookTBL = dao.getBookTbl();
 		for (Book b : bookTBL) {
 			obLBook.add(b);
 		}
 		tblBook.setItems(obLBook);
+
+	}
+
+	// 바차트 막대그래프 출력
+	private void handelBtnBarChartAction(Event e) {
+		Parent root;
+		try {
+			root = FXMLLoader.load(getClass().getResource("/view/chart.fxml"));
+			Stage addPopup = new Stage();
+			Scene s = new Scene(root);
+			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
+			BarChart barChart = (BarChart) root.lookup("#barChart");
+			Button btnExit = (Button) root.lookup("#btnExit");
+			addPopup.initModality(Modality.WINDOW_MODAL);
+			addPopup.initOwner(btnBookAdd.getScene().getWindow());
+			addPopup.setTitle("장르별 도서 권 수");
+			addPopup.setScene(s);
+			btnExit.setOnAction(e1 -> addPopup.close());
+
+			XYChart.Series series1 = new XYChart.Series();
+			series1.setName(dao.categoryList.get(0));
+			XYChart.Series series2 = new XYChart.Series();
+			series2.setName(dao.categoryList.get(1));
+			XYChart.Series series3 = new XYChart.Series();
+			series3.setName(dao.categoryList.get(2));
+			XYChart.Series series4 = new XYChart.Series();
+			series4.setName(dao.categoryList.get(3));
+			XYChart.Series series5 = new XYChart.Series();
+			series5.setName(dao.categoryList.get(4));
+			XYChart.Series series6 = new XYChart.Series();
+			series6.setName(dao.categoryList.get(5));
+			XYChart.Series series7 = new XYChart.Series();
+			series7.setName(dao.categoryList.get(6));
+
+			series1.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series1.getName(), "category").size())));
+			barChart.getData().add(series1);
+			series2.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series2.getName(), "category").size())));
+			barChart.getData().add(series2);
+			series3.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series3.getName(), "category").size())));
+			barChart.getData().add(series3);
+			series4.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series4.getName(), "category").size())));
+			barChart.getData().add(series4);
+			series5.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series5.getName(), "category").size())));
+			barChart.getData().add(series5);
+			series6.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series6.getName(), "category").size())));
+			barChart.getData().add(series6);
+			series7.setData(FXCollections
+					.observableArrayList(new XYChart.Data("", dao.searchBook(series7.getName(), "category").size())));
+			barChart.getData().add(series7);
+			addPopup.show();
+		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("데이터 에러");
+			alert.setHeaderText("데이터가 존재하지않습니다.");
+			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
+		}
 
 	}
 
@@ -785,7 +834,10 @@ public class AdminManagement implements Initializable {
 		Parent root;
 		try {
 			root = FXMLLoader.load(getClass().getResource("/view/requestPopup.fxml"));
-			Stage addPopup = new Stage(StageStyle.UTILITY);
+			Stage addPopup = new Stage();
+			Scene s = new Scene(root);
+			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			addPopup.initModality(Modality.WINDOW_MODAL);
 			addPopup.initOwner(btnBookAdd.getScene().getWindow());
 			Button btnAdd = (Button) root.lookup("#btnAdd");
@@ -802,18 +854,20 @@ public class AdminManagement implements Initializable {
 			lbDate.setText(request.getDate());
 			txaContent.setEditable(false);
 			addPopup.setTitle("자료 요청 내용");
-			addPopup.setScene(new Scene(root));
+			addPopup.setScene(s);
 			addPopup.show();
 
 			btnAdd.setOnAction(eve -> {
 				try {
 					Parent root1 = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
-					Stage addPopup1 = new Stage(StageStyle.UTILITY);
+					Stage addPopup1 = new Stage();
+					addPopup1.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					addPopup1.initModality(Modality.NONE);
 					addPopup1.initOwner(btnAdd.getScene().getWindow());
-					Scene s = new Scene(root1);
+					Scene s1 = new Scene(root1);
+					s1.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 					addPopup1.setTitle("도서 추가");
-					addPopup1.setScene(s);
+					addPopup1.setScene(s1);
 					addPopup1.show();
 					Button btnOk = (Button) s.lookup("#btnOk");
 					Button btnCancel = (Button) s.lookup("#btnCancel");
@@ -862,14 +916,14 @@ public class AdminManagement implements Initializable {
 							bis = new BufferedInputStream(new FileInputStream(selectFile));
 							bos = new BufferedOutputStream(
 									new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
-							int data = -1;// -1더이상 읽을값이 없다는 의미
-							while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
-								bos.write(data); // 파일 복사
-								bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
+							int data = -1;
+							while ((data = bis.read()) != -1) {
+								bos.write(data);
+								bos.flush();
 							}
 						} catch (Exception e1) {
 							System.out.println("파일 복사에러 : " + e1.getMessage());
-							return; // 파일 에러인데 밑에 저장하는과정을 실행하면안되기때문에 리턴으로 끝내버린다
+							return;
 						} finally {
 							try {
 								book1.setFileimg(fileName);
@@ -890,9 +944,7 @@ public class AdminManagement implements Initializable {
 					});
 					btnCancel.setOnAction(eve1 -> addPopup.close());
 				} catch (Exception e1) {
-					// TODO: handle exception
 				}
-
 			});
 
 			btnBack.setOnAction(eve -> addPopup.close());
@@ -905,140 +957,20 @@ public class AdminManagement implements Initializable {
 
 	// 요청테이블 삭제 버튼 이벤트
 	private void handleBtnRequestDeleteAction(ActionEvent e) {
-
 		try {
 			RequestBook selectRequest = obLRequest.get(requestTableSelectIndex);
-			Connection con = DBUtil.getConnection();
-			String query = "delete from RequestTBL where No=?";
-			PreparedStatement preparedStatement = con.prepareStatement(query);
-			preparedStatement.setInt(1, selectRequest.getNo());
-			if (preparedStatement.executeUpdate() != 0) {
+			RequestDAO dao = new RequestDAO();
+			int returnValue = dao.deleteRequest(selectRequest);
+			if (returnValue != 0) {
 				obLRequest.remove(requestTableSelectIndex);
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 완료");
-				alert.showAndWait();
-			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("삭제 실패");
-				alert.showAndWait();
 			}
-
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
 	}
 
-	/* ========================통계====================== */
-
-	// 바차트 막대그래프 출력
-	private void handelBtnBarChartAction(Event e) {
-			Parent root;
-			try {
-				root = FXMLLoader.load(getClass().getResource("/view/chart.fxml"));
-				Stage addPopup = new Stage(StageStyle.UTILITY);
-				BarChart barChart=(BarChart) root.lookup("#barChart");
-				Button btnExit = (Button) root.lookup("#btnExit");
-				addPopup.initModality(Modality.WINDOW_MODAL);
-				addPopup.initOwner(btnBookAdd.getScene().getWindow());
-				addPopup.setTitle("장르별 도서 권 수");
-				addPopup.setScene(new Scene(root));
-				btnExit.setOnAction(e1->addPopup.close());
-
-			XYChart.Series series1 = new XYChart.Series();
-			series1.setName(dao.categoryList.get(0));
-			XYChart.Series series2 = new XYChart.Series();
-			series2.setName(dao.categoryList.get(1));
-			XYChart.Series series3 = new XYChart.Series();
-			series3.setName(dao.categoryList.get(2));
-			XYChart.Series series4 = new XYChart.Series();
-			series4.setName(dao.categoryList.get(3));
-			XYChart.Series series5 = new XYChart.Series();
-			series5.setName(dao.categoryList.get(4));
-			XYChart.Series series6 = new XYChart.Series();
-			series6.setName(dao.categoryList.get(5));
-			XYChart.Series series7 = new XYChart.Series();
-			series7.setName(dao.categoryList.get(6));
-
-			ObservableList obL1 = FXCollections.observableArrayList();
-			ObservableList obL2 = FXCollections.observableArrayList();
-			ObservableList obL3 = FXCollections.observableArrayList();
-			ObservableList obL4 = FXCollections.observableArrayList();
-			ObservableList obL5 = FXCollections.observableArrayList();
-			ObservableList obL6 = FXCollections.observableArrayList();
-			ObservableList obL7 = FXCollections.observableArrayList();
-
-			obL1.add(new XYChart.Data("", dao.searchBook(series1.getName(), "category").size()));
-			obL2.add(new XYChart.Data("", dao.searchBook(series2.getName(), "category").size()));
-			obL3.add(new XYChart.Data("", dao.searchBook(series3.getName(), "category").size()));
-			obL4.add(new XYChart.Data("", dao.searchBook(series4.getName(), "category").size()));
-			obL5.add(new XYChart.Data("", dao.searchBook(series5.getName(), "category").size()));
-			obL6.add(new XYChart.Data("", dao.searchBook(series6.getName(), "category").size()));
-			obL7.add(new XYChart.Data("", dao.searchBook(series7.getName(), "category").size()));
-
-			series1.setData(obL1);
-			barChart.getData().add(series1);
-			series2.setData(obL2);
-			barChart.getData().add(series2);
-			series3.setData(obL3);
-			barChart.getData().add(series3);
-			series4.setData(obL4);
-			barChart.getData().add(series4);
-			series5.setData(obL5);
-			barChart.getData().add(series5);
-			series6.setData(obL6);
-			barChart.getData().add(series6);
-			series7.setData(obL7);
-			barChart.getData().add(series7);
-			addPopup.show();
-		} catch (Exception e1) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("데이터 에러");
-			alert.setHeaderText("데이터가 존재하지않습니다.");
-			alert.setContentText(e1.getMessage());
-			alert.showAndWait();
-		}
-
-	}
-
-	// 파이차트 출력
-	private void handelBtnPieChartAction(Event e) {
-		try {
-			XYChart.Series series1 = new XYChart.Series();
-			series1.setName(dao.categoryList.get(0));
-			XYChart.Series series2 = new XYChart.Series();
-			series2.setName(dao.categoryList.get(1));
-			XYChart.Series series3 = new XYChart.Series();
-			series3.setName(dao.categoryList.get(2));
-			XYChart.Series series4 = new XYChart.Series();
-			series4.setName(dao.categoryList.get(3));
-			XYChart.Series series5 = new XYChart.Series();
-			series5.setName(dao.categoryList.get(4));
-			XYChart.Series series6 = new XYChart.Series();
-			series6.setName(dao.categoryList.get(5));
-			XYChart.Series series7 = new XYChart.Series();
-			series7.setName(dao.categoryList.get(6));
-			ObservableList obLPie = FXCollections.observableArrayList();
-
-			obLPie.add(new PieChart.Data(series1.getName(), dao.searchBook(series1.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series2.getName(), dao.searchBook(series2.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series3.getName(), dao.searchBook(series3.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series4.getName(), dao.searchBook(series4.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series5.getName(), dao.searchBook(series5.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series6.getName(), dao.searchBook(series6.getName(), "category").size()));
-			obLPie.add(new PieChart.Data(series7.getName(), dao.searchBook(series7.getName(), "category").size()));
-
-			//pieChart.setData(obLPie);
-
-		} catch (Exception e1) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("데이터 에러");
-			alert.setHeaderText("데이터가 존재하지않습니다.");
-			alert.setContentText(e1.getMessage());
-			alert.showAndWait();
-		}
-
-	}
+	
 
 	/* ========================서브함수들 ====================== */
 

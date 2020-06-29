@@ -4,6 +4,9 @@ AnchorPane{
 HBox{
 	-fx-background-color:#FDF0E4;
 }
+.vBox{
+	-fx-background-color:#FDF0E4;
+}
 Button{
 	-fx-background-color:#a79c8e;
 	-fx-font-family: "NanumGothic";

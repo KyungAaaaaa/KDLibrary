@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +22,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,8 +33,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import model.Book;
 import model.Member;
 import model.Notice;
@@ -57,7 +57,7 @@ public class User_MainController implements Initializable {
 	private Button btnNotice;
 	@FXML
 	private Button btnCalendar;
-	public Stage stage;
+	public Stage userStage;
 	@FXML
 	private ImageView imgV;
 	@FXML
@@ -102,8 +102,8 @@ public class User_MainController implements Initializable {
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//대여중인 도서 반납 버튼 핸들러 함수
+
+	// 대여중인 도서 반납 버튼 핸들러 함수
 	private void setReturnRentalBook() {
 		try {
 			BookDAO dao = new BookDAO();
@@ -124,7 +124,8 @@ public class User_MainController implements Initializable {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_bookInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userModifyStage = new Stage(StageStyle.UTILITY);
+			Stage userModifyStage = new Stage();
+			userModifyStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			Label lbTitle = (Label) scene.lookup("#lbTitle");
 			Label lbISBN = (Label) scene.lookup("#lbISBN");
 			Label lbWriter = (Label) scene.lookup("#lbWriter");
@@ -144,47 +145,21 @@ public class User_MainController implements Initializable {
 			String selectFileName = b.getFileimg();
 			String localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
 			imgV.setImage(new Image(localUrl));
-			// userModifyStage.initModality(Modality.WINDOW_MODAL);
-			userModifyStage.initOwner(this.stage);
+			userModifyStage.initModality(Modality.WINDOW_MODAL);
+			userModifyStage.initOwner(this.userStage);
 			userModifyStage.setScene(scene);
 			userModifyStage.setResizable(false);
 			userModifyStage.setTitle("책 정보");
 			userModifyStage.show();
 			btnClose.setOnAction(e -> userModifyStage.close());
 			btnRental.setOnAction(e -> {
-				MemberDAO dao = new MemberDAO();
-				Connection con1 = null;
-				PreparedStatement preparedStatement1 = null;
-				PreparedStatement preparedStatement2 = null;
-				try {
-					con1 = DBUtil.getConnection(); //
-					String query1 = "update memberTBL set rentalBook=? where Id=?";
-					String query2 = "update BookTBL set rental=? where ISBN=?";
-					preparedStatement1 = con1.prepareStatement(query1);
-					preparedStatement2 = con1.prepareStatement(query2);
-					preparedStatement1.setString(1, null);
-					preparedStatement1.setString(2, dao.m.getId());
-					preparedStatement2.setBoolean(1, false);
-					preparedStatement2.setString(2, b.getIsbn());
 
-					if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0) {
-						memberDao.m.setRentalBook(null);
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("반납 완료");
-						alert.showAndWait();
-						userModifyStage.close();
-						bookList.clear();
-					} else {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("반납 실패");
-						alert.showAndWait();
-						throw new Exception();
-					}
-				} catch (Exception e1) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setHeaderText("등록 실패 DB에러");
-					alert.showAndWait();
+				if (memberDao.getRentalBookInformationPopup(b)) {
+					memberDao.m.setRentalBook(null);
+					userModifyStage.close();
+					bookList.clear();
 				}
+
 			});
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -195,21 +170,25 @@ public class User_MainController implements Initializable {
 		}
 	}
 
-	// 자료검색
+	// 자료검색 : 창 전환
 	private void handlerBtnBookSearch(ActionEvent event) {
 
-		Parent mainView = null;
-		Stage mainStage = null;
 		try {
-			mainView = FXMLLoader.load(getClass().getResource("/view/user_BookSearch.fxml"));
-			Scene scene = new Scene(mainView);
+			Stage mainStage = new Stage();
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_BookSearch.fxml"));
+			Parent root = fxmlLoader.load();
+			User_BookSearchController userBookSearchController = fxmlLoader.getController();
+			userBookSearchController.stage = mainStage;
+
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
-			mainStage = new Stage();
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);
+			mainStage.initOwner(userStage);
 			mainStage.setResizable(true);
 			((Stage) btnOut.getScene().getWindow()).close();
+
 			mainStage.show();
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
@@ -222,13 +201,15 @@ public class User_MainController implements Initializable {
 
 	// 로그아웃
 	private void handlerBtnOut(ActionEvent event) {
-		Parent mainView = null;
-		Stage mainStage = null;
 		try {
-			mainView = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
-			Scene scene = new Scene(mainView);
+			Stage mainStage = new Stage();
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+			Parent root = fxmlLoader.load();
+			RootController rootController = fxmlLoader.getController();
+			rootController.stage = mainStage;
+			mainStage.initOwner(this.userStage);
 
-			mainStage = new Stage();
+			Scene scene = new Scene(root);
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			mainStage.setTitle("KD Library");
@@ -251,8 +232,8 @@ public class User_MainController implements Initializable {
 			Parent userModifyView = FXMLLoader.load(getClass().getResource("/view/user_changingInformation.fxml"));
 			Scene scene = new Scene(userModifyView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userModifyStage = new Stage(StageStyle.UTILITY);
-
+			Stage userModifyStage = new Stage();
+			userModifyStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			PasswordField txtPass = (PasswordField) scene.lookup("#txtPass");
 			Button btnUserModifyNo = (Button) scene.lookup("#btnNo");
 			Button btnUserModifyOk = (Button) scene.lookup("#btnOk");
@@ -272,7 +253,9 @@ public class User_MainController implements Initializable {
 								.load(getClass().getResource("/view/user_changingInformation2.fxml"));
 						Scene scene1 = new Scene(userModifyView2);
 						scene1.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-						Stage userModifyStage2 = new Stage(StageStyle.UTILITY);
+						Stage userModifyStage2 = new Stage();
+						userModifyStage2.getIcons()
+								.add(new Image(getClass().getResource("/image/logo.png").toString()));
 
 						Label lblId2 = (Label) scene1.lookup("#lblId");
 						Label lblBirth2 = (Label) scene1.lookup("#lblBirth");
@@ -329,7 +312,7 @@ public class User_MainController implements Initializable {
 						});
 
 						userModifyStage2.initModality(Modality.WINDOW_MODAL);
-						userModifyStage2.initOwner(stage);
+						userModifyStage2.initOwner(userStage);
 						userModifyStage2.setScene(scene1);
 						userModifyStage2.setResizable(false);
 						userModifyStage2.setTitle("계정관리");
@@ -352,7 +335,7 @@ public class User_MainController implements Initializable {
 				}
 			});
 			userModifyStage.initModality(Modality.WINDOW_MODAL);
-			userModifyStage.initOwner(stage);
+			userModifyStage.initOwner(userStage);
 			userModifyStage.setScene(scene);
 			userModifyStage.setResizable(false);
 			userModifyStage.setTitle("본인확인");
@@ -372,51 +355,64 @@ public class User_MainController implements Initializable {
 		try {
 			obsListS.clear();
 			schList.clear();
-			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule.fxml"));
+			DAO dao = new DAO();
+			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule2.fxml"));
 			Scene scene = new Scene(userScheduleView);
+			Stage userScheduleStage = new Stage();
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userScheduleStage = new Stage(StageStyle.UTILITY);
-			TableView tblUserSchedule = (TableView) scene.lookup("#tblSchedule");
-			Button btnUserScheduleNo = (Button) scene.lookup("#btnNo");
+			userScheduleStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 
-			TableColumn colDate = new TableColumn("날 짜");
-			colDate.setMaxWidth(115);
-			colDate.setStyle("-fx-allignment: CENTER");
-			colDate.setCellValueFactory(new PropertyValueFactory("date"));
-
-			TableColumn colContent = new TableColumn("내 용");
-			colContent.setPrefWidth(550);
-			colContent.setStyle("-fx-allignment: CENTER");
-			colContent.setCellValueFactory(new PropertyValueFactory("content"));
-			tblUserSchedule.getColumns().addAll(colDate, colContent);
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			con = DBUtil.getConnection();
-			String query = "SELECT * FROM ScheduleTBL";
-			pstmt = con.prepareStatement(query);
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				Schedule schedule = new Schedule(rs.getString("content"), rs.getString("date"));
-				schList.add(schedule);
+			ArrayList<Button> dateBtnList = new ArrayList<Button>();
+			for (int i = 1; i <= 30; i++) {
+				dateBtnList.add((Button) scene.lookup("#btn" + i));
 			}
 
+			for (Button b : dateBtnList) {
+				b.setStyle("-fx-background-color:#00ff0000;-fx-text-fill:#00ff0000;");
+				b.setDisable(true);
+			}
+
+			schList = dao.getScheduleMember();
 			for (Schedule s : schList) {
-				obsListS.add(s);
+				for (Button b : dateBtnList) {
+					if (s.getDate().equals(b.getText())) {
+						b.setDisable(false);
+						b.setStyle("-fx-text-fill:#00ff0000;-fx-background-color:#F7AA97;");
+					}
+				}
 			}
 
-			tblUserSchedule.setItems(obsListS);
+			for (Button b : dateBtnList) {
+				b.setOnAction(e -> {
+					ObservableList<String> obSchdule = FXCollections.observableArrayList();
+					ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
+					Popup popup = new Popup();
+					Parent root = null;
+					try {
+						root = FXMLLoader.load(getClass().getResource("/view/popup.fxml"));
+					} catch (IOException e1) {
+					}
+					Label lbDate = (Label) root.lookup("#lbDate");
+					ListView list = (ListView) root.lookup("#list");
+					obSchdule.clear();
+					schduleList = dao.getSchedule(b.getText());
+					for (int i = 0; i < schduleList.size(); i++) {
+						obSchdule.add(schduleList.get(i).getContent());
+					}
+					list.setItems(obSchdule);
+					lbDate.setText(b.getText());
+					popup.getContent().add(root);
+					popup.setAutoHide(true);
+					popup.show(userScheduleStage);
+				});
 
+			}
 			userScheduleStage.initModality(Modality.WINDOW_MODAL);
-			userScheduleStage.initOwner(stage);
+			userScheduleStage.initOwner(userStage);
 			userScheduleStage.setScene(scene);
 			userScheduleStage.setResizable(false);
 			userScheduleStage.setTitle("일정표");
 			userScheduleStage.show();
-			btnUserScheduleNo.setOnAction(event1 -> {
-				userScheduleStage.close();
-			});
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");
@@ -433,8 +429,8 @@ public class User_MainController implements Initializable {
 			Parent userNoticeView = FXMLLoader.load(getClass().getResource("/view/user_notice.fxml"));
 			Scene scene = new Scene(userNoticeView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userNoticeStage = new Stage(StageStyle.UTILITY);
-
+			Stage userNoticeStage = new Stage();
+			userNoticeStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			TableView tblUserNotice = (TableView) scene.lookup("#tblNotice");
 			Button btnUserNoticeNo = (Button) scene.lookup("#btnNo");
 			Button btnUserNoticeAdd = (Button) scene.lookup("#btnAdd");
@@ -501,40 +497,16 @@ public class User_MainController implements Initializable {
 				}
 			});
 
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			try {
-				con = DBUtil.getConnection();
+			DAO dao = new DAO();
+			ArrayList<Notice> arrayList = new ArrayList<Notice>();
+			arrayList = dao.getNotice();
 
-				String query = "select * from noticeTBL";
-
-				pstmt = con.prepareStatement(query);
-
-				rs = pstmt.executeQuery();
-
-				ArrayList<Notice> arrayList = new ArrayList<Notice>();
-				while (rs.next()) {
-					Notice notice = new Notice(rs.getString("title"), rs.getString("content"), rs.getString("date"),
-							rs.getInt("No"));
-					arrayList.add(notice);
-				}
-
-				for (int i = 0; i < arrayList.size(); i++) {
-					Notice n = arrayList.get(i);
-					obsList.add(n);
-				}
-
-			} catch (Exception e1) {
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("에러발생");
-				alert.setHeaderText("DB 점검하세요");
-				alert.setContentText(e1.getMessage());
-				alert.showAndWait();
+			for (Notice n : arrayList) {
+				obsList.add(n);
 			}
 
 			userNoticeStage.initModality(Modality.WINDOW_MODAL);
-			userNoticeStage.initOwner(stage);
+			userNoticeStage.initOwner(userStage);
 			userNoticeStage.setScene(scene);
 			userNoticeStage.setResizable(false);
 			userNoticeStage.setTitle("공지사항");
@@ -560,7 +532,8 @@ public class User_MainController implements Initializable {
 			Parent userRequestPopUpView = FXMLLoader.load(getClass().getResource("/view/requestPopUp.fxml"));
 			Scene scene = new Scene(userRequestPopUpView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-			Stage userRequestPopUpStage = new Stage(StageStyle.UTILITY);
+			Stage userRequestPopUpStage = new Stage();
+			userRequestPopUpStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 
 			Button btnUserPopUpAdd = (Button) scene.lookup("#btnAdd");
 			Button btnUserPopUpBack = (Button) scene.lookup("#btnBack");
@@ -572,49 +545,25 @@ public class User_MainController implements Initializable {
 			btnUserPopUpAdd.setText("자료 신청");
 
 			btnUserPopUpAdd.setOnAction(event1 -> {
-				Connection con = null;
-				PreparedStatement pstmt = null;
-
-				try {
-					if (txfUserPopUpTitle.getText().trim().equals("")
-							|| txaUserPopUpContent.getText().trim().equals(""))
-						throw new Exception();
-					con = DBUtil.getConnection();
-					String query = "Insert into RequestTBL(No,title,name,content,date) values(NULL, ?, ?, ?, ?)";
-					pstmt = con.prepareStatement(query);
-
-					RequestBook r = new RequestBook(txfUserPopUpTitle.getText(), txaUserPopUpContent.getText(),
-							lblUserPopUpName.getText(), lblUserPopUpDate.getText());
-					pstmt.setString(1, r.getTitle());
-					pstmt.setString(2, r.getName());
-					pstmt.setString(3, r.getContent());
-					pstmt.setString(4, r.getDate());
-
-					int BookApply = pstmt.executeUpdate();
-					if (BookApply != 0) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("도서신청");
-						alert.setHeaderText("도서 신청완료");
-						alert.setContentText("신청을 성공적으로 진행하였습니다");
-						alert.showAndWait();
-						userRequestPopUpStage.close();
-					} else {
-						Alert alert = new Alert(AlertType.ERROR);
-						alert.setTitle("에러발생");
-						alert.setHeaderText("삽입사항을 점검하세요");
-						alert.showAndWait();
-					}
-
-				} catch (Exception e) {
+				if (txfUserPopUpTitle.getText().trim().equals("") || txaUserPopUpContent.getText().trim().equals("")) {
 					Alert alert = new Alert(AlertType.ERROR);
 					alert.setTitle("에러발생");
 					alert.setHeaderText("도서 제목과 내용을 입력하세요");
 					alert.showAndWait();
+					return;
+				}
+				RequestBook r = new RequestBook(txfUserPopUpTitle.getText(), txaUserPopUpContent.getText(),
+						lblUserPopUpName.getText(), lblUserPopUpDate.getText());
+				RequestDAO dao = new RequestDAO();
+
+				int bookApply = dao.requestBook(r);
+				if (bookApply != 0) {
+					userRequestPopUpStage.close();
 				}
 			});
 
 			userRequestPopUpStage.initModality(Modality.WINDOW_MODAL);
-			userRequestPopUpStage.initOwner(stage);
+			userRequestPopUpStage.initOwner(userStage);
 			userRequestPopUpStage.setScene(scene);
 			userRequestPopUpStage.setResizable(false);
 			userRequestPopUpStage.setTitle("자료신청");
