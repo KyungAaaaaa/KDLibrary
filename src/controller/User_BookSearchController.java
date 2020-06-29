@@ -153,9 +153,13 @@ public class User_BookSearchController implements Initializable {
 			if (bookCount > 9) {
 				bookList2 = bookList;
 			}
-			for (int i = 0; i < bookCount; i++) {
-				if (bookCount > 9) {
-					bookCount = 9;
+
+			for (int i = 0; i < 9; i++) {
+				if (bookCount < 9) {
+					if (i == bookCount) {
+						break;
+					}
+					;
 				}
 				Book b = bookList.get(i);
 				selectFileName = b.getFileimg();
@@ -194,9 +198,13 @@ public class User_BookSearchController implements Initializable {
 						bookImageVList.get(j).setImage(null);
 						bookImageVList.get(j).setDisable(true);
 					}
-					for (int i = 0; i < bookCount; i++) {
-						if (bookCount > 9) {
-							bookCount = 9;
+
+					for (int i = 0; i < 9; i++) {
+						if (bookCount < 9) {
+							if (i == bookCount) {
+								break;
+							}
+							;
 						}
 						Book b = bookList.get(i);
 						selectFileName = b.getFileimg();
@@ -212,7 +220,7 @@ public class User_BookSearchController implements Initializable {
 
 			}
 		} catch (Exception e2) {
-			
+
 		}
 	}
 
@@ -255,13 +263,13 @@ public class User_BookSearchController implements Initializable {
 	// 뒤로가기
 	private void handleBtnBackAction(ActionEvent e) {
 		try {
-			
+
 			Stage user_MainStage = new Stage();
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
 			Parent root = fxmlLoader.load();
 			User_MainController user_MainController = fxmlLoader.getController();
 			user_MainController.userStage = user_MainStage;
-			
+
 			root = FXMLLoader.load(getClass().getResource("/view/user_Main.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -289,8 +297,7 @@ public class User_BookSearchController implements Initializable {
 	// 장르 선택시 책 진열
 	private void getCartegoryBook() {
 		page = 0;
-		btnNext.setDisable(true);
-		btnBack.setDisable(true);
+		bookList2 = null;
 		bookBox.setStyle("-fx-background-color:#dedcee");
 		BookDAO dao = new BookDAO();
 		bookList = dao.searchBook(listViewSelectItem, "category");
@@ -300,6 +307,8 @@ public class User_BookSearchController implements Initializable {
 		bookImageVList.addAll(FXCollections.observableArrayList(imgV11, imgV12, imgV13, imgV21, imgV22, imgV23, imgV31,
 				imgV32, imgV33));
 		try {
+			btnNext.setDisable(true);
+			btnBack.setDisable(true);
 			for (int j = 0; j < 9; j++) {
 				bookTitleList.get(j).setText("");
 				bookImageVList.get(j).setImage(null);
@@ -308,9 +317,13 @@ public class User_BookSearchController implements Initializable {
 			if (bookCount > 9) {
 				bookList2 = bookList;
 			}
-			for (int i = 0; i < bookCount; i++) {
-				if (bookCount > 9) {
-					bookCount = 9;
+
+			for (int i = 0; i < 9; i++) {
+				if (bookCount < 9) {
+					if (i == bookCount) {
+						break;
+					}
+					;
 				}
 				Book b = bookList.get(i);
 				selectFileName = b.getFileimg();
@@ -332,16 +345,21 @@ public class User_BookSearchController implements Initializable {
 					}
 
 					for (int i = 9; i < bookList2.size(); i++) {
-
-						Book b = bookList.get(i);
-						selectFileName = b.getFileimg();
-						localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
-						bookTitleList.get(i - 9).setText(b.getTitle());
-						bookImageVList.get(i - 9).setImage(new Image(localUrl));
-						bookImageVList.get(i - 9).setDisable(false);
+						Book b = null;
+						try {
+							b = bookList.get(i);
+							selectFileName = b.getFileimg();
+							localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
+							bookTitleList.get(i - 9).setText(b.getTitle());
+							bookImageVList.get(i - 9).setImage(new Image(localUrl));
+							bookImageVList.get(i - 9).setDisable(false);
+						} catch (Exception e) {
+							System.out.println("페이지넘기기 오류 ㅠ왜 setDisable안되냐");
+						}
 
 					}
 					btnNext.setDisable(true);
+
 				});
 				btnBack.setOnAction(event -> {
 					for (int j = 0; j < 9; j++) {
@@ -349,9 +367,13 @@ public class User_BookSearchController implements Initializable {
 						bookImageVList.get(j).setImage(null);
 						bookImageVList.get(j).setDisable(true);
 					}
-					for (int i = 0; i < bookCount; i++) {
-						if (bookCount > 9) {
-							bookCount = 9;
+
+					for (int i = 0; i < 9; i++) {
+						if (bookCount < 9) {
+							if (i == bookCount) {
+								break;
+							}
+							;
 						}
 						Book b = bookList.get(i);
 						selectFileName = b.getFileimg();

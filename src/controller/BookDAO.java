@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -78,15 +77,18 @@ public class BookDAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("도서 추가");
 				alert.setHeaderText("등록 완료");
 				alert.showAndWait();
 			} else {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("도서 추가");
 				alert.setHeaderText("등록 실패");
 				alert.showAndWait();
 			}
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("에러");
 			alert.setHeaderText("등록 실패 : DB에러");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();
@@ -167,10 +169,12 @@ public class BookDAO {
 			if (returnValue != 0) {
 
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("도서 삭제");
 				alert.setHeaderText("삭제 완료");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("도서 삭제");
 				alert.setHeaderText("삭제 실패");
 				alert.showAndWait();
 			}

@@ -40,11 +40,13 @@ public class MemberDAO {
 				returnValue = true;
 			if (returnValue) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("도서 반납");
 				alert.setHeaderText("반납 완료");
 				alert.showAndWait();
 
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("도서 반납");
 				alert.setHeaderText("반납 실패");
 				alert.setContentText("관리자에게 문의하세요.");
 				alert.showAndWait();
@@ -187,10 +189,12 @@ public class MemberDAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("회원 삭제");
 				alert.setHeaderText("삭제 완료");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("회원 삭제");
 				alert.setHeaderText("삭제 실패");
 				alert.showAndWait();
 			}
