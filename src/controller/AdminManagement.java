@@ -431,12 +431,14 @@ public class AdminManagement implements Initializable {
 			TextArea txaInformation = (TextArea) root.lookup("#txaInformation");
 			ImageView imgV = (ImageView) root.lookup("#imgV");
 			btnCancel.setOnAction(eve -> addPopup.close());
+			
 			cmbCategory.setItems(dao.categoryList);
 			Book book0 = obLBook.get(bookTableSelectIndex);
 			selectFileName = book0.getFileimg();
 			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
 			image = new Image(localUrl);
 			imgV.setImage(image);
+			
 			txtISBN.setText(book0.getIsbn());
 			txtISBN.setDisable(true);
 			txtTitle.setText(book0.getTitle());
@@ -453,10 +455,12 @@ public class AdminManagement implements Initializable {
 			});
 
 			btnOk.setOnAction(eve -> {
-
+				String fileName = null;
 				Connection con1 = null;
 				PreparedStatement preparedStatement = null;
 				try {
+					fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
+					
 					con1 = DBUtil.getConnection(); //
 					String query = "update BookTBL set ISBN=?,title=?,writer=?,category=?,company=?,date=?,information=?,fileimg=? where ISBN=?";
 					preparedStatement = con1.prepareStatement(query);
@@ -468,6 +472,7 @@ public class AdminManagement implements Initializable {
 					preparedStatement.setString(5, txtCompany.getText());
 					preparedStatement.setString(6, txtDate.getText());
 					preparedStatement.setString(7, txaInformation.getText());
+					preparedStatement.setString(8, fileName);
 					preparedStatement.setString(9, book0.getIsbn());
 					book0.setIsbn(txtISBN.getText());
 					book0.setTitle(txtTitle.getText());
@@ -476,7 +481,8 @@ public class AdminManagement implements Initializable {
 					book0.setCompany(txtCompany.getText());
 					book0.setDate(txtDate.getText());
 					book0.setInformation(txaInformation.getText());
-
+					
+					
 					if (selectFile == null) {
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("문제발생");
@@ -484,48 +490,47 @@ public class AdminManagement implements Initializable {
 						alert.showAndWait();
 						return;
 					}
-					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
-					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
-					String fileName = null;
-					try {
-						fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
-						preparedStatement.setString(8, fileName);
-						book0.setFileimg(fileName);
-						bis = new BufferedInputStream(new FileInputStream(selectFile));
-						bos = new BufferedOutputStream(
-								new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
-						int data = -1;// -1더이상 읽을값이 없다는 의미
-						while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
-							bos.write(data); // 파일 복사
-							bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
-						}
-					} catch (Exception e1) {
-						System.out.println("파일 복사에러 : " + e1.getMessage());
-						return;
-					} finally {
-						try {
-							book0.setFileimg(fileName);
-
-							if (bis != null)
-								bis.close();
-							if (bos != null)
-								bos.close();
-						} catch (IOException e1) {
-						}
-					}
+					
 
 					if (preparedStatement.executeUpdate() != 0) {
 						imageDelete(selectFileName);
+						
+						BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
+						BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
+					
+						try {
+							
+							
+							book0.setFileimg(fileName);
+							bis = new BufferedInputStream(new FileInputStream(selectFile));
+							bos = new BufferedOutputStream(
+									new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
+							int data = -1;// -1더이상 읽을값이 없다는 의미
+							while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
+								bos.write(data); // 파일 복사
+								bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
+							}
+						} catch (Exception e1) {
+							System.out.println("파일 복사에러 : " + e1.getMessage());
+							return;
+						} finally {
+							try {
+								book0.setFileimg(fileName);
+
+								if (bis != null)
+									bis.close();
+								if (bos != null)
+									bos.close();
+							} catch (IOException e1) {
+							}
+						}
+						
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("등록 완료");
 						alert.showAndWait();
 						addPopup.close();
 						obLBook.set(bookTableSelectIndex, book0);
-					} else {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("등록 실패");
-						alert.showAndWait();
-					}
+					} 
 
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
@@ -895,16 +900,15 @@ public class AdminManagement implements Initializable {
 									txaInformation.getText(), false);
 						} catch (Exception e1) {
 							Alert alert = new Alert(AlertType.ERROR);
-							alert.setTitle("오류");
+							alert.setTitle("장르 미선택");
 							alert.setHeaderText("장르를 선택하세요");
 							alert.showAndWait();
 							return;
 						}
 						if (selectFile == null) {
 							Alert alert = new Alert(AlertType.WARNING);
-							alert.setTitle("문제발생");
+							alert.setTitle("이미지 파일 미선택");
 							alert.setHeaderText("이미지 파일을 선택하세요");
-							alert.setContentText("다음에는 주의하세요.");
 							alert.showAndWait();
 							return;
 						}
@@ -1009,7 +1013,6 @@ public class AdminManagement implements Initializable {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("사진 가져오기");
 			alert.setHeaderText("사진 가져오기 문제 발생");
-			alert.setContentText("이미지파일만 가져오기바란다!!");
 			alert.showAndWait();
 		}
 		return image;

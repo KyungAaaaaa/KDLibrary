@@ -60,10 +60,12 @@ public class RequestDAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("요청 삭제");
 				alert.setHeaderText("삭제 완료");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("요청 삭제");
 				alert.setHeaderText("삭제 실패");
 				alert.showAndWait();
 			}
@@ -103,17 +105,19 @@ public class RequestDAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("도서신청");
+				alert.setTitle("도서 신청");
 				alert.setHeaderText("도서 신청완료");
 				alert.setContentText("신청을 성공적으로 진행하였습니다");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("도서 신청");
 				alert.setHeaderText("등록 실패");
 				alert.showAndWait();
 			}
 		} catch (Exception e1) {
-			Alert alert = new Alert(AlertType.INFORMATION);
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("에러");
 			alert.setHeaderText("등록 실패 : DB에러");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();

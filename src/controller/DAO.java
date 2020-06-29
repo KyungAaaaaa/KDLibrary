@@ -103,7 +103,7 @@ public class DAO {
 
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("에러발생");
+			alert.setTitle("에러");
 			alert.setHeaderText("공지사항 불러오기 오류");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();
@@ -133,8 +133,8 @@ public class DAO {
 
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("에러발생");
-			alert.setHeaderText("공지사항 불러오기 오류");
+			alert.setTitle("에러");
+			alert.setHeaderText("대여기록 불러오기 오류");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();
 		}
@@ -238,10 +238,12 @@ public class DAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 삭제");
 				alert.setHeaderText("삭제 완료");
 				alert.showAndWait();
 			} else {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 삭제");
 				alert.setHeaderText("삭제 실패");
 				alert.showAndWait();
 			}
@@ -279,15 +281,18 @@ public class DAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 추가");
 				alert.setHeaderText("등록 완료");
 				alert.showAndWait();
 			} else {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 추가");
 				alert.setHeaderText("등록 실패");
 				alert.showAndWait();
 			}
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("에러");
 			alert.setHeaderText("등록 실패 : DB에러");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();
@@ -321,15 +326,18 @@ public class DAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("일정 추가");
 				alert.setHeaderText("등록 완료");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("일정 추가");
 				alert.setHeaderText("등록 실패");
 				alert.showAndWait();
 			}
 		} catch (Exception e1) {
 			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("에러");
 			alert.setHeaderText("등록 실패 : DB에러");
 			alert.setContentText(e1.getMessage());
 			alert.showAndWait();
@@ -360,10 +368,12 @@ public class DAO {
 			returnValue = preparedStatement.executeUpdate();
 			if (returnValue != 0) {
 				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("일정 삭제");
 				alert.setHeaderText("삭제 완료");
 				alert.showAndWait();
 			} else {
-				Alert alert = new Alert(AlertType.INFORMATION);
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("일정 삭제");
 				alert.setHeaderText("삭제 실패");
 				alert.showAndWait();
 			}
