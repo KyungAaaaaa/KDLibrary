@@ -8,18 +8,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="898.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminManagement">
+<AnchorPane prefHeight="766.0" prefWidth="1035.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminManagement">
 	<children>
-		<Button fx:id="btnBack" layoutX="933.0" layoutY="840.0" mnemonicParsing="false" styleClass="btnAll" text="뒤로가기" />
-		<TabPane fx:id="tabContainer" layoutX="7.0" layoutY="14.0" prefHeight="821.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
+		<Button fx:id="btnBack" layoutX="922.0" layoutY="713.0" mnemonicParsing="false" styleClass="btnAll" text="뒤로가기" />
+		<TabPane fx:id="tabContainer" layoutX="7.0" layoutY="14.0" prefHeight="694.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
 			<tabs>
 				<Tab fx:id="memberTab" text="회원관리">
 					<content>
-						<AnchorPane fx:id="memberContainer" minHeight="0.0" minWidth="0.0" prefHeight="743.0" prefWidth="966.0">
+						<AnchorPane fx:id="memberContainer" minHeight="0.0" minWidth="0.0" prefHeight="740.0" prefWidth="966.0">
 							<children>
 								<TableView fx:id="tblUser" layoutX="10.0" layoutY="56.0" prefHeight="500.0" prefWidth="940.0" />
-								<Button fx:id="btnUserEdit" layoutX="36.0" layoutY="659.0" mnemonicParsing="false" styleClass="btnAll" text="수정" />
-								<Button fx:id="btnUserDelete" layoutX="86.0" layoutY="659.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
+								<Button fx:id="btnUserEdit" layoutX="14.0" layoutY="565.0" mnemonicParsing="false" styleClass="btnAll" text="수정" />
+								<Button fx:id="btnUserDelete" layoutX="64.0" layoutY="565.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
 								<Button fx:id="btnUserSearch" layoutX="495.0" layoutY="17.0" mnemonicParsing="false" styleClass="btnAll" text="검색" />
 								<TextField fx:id="txtUserSearch" layoutX="10.0" layoutY="16.0" prefHeight="25.0" prefWidth="480.0" promptText="이름을 입력하세요" />
 							</children>
@@ -33,10 +33,10 @@
 								<TableView fx:id="tblBook" layoutX="10.0" layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
 								<TextField fx:id="txtBookSearch" layoutX="10.0" layoutY="16.0" prefHeight="25.0" prefWidth="480.0" promptText="책 이름을 입력하세요" />
 								<Button fx:id="btnBookSearch" layoutX="495.0" layoutY="17.0" mnemonicParsing="false" styleClass="btnAll" text="검색" />
-								<Button fx:id="btnBookEdit" layoutX="80.0" layoutY="621.0" mnemonicParsing="false" styleClass="btnAll" text="수정" />
-								<Button fx:id="btnBookDelete" layoutX="130.0" layoutY="621.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
-								<Button fx:id="btnBookAdd" layoutX="30.0" layoutY="621.0" mnemonicParsing="false" styleClass="btnAll" text="추가" />
-                        <Button fx:id="btnBookCategory" layoutX="178.0" layoutY="621.0" mnemonicParsing="false" styleClass="btnAll" text="장르별 도서 갯수" />
+								<Button fx:id="btnBookEdit" layoutX="63.0" layoutY="563.0" mnemonicParsing="false" styleClass="btnAll" text="수정" />
+								<Button fx:id="btnBookDelete" layoutX="113.0" layoutY="563.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
+								<Button fx:id="btnBookAdd" layoutX="13.0" layoutY="563.0" mnemonicParsing="false" styleClass="btnAll" text="추가" />
+                        <Button fx:id="btnBookCategory" layoutX="161.0" layoutY="563.0" mnemonicParsing="false" styleClass="btnAll" text="장르별 도서 갯수" />
 							</children>
 						</AnchorPane>
 					</content>
@@ -46,7 +46,7 @@
 						<AnchorPane fx:id="requestContainer" minHeight="0.0" minWidth="0.0" prefHeight="653.0" prefWidth="966.0">
 							<children>
 								<TableView fx:id="tblRequest" layoutX="10.0" layoutY="55.0" prefHeight="500.0" prefWidth="940.0" />
-								<Button fx:id="btnRequestDelete" layoutX="886.0" layoutY="574.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
+								<Button fx:id="btnRequestDelete" layoutX="14.0" layoutY="564.0" mnemonicParsing="false" styleClass="btnAll" text="삭제" />
 							</children>
 						</AnchorPane>
 					</content>

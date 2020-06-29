@@ -28,8 +28,8 @@ public class Main extends Application {
 		
 		System.setProperty("prism.lcdtext", "false"); // 폰트파일 로드전에 실행
 
-		Font.loadFont(getClass().getResourceAsStream("/css/NanumGothic.ttf"), 10);
-		s.getStylesheets().add(getClass().getResource("main.css").toString());
+		Font.loadFont(getClass().getResourceAsStream("/application/NanumGothic.ttf"), 10);
+		s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 		primaryStage.setTitle("KD Library");
 		primaryStage.show();
