@@ -358,6 +358,7 @@ public class User_MainController implements Initializable {
 			DAO dao = new DAO();
 			Parent userScheduleView = FXMLLoader.load(getClass().getResource("/view/user_schedule2.fxml"));
 			Scene scene = new Scene(userScheduleView);
+			Button btnSchExit = (Button) scene.lookup("#btnExit");
 			Stage userScheduleStage = new Stage();
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			userScheduleStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
@@ -413,6 +414,7 @@ public class User_MainController implements Initializable {
 			userScheduleStage.setResizable(false);
 			userScheduleStage.setTitle("일정표");
 			userScheduleStage.show();
+			btnSchExit.setOnAction(eve-> userScheduleStage.close());
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");
@@ -469,6 +471,7 @@ public class User_MainController implements Initializable {
 						Parent userNotView = FXMLLoader.load(getClass().getResource("/view/user_NoticeView.fxml"));
 						Scene scene1 = new Scene(userNotView);
 						Stage userNotStage = new Stage();
+						scene1.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 
 						TextField txtTitleNotView = (TextField) scene1.lookup("#txtTitle");
 						Label lblDateNotView = (Label) scene1.lookup("#lblDate");

@@ -13,9 +13,9 @@
             <TableView id="tblNotice" />
             <HBox alignment="CENTER_RIGHT" spacing="30.0">
                <children>
-                  <Button id="btnAdd" mnemonicParsing="false" text="등 록" />
-                  <Button id="btnDelete" mnemonicParsing="false" text="삭 제" />
-                  <Button id="btnNo" mnemonicParsing="false" text="나가기">
+                  <Button id="btnAdd" mnemonicParsing="false" styleClass="btnAll" text="등 록" />
+                  <Button id="btnDelete" mnemonicParsing="false" styleClass="btnAll" text="삭 제" />
+                  <Button id="btnNo" mnemonicParsing="false" styleClass="btnAll" text="나가기">
                      <HBox.margin>
                         <Insets left="180.0" right="10.0" />
                      </HBox.margin>

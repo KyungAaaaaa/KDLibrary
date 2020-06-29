@@ -10,7 +10,6 @@ HBox{
 Button{
 	-fx-background-color:#a79c8e;
 	-fx-font-family: "NanumGothic";
-	
 }
 .textLabel{
 	-fx-font-family: "NanumGothic";
@@ -30,4 +29,10 @@ Button{
 
 .etcLabel{
 	-fx-font-family: "NanumGothic";
+}
+
+.btnAll{
+	-fx-background-radius: 10;
+	-fx-border-color:#A65D56;
+	-fx-border-radius: 10;
 }

@@ -340,14 +340,14 @@ public class RootController implements Initializable {
 	// 관리자 로그인
 	private void handleBtnAdminLoginAction(ActionEvent event) {
 		try {
-			
+			String adminChord = "12230313";
 		
 			Parent root = FXMLLoader.load(getClass().getResource("/view/adminLogin.fxml"));
 			Scene scene = new Scene(root);
 			Stage adminStage = new Stage();
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			adminStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
-			TextField txtAdminCode = (TextField) scene.lookup("#txtCode");
+			PasswordField txtAdminCode = (PasswordField) scene.lookup("#txtCode");
 			Button btnAdminOk = (Button) scene.lookup("#btnOk");
 			Button btnAdminNo = (Button) scene.lookup("#btnNo");
 
@@ -361,6 +361,8 @@ public class RootController implements Initializable {
 			btnAdminNo.setOnAction(event1 -> adminStage.close());
 			btnAdminOk.setOnAction(event1 -> {
 				try {
+					if(txtAdminCode.getText().trim().equals("")) throw new Exception();
+					if(txtAdminCode.getText().equals(adminChord)) {
 					Stage adminMain = new Stage();
 					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/adminMain.fxml"));
 					Parent root1 = fxmlLoader.load();
@@ -377,10 +379,20 @@ public class RootController implements Initializable {
 					((Stage) btnLogin.getScene().getWindow()).close();
 					adminStage.close();
 					adminMain.show();
-
+					}else{
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("에러발생");
+						alert.setHeaderText("관리자코드를 점검하세요.");
+						alert.showAndWait();
+					}
 				} catch (Exception e) {
-					e.printStackTrace();
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("에러발생");
+					alert.setHeaderText("관리자코드를 입력하세요.");
+					alert.showAndWait();
+					return;
 				}
+			
 			});
 
 		} catch (Exception e) {

@@ -44,7 +44,7 @@
             <TextArea id="txaContent" editable="false" prefHeight="400.0" prefWidth="600.0" />
             <HBox alignment="CENTER" spacing="100.0">
                <children>
-                  <Button id="btnNo" mnemonicParsing="false" text="취 소" />
+                  <Button id="btnNo" mnemonicParsing="false" styleClass="btnAll" text="취 소" />
                </children>
                <VBox.margin>
                   <Insets top="25.0" />

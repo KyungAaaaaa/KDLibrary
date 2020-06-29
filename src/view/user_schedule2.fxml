@@ -238,39 +238,39 @@
                   <Button mnemonicParsing="false" prefHeight="75.0" prefWidth="125.0" style="-fx-background-color: #00ff0000;" />
                </children>
             </VBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #A65D56; -fx-border-color: black;">
                <children>
-                  <Label text="Sun" />
+                  <Label text="Sun" textFill="#f2887e" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="1">
                <children>
-                  <Label text="Mon" />
+                  <Label text="Mon" textFill="#a65d56" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="2">
                <children>
-                  <Label text="Tus" />
+                  <Label text="Tus" textFill="#a65d56" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="3">
                <children>
-                  <Label text="Wed" />
+                  <Label text="Wed" textFill="#a65d56" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="4">
                <children>
-                  <Label text="Thu" />
+                  <Label text="Thu" textFill="#a65d56" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="5">
                <children>
-                  <Label text="Fri" />
+                  <Label text="Fri" textFill="#a65d56" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: FADAD8; -fx-border-color: black;" GridPane.columnIndex="6">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #A65D56; -fx-border-color: black;" GridPane.columnIndex="6">
                <children>
-                  <Label text="Sat" />
+                  <Label text="Sat" textFill="#f2887e" />
                </children>
             </HBox>
             <VBox alignment="CENTER_LEFT" style="-fx-border-color: black;" GridPane.columnIndex="1" GridPane.rowIndex="1">
@@ -286,5 +286,6 @@
             <Font name="Arial Black" size="44.0" />
          </font>
       </Label>
+      <Button id="btnExit" layoutX="423.0" layoutY="604.0" mnemonicParsing="false" style="-fx-background-color: #F2887E;" styleClass="btnAll" text="나가기" />
    </children>
 </AnchorPane>
