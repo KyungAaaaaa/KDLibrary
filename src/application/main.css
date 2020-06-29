@@ -30,6 +30,9 @@ HBox{
 .etcLabel{
 	-fx-font-family: "NanumGothic";
 }
+.cartegoryBtn{
+	-fx-font-family: "NanumGothic";
+}
 
 .btnAll{
 	-fx-background-color:#F2887E;

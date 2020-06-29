@@ -45,7 +45,6 @@ public class RootController implements Initializable {
 	@FXML
 	private PasswordField txtPass;
 	public Stage stage;
-	private ObservableList<Member> obsList;
 	private String see = "86182";;
 	private Image img = new Image(getClass().getResource("/image/보안문자.png").toString());
 	
@@ -340,7 +339,7 @@ public class RootController implements Initializable {
 		try {
 			String adminChord = "12230313";
 		
-			Parent root = FXMLLoader.load(getClass().getResource("/view/adminLogin.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/view/admin_Login.fxml"));
 			Scene scene = new Scene(root);
 			Stage adminStage = new Stage();
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -362,7 +361,7 @@ public class RootController implements Initializable {
 					if(txtAdminCode.getText().trim().equals("")) throw new Exception();
 					if(txtAdminCode.getText().equals(adminChord)) {
 					Stage adminMain = new Stage();
-					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/adminMain.fxml"));
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/admin_Main.fxml"));
 					Parent root1 = fxmlLoader.load();
 					AdminController adminController= fxmlLoader.getController();
 					adminController.stage = adminMain;
@@ -415,12 +414,12 @@ public class RootController implements Initializable {
 				
 				
 				Stage user_MainStage = new Stage();
-				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main2.fxml"));
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
 				Parent root = fxmlLoader.load();
 				User_MainController user_MainController = fxmlLoader.getController();
 				user_MainController.userStage = user_MainStage;
 				Scene scene = new Scene(root);
-				scene.getStylesheets().add(getClass().getResource("/css/main.css").toString());
+				scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 				user_MainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 				user_MainStage.setTitle("KD Library");
 				user_MainStage.setScene(scene);

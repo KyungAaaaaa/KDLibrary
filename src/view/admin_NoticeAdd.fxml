@@ -16,7 +16,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <TextField id="txtTitle" prefHeight="23.0" prefWidth="187.0">
+            <TextField id="txtTitle" prefHeight="23.0" prefWidth="187.0" styleClass="textField">
                <HBox.margin>
                   <Insets right="85.0" />
                </HBox.margin>
@@ -35,7 +35,7 @@
       </HBox>
       <VBox layoutX="20.0" layoutY="126.0" prefWidth="560.0">
          <children>
-            <TextArea id="txaContent" prefHeight="400.0" prefWidth="600.0" />
+            <TextArea id="txaContent" prefHeight="400.0" prefWidth="600.0" styleClass="textField" />
             <HBox alignment="CENTER" spacing="100.0">
                <children>
                   <Button id="btnOk" mnemonicParsing="false" styleClass="btnAll" text="완 료" />
@@ -47,7 +47,7 @@
             </HBox>
          </children>
       </VBox>
-      <Label layoutX="244.0" layoutY="35.0" prefHeight="21.0" prefWidth="112.0" styleClass="etcLabel" text="공지사항 등록">
+      <Label id="lbTitle" layoutX="244.0" layoutY="35.0" prefHeight="21.0" prefWidth="112.0" styleClass="etcLabel" text="공지사항 등록">
          <font>
             <Font size="17.0" />
          </font>

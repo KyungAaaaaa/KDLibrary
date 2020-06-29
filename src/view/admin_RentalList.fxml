@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" styleClass="vBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<HBox alignment="CENTER" fillHeight="false" prefHeight="52.0" prefWidth="343.0" spacing="2.0">
+			<children>
+				<DatePicker id="dp1" />
+				<Label text="  ~  ">
+					<font>
+						<Font size="15.0" />
+					</font>
+				</Label>
+				<DatePicker id="dp2" />
+				<Button id="btnSearch" mnemonicParsing="false" styleClass="btnAll" text="검색">
+					<HBox.margin>
+						<Insets left="20.0" />
+					</HBox.margin>
+				</Button>
+				<Button id="btnAll" mnemonicParsing="false" styleClass="btnAll" text="전체보기" />
+			</children>
+		</HBox>
+		<HBox prefHeight="426.0" prefWidth="960.0" spacing="10.0">
+			<children>
+				<TableView id="tblRentalList" prefHeight="426.0" prefWidth="694.0" />
+				<LineChart id="lineChart">
+					<xAxis>
+						<NumberAxis autoRanging="false" lowerBound="1" tickUnit="1" upperBound="12" fx:id="xAxis" />
+					</xAxis>
+					<yAxis>
+						<NumberAxis fx:id="yAxis" lowerBound="0" tickUnit="4" />
+					</yAxis>
+				</LineChart>
+			</children>
+		</HBox>
+		<Button id="btnExit" mnemonicParsing="false" styleClass="btnAll" text="닫기">
+			<VBox.margin>
+				<Insets top="10.0" />
+			</VBox.margin>
+		</Button>
+	</children>
+	<padding>
+		<Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+	</padding>
+</VBox>

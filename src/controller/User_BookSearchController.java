@@ -105,7 +105,7 @@ public class User_BookSearchController implements Initializable {
 	private String localUrl;
 	private int bookCount;
 	private int page = 0;
-	BookDAO dao = new BookDAO();
+	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -126,6 +126,7 @@ public class User_BookSearchController implements Initializable {
 
 	// 제목 검색 버튼 이벤트
 	private void handleBtnSearchAction(ActionEvent e) {
+		bookBox.setStyle("-fx-background-color:#dedcee");
 		page = 0;
 		btnNext.setDisable(true);
 		btnBack.setDisable(true);
@@ -446,9 +447,9 @@ public class User_BookSearchController implements Initializable {
 			userModifyStage.show();
 			btnClose.setOnAction(e -> userModifyStage.close());
 			btnRental.setOnAction(e -> {
-				MemberDAO dao = new MemberDAO();
+				//MemberDAO dao = new MemberDAO();
 				if (!(b.isRental())) {
-					if (dao.m.getRentalBook() == null) {
+					if (MemberDAO.m.getRentalBook() == null) {
 						Connection con1 = null;
 						PreparedStatement preparedStatement1 = null;
 						PreparedStatement preparedStatement2 = null;
@@ -464,7 +465,7 @@ public class User_BookSearchController implements Initializable {
 							preparedStatement3 = con1.prepareStatement(query3);
 
 							preparedStatement1.setString(1, b.getIsbn());
-							preparedStatement1.setString(2, dao.m.getId());
+							preparedStatement1.setString(2, MemberDAO.m.getId());
 
 							preparedStatement2.setBoolean(1, true);
 							preparedStatement2.setString(2, b.getIsbn());
@@ -472,11 +473,11 @@ public class User_BookSearchController implements Initializable {
 							preparedStatement3.setString(1, b.getIsbn());
 							preparedStatement3.setString(2, LocalDate.now().getYear() + "-"
 									+ LocalDate.now().getMonthValue() + "-" + LocalDate.now().getDayOfMonth());
-							preparedStatement3.setString(3, dao.m.getId());
+							preparedStatement3.setString(3, MemberDAO.m.getId());
 
 							if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0
 									&& preparedStatement3.executeUpdate() != 0) {
-								dao.m.setRentalBook(b.getIsbn());
+								MemberDAO.m.setRentalBook(b.getIsbn());
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setHeaderText("대여완료");
 								alert.showAndWait();

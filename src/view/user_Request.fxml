@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="63.0" layoutY="117.0" styleClass="etcLabel" text="제목 : ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="63.0" layoutY="169.0" styleClass="etcLabel" text="내용 : ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <TextArea id="txaContent" layoutX="63.0" layoutY="192.0" prefHeight="316.0" prefWidth="493.0" styleClass="textField" text="제목 : &#10;저자 : &#10;" />
+      <TextField id="txtTitle" layoutX="112.0" layoutY="113.0" prefHeight="23.0" prefWidth="440.0" styleClass="textField" />
+      <Label layoutX="63.0" layoutY="79.0" styleClass="etcLabel" text="신청자 : ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Label layoutX="366.0" layoutY="79.0" styleClass="etcLabel" text="날짜 : ">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <Button id="btnAdd" layoutX="384.0" layoutY="548.0" mnemonicParsing="false" styleClass="btnAll" text="도서 추가" />
+      <Button id="btnBack" layoutX="472.0" layoutY="548.0" mnemonicParsing="false" styleClass="btnAll" text="뒤로 가기" />
+      <Label id="lbName" layoutX="123.0" layoutY="81.0" styleClass="etcLabel" text="-" />
+      <Label id="lbDate" layoutX="413.0" layoutY="81.0" styleClass="etcLabel" text="-" />
+   </children>
+</AnchorPane>

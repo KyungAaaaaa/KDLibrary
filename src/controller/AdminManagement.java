@@ -108,10 +108,8 @@ public class AdminManagement implements Initializable {
 	private NumberAxis xAxis;
 	@FXML
 	public Stage stage;
-	private NumberAxis yAxis;
 	private double tabWidth = 90.0;
 	public static int lastSelectedTabIndex = 0;
-	private ToggleGroup togglegroup;
 	private File selectFile;
 	private File directorySave;
 	private int bookTableSelectIndex = -1;
@@ -124,8 +122,6 @@ public class AdminManagement implements Initializable {
 	private ObservableList<Book> obLBook = FXCollections.observableArrayList();
 	private ObservableList<RequestBook> obLRequest = FXCollections.observableArrayList();
 	private ObservableList<Member> obLMember = FXCollections.observableArrayList();
-	private BookDAO dao = new BookDAO();
-	int chart = 0;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -178,7 +174,7 @@ public class AdminManagement implements Initializable {
 
 	// 탭페인 디자인 메소드
 	private void configureView() {
-		memberTab.setStyle("-fx-background-color:pink;");
+		// memberTab.setStyle("-fx-background-color:pink;");
 		tabContainer.setTabMinWidth(tabWidth);
 		tabContainer.setTabMaxWidth(tabWidth);
 		tabContainer.setTabMinHeight(tabWidth);
@@ -189,14 +185,14 @@ public class AdminManagement implements Initializable {
 	// 뒤로가기 버튼 핸들러 이벤트
 	private void handleBtnBackAction(ActionEvent e) {
 		try {
-			
+
 			Stage adminMain = new Stage();
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/adminMain.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/admin_Main.fxml"));
 			Parent root = fxmlLoader.load();
-			AdminController adminController= fxmlLoader.getController();
+			AdminController adminController = fxmlLoader.getController();
 			adminController.stage = adminMain;
 			adminMain.initOwner(stage);
-			
+
 			Scene scene = new Scene(root);
 			adminMain.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -226,6 +222,8 @@ public class AdminManagement implements Initializable {
 	// 유저 테이블 삭제 버튼 이벤트
 	private void handleBtnUserDeleteAction(ActionEvent e) {
 		try {
+			if (userTableSelectIndex == -1)
+				throw new Exception();
 			Member selectUser = obLMember.get(userTableSelectIndex);
 			MemberDAO dao = new MemberDAO();
 
@@ -235,6 +233,11 @@ public class AdminManagement implements Initializable {
 
 			}
 		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("데이터 미선택");
+			alert.setContentText("삭제할 데이터를 선택하세요.");
+			alert.showAndWait();
+			userTableSelectIndex = -1;
 		}
 
 	}
@@ -244,8 +247,8 @@ public class AdminManagement implements Initializable {
 
 		try {
 			if (userTableSelectIndex == -1)
-				throw new Exception("수정할 데이터를 선택하세요.");
-			Parent root = FXMLLoader.load(getClass().getResource("/view/adminEditUserPopup.fxml"));
+				throw new Exception();
+			Parent root = FXMLLoader.load(getClass().getResource("/view/admin_MemberEdit.fxml"));
 			Scene s = new Scene(root);
 			Stage addPopup = new Stage();
 			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -281,7 +284,6 @@ public class AdminManagement implements Initializable {
 				lbRentalBook.setText("대여중인 책 없음.");
 			else
 				lbRentalBook.setText(selectUser.getRentalBook());
-			// dpBirth.setValue(selectUser.getBirth());
 			String[] birth = selectUser.getBirth().split("-");
 			cmbYear.setValue(birth[0]);
 			cmbMonth.setValue(birth[1]);
@@ -329,12 +331,14 @@ public class AdminManagement implements Initializable {
 
 					if (preparedStatement.executeUpdate() != 0) {
 						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("등록 완료");
+						alert.setTitle("회원정보 수정");
+						alert.setHeaderText("수정 완료");
 						alert.showAndWait();
 						addPopup.close();
 						obLMember.set(userTableSelectIndex, selectUser);
 					} else {
-						Alert alert = new Alert(AlertType.INFORMATION);
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("에러");
 						alert.setHeaderText("등록 실패");
 						alert.showAndWait();
 						throw new Exception();
@@ -409,7 +413,7 @@ public class AdminManagement implements Initializable {
 
 			if (bookTableSelectIndex == -1)
 				throw new Exception("수정할 데이터를 선택하세요.");
-			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 			Scene s = new Scene(root);
 			Stage addPopup = new Stage();
 			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
@@ -431,14 +435,14 @@ public class AdminManagement implements Initializable {
 			TextArea txaInformation = (TextArea) root.lookup("#txaInformation");
 			ImageView imgV = (ImageView) root.lookup("#imgV");
 			btnCancel.setOnAction(eve -> addPopup.close());
-			
-			cmbCategory.setItems(dao.categoryList);
+			//BookDAO dao = new BookDAO();
+			cmbCategory.setItems(BookDAO.categoryList);
 			Book book0 = obLBook.get(bookTableSelectIndex);
 			selectFileName = book0.getFileimg();
 			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
 			image = new Image(localUrl);
 			imgV.setImage(image);
-			
+
 			txtISBN.setText(book0.getIsbn());
 			txtISBN.setDisable(true);
 			txtTitle.setText(book0.getTitle());
@@ -447,20 +451,21 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
+			String fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
+
+			selectFile = new File(directorySave.getAbsolutePath() + "\\" + fileName.trim());
 
 			btnFileSelect.setOnAction(eve1 -> {
 				image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
-
 			});
 
 			btnOk.setOnAction(eve -> {
-				String fileName = null;
+				// String fileName1= null;
 				Connection con1 = null;
 				PreparedStatement preparedStatement = null;
 				try {
-					fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
-					
+
 					con1 = DBUtil.getConnection(); //
 					String query = "update BookTBL set ISBN=?,title=?,writer=?,category=?,company=?,date=?,information=?,fileimg=? where ISBN=?";
 					preparedStatement = con1.prepareStatement(query);
@@ -481,34 +486,21 @@ public class AdminManagement implements Initializable {
 					book0.setCompany(txtCompany.getText());
 					book0.setDate(txtDate.getText());
 					book0.setInformation(txaInformation.getText());
-					
-					
-					if (selectFile == null) {
-						Alert alert = new Alert(AlertType.WARNING);
-						alert.setTitle("문제발생");
-						alert.setHeaderText("이미지 파일을 다시 선택하세요");
-						alert.showAndWait();
-						return;
-					}
-					
 
 					if (preparedStatement.executeUpdate() != 0) {
-						imageDelete(selectFileName);
-						
+						// imageDelete(selectFileName);
+
 						BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 						BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
-					
 						try {
-							
-							
 							book0.setFileimg(fileName);
 							bis = new BufferedInputStream(new FileInputStream(selectFile));
 							bos = new BufferedOutputStream(
 									new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
-							int data = -1;// -1더이상 읽을값이 없다는 의미
-							while ((data = bis.read()) != -1) { // 이미지파일 크기만큼 반복
-								bos.write(data); // 파일 복사
-								bos.flush();// 버퍼에 있는 값을 다 저장하기위해서 보내라.
+							int data = -1;
+							while ((data = bis.read()) != -1) {
+								bos.write(data);
+								bos.flush();
 							}
 						} catch (Exception e1) {
 							System.out.println("파일 복사에러 : " + e1.getMessage());
@@ -524,13 +516,13 @@ public class AdminManagement implements Initializable {
 							} catch (IOException e1) {
 							}
 						}
-						
+
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setHeaderText("등록 완료");
 						alert.showAndWait();
 						addPopup.close();
 						obLBook.set(bookTableSelectIndex, book0);
-					} 
+					}
 
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
@@ -562,7 +554,8 @@ public class AdminManagement implements Initializable {
 	// 도서탭 추가 버튼 핸들러이벤트
 	private void handleBtnBookAddAction(ActionEvent e) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
+			BookDAO dao = new BookDAO();
+			Parent root = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 			Stage addPopup = new Stage();
 			addPopup.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			addPopup.initModality(Modality.WINDOW_MODAL);
@@ -604,7 +597,7 @@ public class AdminManagement implements Initializable {
 						throw new Exception();
 					fileName = "Book_" + book1.getIsbn() + "_" + book1.getTitle() + ".jpg";
 					book1.setFileimg(fileName);
-					BookDAO dao = new BookDAO();
+				//	BookDAO dao = new BookDAO();
 					if (selectFile == null) {
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("문제발생");
@@ -663,6 +656,14 @@ public class AdminManagement implements Initializable {
 
 	// 도서탭 삭제 버튼 핸들러이벤트
 	private void handleBtnBookDeleteAction(ActionEvent e) {
+
+		if (bookTableSelectIndex == -1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setHeaderText("데이터 미선택");
+			alert.setContentText("삭제할 데이터를 선택하세요.");
+			alert.showAndWait();
+			return;
+		}
 		Book selectBook = obLBook.get(bookTableSelectIndex);
 		selectFileName = selectBook.getFileimg();
 		localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
@@ -672,12 +673,13 @@ public class AdminManagement implements Initializable {
 		if (returnValue != 0) {
 			imageDelete(selectFileName);
 			obLBook.remove(bookTableSelectIndex);
+			bookTableSelectIndex = -1;
 		}
 	}
 
 	// 도서 테이블 검색 버튼 이벤트
 	private void handleBtnBookSearchAction(ActionEvent e) {
-
+		BookDAO dao = new BookDAO();
 		ArrayList<Book> arrayList = dao.searchBook(txtBookSearch.getText(), "title");
 		obLBook.clear();
 		for (Book b : arrayList) {
@@ -737,7 +739,8 @@ public class AdminManagement implements Initializable {
 	private void handelBtnBarChartAction(Event e) {
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("/view/chart.fxml"));
+			BookDAO dao = new BookDAO();
+			root = FXMLLoader.load(getClass().getResource("/view/admin_BookCategoryChart.fxml"));
 			Stage addPopup = new Stage();
 			Scene s = new Scene(root);
 			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -838,7 +841,7 @@ public class AdminManagement implements Initializable {
 			return;
 		Parent root;
 		try {
-			root = FXMLLoader.load(getClass().getResource("/view/requestPopup.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/view/user_Request.fxml"));
 			Stage addPopup = new Stage();
 			Scene s = new Scene(root);
 			s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -864,7 +867,8 @@ public class AdminManagement implements Initializable {
 
 			btnAdd.setOnAction(eve -> {
 				try {
-					Parent root1 = FXMLLoader.load(getClass().getResource("/view/adminAddBookPopup.fxml"));
+					//BookDAO dao = new BookDAO();
+					Parent root1 = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 					Stage addPopup1 = new Stage();
 					addPopup1.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					addPopup1.initModality(Modality.NONE);
@@ -885,7 +889,7 @@ public class AdminManagement implements Initializable {
 					TextField txtDate = (TextField) s1.lookup("#txtDate");
 					TextArea txaInformation = (TextArea) s1.lookup("#txaInformation");
 					ImageView imgV = (ImageView) s1.lookup("#imgV");
-					cmbCategory.setItems(dao.categoryList);
+					cmbCategory.setItems(BookDAO.categoryList);
 
 					btnFileSelect.setOnAction(eve1 -> {
 						Image image = handleBtnImageFileAction(addPopup);
@@ -897,7 +901,8 @@ public class AdminManagement implements Initializable {
 						try {
 							if (txtISBN.getText().trim().equals("") || txtTitle1.getText().trim().equals("")
 									|| txtWriter.getText().trim().equals("") || txtCompany.getText().trim().equals("")
-									|| txtDate.getText().trim().equals("") || txaInformation.getText().trim().equals(""))
+									|| txtDate.getText().trim().equals("")
+									|| txaInformation.getText().trim().equals(""))
 								throw new Exception();
 							book1 = new Book(txtISBN.getText(), txtTitle1.getText(), cmbCategory.getValue().toString(),
 									txtWriter.getText(), txtCompany.getText(), txtDate.getText(), null,
@@ -943,7 +948,7 @@ public class AdminManagement implements Initializable {
 							} catch (IOException e1) {
 							}
 						}
-						BookDAO dao = new BookDAO();
+						// BookDAO dao = new BookDAO();
 						int returnValue = dao.addBook(book1);
 						if (returnValue != 0) {
 							obLBook.add(book1);
@@ -951,14 +956,14 @@ public class AdminManagement implements Initializable {
 						}
 					});
 					btnCancel.setOnAction(eve1 -> addPopup.close());
-					
+
 				} catch (Exception e1) {
 					System.out.println(e1.getMessage());
 				}
 			});
 
 			btnBack.setOnAction(eve -> addPopup.close());
-			
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -979,8 +984,6 @@ public class AdminManagement implements Initializable {
 		}
 
 	}
-
-	
 
 	/* ========================서브함수들 ====================== */
 

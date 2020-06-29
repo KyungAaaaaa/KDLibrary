@@ -60,14 +60,11 @@ public class AdminController implements Initializable {
 	ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
 	private ObservableList<Statistical> obsListRentalList = FXCollections.observableArrayList();
 	private ObservableList<Notice> obsListN = FXCollections.observableArrayList();
-	private ObservableList<Schedule> obsListS = FXCollections.observableArrayList();
 	ArrayList<Notice> arrayList = null;
 	ArrayList<Schedule> arrayList2 = null;
 	private int tableViewselectedIndex=-1;
 	private int tableViewselectedIndex2 = -1;
-	SimpleDateFormat format2 = new SimpleDateFormat("yyyy년 MM월 dd일");
-	Date time = new Date();
-	String Noticetime = format2.format(time);
+	String Noticetime = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
 	String date = LocalDate.now().toString();
 
 	@Override
@@ -93,7 +90,7 @@ public class AdminController implements Initializable {
 	private void handleBtnRentalListAction(ActionEvent e) {
 
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/view/adminRentalListPopUp.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/view/admin_RentalList.fxml"));
 			Scene scene = new Scene(root);
 			Stage adminRentalListPopUp = new Stage();
 			adminRentalListPopUp.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
@@ -226,7 +223,7 @@ public class AdminController implements Initializable {
 		try {
 			
 			Stage adminMain = new Stage();
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/managementView.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/admin_Management.fxml"));
 			Parent root = fxmlLoader.load();
 			AdminManagement adminManagement= fxmlLoader.getController();
 			adminManagement.stage = adminMain;
@@ -279,7 +276,7 @@ public class AdminController implements Initializable {
 	private void handleBtnNoticeAction(ActionEvent e) {
 		try {
 			obsListN.clear();
-			Parent adminNoticeView = FXMLLoader.load(getClass().getResource("/view/user_notice.fxml"));
+			Parent adminNoticeView = FXMLLoader.load(getClass().getResource("/view/notice.fxml"));
 			Scene scene = new Scene(adminNoticeView);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			Stage adminNoticeStage = new Stage();
@@ -351,6 +348,7 @@ public class AdminController implements Initializable {
 					Scene scene2 = new Scene(adminNotAddView);
 					Stage adminNotAddStage = new Stage();
 					scene2.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+					adminNotAddStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					TextField txtAdminAddTitle = (TextField) scene2.lookup("#txtTitle");
 					Label lblAdminAddDate = (Label) scene2.lookup("#lblDate");
 					TextArea txaAdminAddContent = (TextArea) scene2.lookup("#txaContent");
@@ -413,10 +411,11 @@ public class AdminController implements Initializable {
 							return;
 						}
 						Parent adminNotMfView = FXMLLoader
-								.load(getClass().getResource("/view/admin_NoticeModified.fxml"));
+								.load(getClass().getResource("/view/admin_NoticeAdd.fxml"));
 						Scene scene3 = new Scene(adminNotMfView);
 						Stage adminNotMfStage = new Stage();
 						scene3.getStylesheets().add(getClass().getResource("/application/main.css").toString());
+						adminNotMfStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 						adminNotMfStage.initModality(Modality.WINDOW_MODAL);
 						adminNotMfStage.initOwner(adminNoticeStage);
 						adminNotMfStage.setScene(scene3);
@@ -424,12 +423,14 @@ public class AdminController implements Initializable {
 						adminNotMfStage.setTitle("공지사항 수정창");
 						adminNotMfStage.show();
 
+						
 						TextField txtAdminMfTitle = (TextField) scene3.lookup("#txtTitle");
 						Label lblAdminMfDate = (Label) scene3.lookup("#lblDate");
+						Label lbTitle = (Label) scene3.lookup("#lbTitle");
 						TextArea txaAdminMfContent = (TextArea) scene3.lookup("#txaContent");
 						Button btnAdminMfOk = (Button) scene3.lookup("#btnOk");
 						Button btnAdminMfNo = (Button) scene3.lookup("#btnNo");
-
+						lbTitle.setText("공지사항 수정");
 						// Notice가 있는 obsListN를 가져와서 not에 넣어줌
 						Notice not = obsListN.get(tableViewselectedIndex);
 						txtAdminMfTitle.setText(not.getTitle());
@@ -510,21 +511,22 @@ public class AdminController implements Initializable {
 	private void handleBtnScheduleAction(ActionEvent e) {
 		try {
 
-			HBox tab3 = FXMLLoader.load(getClass().getResource("/view/calender.fxml"));
+			HBox tab3 = FXMLLoader.load(getClass().getResource("/view/admin_Schdule.fxml"));
 			Button btnAdd = (Button) tab3.lookup("#btnAdd");
 			Button btnEdit = (Button) tab3.lookup("#btnEdit");
 			Button btnDelete = (Button) tab3.lookup("#btnDelete");
 			Button btnClose = (Button) tab3.lookup("#btnClose");
 			ListView listV = (ListView) tab3.lookup("#listV");
 			DatePicker datePicker = (DatePicker) tab3.lookup("#datePicker");
+			
 			datePicker.setValue(LocalDate.now());
-			Label lbDate1 = (Label) tab3.lookup("#lbDate");
+			
 			DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
 			Pane popupContent = (Pane) datePickerSkin.getPopupContent();
 			popupContent.setPrefWidth(250);
 			VBox vboxBtn = (VBox) tab3.lookup("#vboxBtn");
 			VBox vBoxList = (VBox) tab3.lookup("#vBoxList");
-			vBoxList.getChildren().setAll(lbDate1, listV);
+			vBoxList.getChildren().setAll( listV);
 			vboxBtn.getChildren().setAll(btnAdd, btnEdit, btnDelete, btnClose);
 			tab3.getChildren().setAll(popupContent, vBoxList, vboxBtn);
 			Scene s = new Scene(tab3);
@@ -566,7 +568,8 @@ public class AdminController implements Initializable {
 			btnAdd.setOnAction(eve -> {
 				Parent root;
 				try {
-					root = FXMLLoader.load(getClass().getResource("/view/scheduleAddPopup.fxml"));
+					obSchdule.clear();
+					root = FXMLLoader.load(getClass().getResource("/view/admin_ScheduleAdd.fxml"));
 					Scene s1 = new Scene(root);
 					Label lbDate = (Label) s1.lookup("#lbDate");
 					TextArea txaContent = (TextArea) s1.lookup("#txaContent");
@@ -594,7 +597,13 @@ public class AdminController implements Initializable {
 						int resultValue = dao.addSchedule(schedule);
 						if (resultValue != 0) {
 							schduleCount += 1;
-							obSchdule.add(txaContent.getText());
+							schduleList = dao.getSchedule(date);
+							if (schduleList.size() != 0) {
+								for (int i = 0; i < schduleList.size(); i++) {
+									obSchdule.add(schduleList.get(i).getContent());
+								}
+							}
+							listV.setItems(obSchdule);
 							popup.close();
 						}
 					});
@@ -618,16 +627,18 @@ public class AdminController implements Initializable {
 						alert.showAndWait();
 						return;
 					}
-					Parent adminScheduleView = FXMLLoader.load(getClass().getResource("/view/scheduleEditPopup.fxml"));
+					Parent adminScheduleView = FXMLLoader.load(getClass().getResource("/view/admin_ScheduleAdd.fxml"));
 					Scene scene = new Scene(adminScheduleView);
 					Stage adminScheduleStage = new Stage();
 					adminScheduleStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
-					Button btnEdit2 = (Button) scene.lookup("#btnEdit");
+
+					Button btnEdit2 = (Button) scene.lookup("#btnAdd");
 					Label lbDate2 = (Label) scene.lookup("#lbDate");
 					TextArea txaContent2 = (TextArea) scene.lookup("#txaContent");
 					Schedule sh = schduleList.get(tableViewselectedIndex2);
 					lbDate2.setText(sh.getDate());
+					btnEdit2.setText("수정");
 					txaContent2.setText(sh.getContent());
 					adminScheduleStage.initModality(Modality.WINDOW_MODAL);
 					adminScheduleStage.initOwner(arg0);
