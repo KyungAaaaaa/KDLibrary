@@ -948,7 +948,7 @@ public class AdminManagement implements Initializable {
 							} catch (IOException e1) {
 							}
 						}
-						// BookDAO dao = new BookDAO();
+						 BookDAO dao = new BookDAO();
 						int returnValue = dao.addBook(book1);
 						if (returnValue != 0) {
 							obLBook.add(book1);
