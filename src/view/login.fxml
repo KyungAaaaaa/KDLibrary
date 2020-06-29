@@ -11,12 +11,12 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../application/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RootController">
    <children>
-      <Label layoutX="278.0" layoutY="69.0" styleClass="logo" text="KDLIBRARY ">
+      <Label alignment="CENTER" layoutX="228.0" layoutY="94.0" prefHeight="89.0" prefWidth="433.0" styleClass="logo" text="KDLIBRARY" textAlignment="CENTER">
          <font>
-            <Font name="Arial Black" size="50.0" />
+            <Font name="Arial Black" size="60.0" />
          </font>
       </Label>
-      <VBox layoutX="275.0" layoutY="196.0" prefHeight="68.0" prefWidth="320.0" spacing="8.0">
+      <VBox layoutX="274.0" layoutY="232.0" prefHeight="68.0" prefWidth="320.0" spacing="8.0">
          <children>
             <HBox prefHeight="30.0" prefWidth="320.0">
                <children>
@@ -40,19 +40,18 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="btnLogin" layoutX="274.0" layoutY="273.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="320.0" text="Login" />
-      <Label  fx:id="lblFindPass" layoutX="347.0" layoutY="353.0" styleClass="text" text="비밀번호 찾기 ">
+      <Button fx:id="btnLogin" layoutX="274.0" layoutY="318.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="320.0" text="Login" />
+      <Label fx:id="lblFindPass" layoutX="347.0" layoutY="389.0" styleClass="text" text="비밀번호 찾기 ">
          <font>
             <Font size="11.0" />
          </font></Label>
-      <HBox layoutX="339.0" layoutY="503.0" spacing="10.0" />
-      <Label  fx:id="lbSign" layoutX="460.0" layoutY="353.0" styleClass="text" text="회원가입">
+      <Label fx:id="lbSign" layoutX="460.0" layoutY="389.0" styleClass="text" text="회원가입">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Separator layoutX="274.0" layoutY="334.0" prefHeight="5.0" prefWidth="320.0" />
-      <Button fx:id="btnAdminLogin" layoutX="388.0" layoutY="378.0" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="관리자 로그인" />
+      <Separator layoutX="274.0" layoutY="368.0" prefHeight="5.0" prefWidth="320.0" />
+      <Button fx:id="btnAdminLogin" layoutX="388.0" layoutY="409.0" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="관리자 로그인" />
       <Button fx:id="btnExit" layoutX="410.0" layoutY="503.0" mnemonicParsing="false" text="종  료" />
    </children>
 </AnchorPane>

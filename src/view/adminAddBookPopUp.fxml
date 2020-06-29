@@ -25,50 +25,53 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="ISBN " />
-                  <TextField id="txtISBN" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="ISBN " />
+                  <TextField id="txtISBN" prefWidth="150.0" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="제목 " />
-                  <TextField id="txtTitle" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="제목 " />
+                  <TextField id="txtTitle" prefWidth="150.0" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="저자  " />
-                  <TextField id="txtWriter" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="저자  " />
+                  <TextField id="txtWriter" prefWidth="150.0" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="장르 " />
-                  <ComboBox id="cmbCategory" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="장르 " />
+                  <ComboBox id="cmbCategory" prefWidth="150.0" styleClass="cmb" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="출판사 " />
-                  <TextField id="txtCompany" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="출판사 " />
+                  <TextField id="txtCompany" prefWidth="150.0" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="출간일 " />
-                  <TextField id="txtDate" prefWidth="150.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="출간일 " />
+                  <TextField id="txtDate" prefWidth="150.0" styleClass="textField" />
                </children>
             </HBox>
             <HBox fillHeight="false" prefHeight="207.0" prefWidth="460.0" spacing="20.0">
                <children>
-                  <Label prefWidth="60.0" text="책 소개 " />
-                  <TextArea id="txaInformation" prefHeight="207.0" prefWidth="370.0" />
+                  <Label prefWidth="60.0" styleClass="textLabel" text="책 소개 " />
+                  <TextArea id="txaInformation" prefHeight="207.0" prefWidth="370.0" styleClass="textField" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </HBox>
          </children>
+         <HBox.margin>
+            <Insets left="15.0" />
+         </HBox.margin>
       </VBox>
    </children>
    <padding>

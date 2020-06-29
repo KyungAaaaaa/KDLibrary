@@ -15,25 +15,25 @@
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
                   <Label prefWidth="80.0" text="ID " />
-                  <TextField id="txtId" disable="true" />
+                  <TextField id="txtId" disable="true" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
                   <Label prefWidth="80.0" text="이름 " />
-                  <TextField id="txtName" />
+                  <TextField id="txtName" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
                   <Label prefWidth="80.0" text="비밀번호 " />
-                  <TextField id="txtPass" />
+                  <TextField id="txtPass" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
                   <Label prefWidth="80.0" text="휴대전화 " />
-                  <TextField id="txtPhoneNumber" />
+                  <TextField id="txtPhoneNumber" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
@@ -68,7 +68,7 @@
             <HBox alignment="CENTER_LEFT" prefHeight="52.0" prefWidth="343.0">
                <children>
                   <Label prefWidth="80.0" text="상태" />
-                  <ComboBox id="cmbEtc" prefWidth="150.0" />
+                  <ComboBox id="cmbEtc" prefWidth="150.0" styleClass="cmb" />
                </children>
             </HBox>
          </children>

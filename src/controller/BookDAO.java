@@ -20,7 +20,6 @@ public class BookDAO {
 			"요리", "인물", "자기계발", "종교");
 
 	// 도서 테이블 전체보기
-	// public ArrayList<Book> getBookTbl() {
 	public HashSet<Book> getBookTbl() {
 		HashSet<Book> hashSet = new HashSet<Book>();
 		// ArrayList<Book> arrayList = new ArrayList<Book>();
@@ -107,7 +106,6 @@ public class BookDAO {
 
 	// 도서 검색 메소드
 	public ArrayList<Book> searchBook(String searchText, String type) {
-		// public ArrayList<Book> searchBook(String searchText, String type) {
 		ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
@@ -216,7 +214,7 @@ public class BookDAO {
 		return arrayList;
 	}
 
-	// 도서 검색 메소드
+	// 대충중인 책 확인 메소드 (유저 -> 대여중인책)
 	public ArrayList<Book> searchRentalBook(String searchText) {
 		ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
@@ -253,43 +251,6 @@ public class BookDAO {
 		return arrayList;
 	}
 
-	// 도서 검색 메소드
-	public ArrayList<Statistical> searchRentalBookList(String searchText) {
-		ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
-		Connection con = null;
-		PreparedStatement preparedStatement = null;
-		ResultSet rs = null;
-		String query = null;
-		try {
-			con = DBUtil.getConnection();
-
-			query = "select No,DATE_FORMAT(Rentaldate,'%Y-%m-%d '),Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B "
-					+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?)+1;";
-			preparedStatement = con.prepareStatement(query); //
-			preparedStatement.setString(1, LocalDate.now().getYear()+searchText+"01");
-			preparedStatement.setString(2, LocalDate.now().getYear()+searchText+"30");
-
-			rs = preparedStatement.executeQuery();
-			while (rs.next()) {
-				arrayList.add(new Statistical(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4),
-						rs.getString(5), rs.getString(6)));
-			}
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			try {
-				if (rs != null)
-					rs.close();
-				if (preparedStatement != null)
-					preparedStatement.close();
-				if (con != null)
-					con.close();
-			} catch (SQLException e1) {
-				System.out.println(e1.getMessage());
-			}
-		}
-		return arrayList;
-	}
+	
 
 }

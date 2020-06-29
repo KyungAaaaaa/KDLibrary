@@ -7,9 +7,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1200.0" styleClass="vBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
-		<HBox alignment="CENTER" fillHeight="false" prefHeight="52.0" prefWidth="343.0">
+		<HBox alignment="CENTER" fillHeight="false" prefHeight="52.0" prefWidth="343.0" spacing="2.0">
 			<children>
 				<DatePicker id="dp1" />
 				<Label text="  ~  ">
@@ -31,10 +31,10 @@
 				<TableView id="tblRentalList" prefHeight="426.0" prefWidth="694.0" />
 				<LineChart id="lineChart">
 					<xAxis>
-						<NumberAxis lowerBound="1" tickUnit="1" upperBound="12" fx:id="xAxis" autoRanging="false"/>
+						<NumberAxis autoRanging="false" lowerBound="1" tickUnit="1" upperBound="12" fx:id="xAxis" />
 					</xAxis>
 					<yAxis>
-						<NumberAxis fx:id="yAxis" lowerBound="0" tickUnit="4"  />
+						<NumberAxis fx:id="yAxis" lowerBound="0" tickUnit="4" />
 					</yAxis>
 				</LineChart>
 			</children>
