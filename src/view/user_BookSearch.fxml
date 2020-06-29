@@ -14,7 +14,7 @@
          <children>
             <HBox fillHeight="false" prefHeight="876.0" prefWidth="1042.0">
                <children>
-                  <VBox alignment="TOP_CENTER" fillWidth="false" prefWidth="180.0" style="-fx-background-color: pink;">
+                  <VBox alignment="TOP_CENTER" fillWidth="false" prefWidth="180.0">
                      <children>
                         <Button fx:id="btnCategory1" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" />
                         <Button fx:id="btnCategory11" mnemonicParsing="false" prefHeight="70.0" prefWidth="180.0" style="-fx-background-color: #00ff0000;" styleClass="cartegoryBtn" />
@@ -44,7 +44,7 @@
                                  </graphic></Button>
                            </children>
                         </HBox>
-                        <HBox fx:id="bookBox" prefHeight="846.0" prefWidth="868.0" style="-fx-background-color: pink;">
+                        <HBox fx:id="bookBox" prefHeight="846.0" prefWidth="868.0">
                            <children>
                               <VBox alignment="CENTER" fillWidth="false" prefHeight="348.0" prefWidth="152.0" spacing="5.0">
                                  <children>
@@ -152,9 +152,9 @@
                                  <children>
                                     <HBox alignment="CENTER" prefHeight="38.0" prefWidth="221.0" spacing="20.0" style="-fx-background-color: #00ff0000;">
                                        <children>
-                                          <Button fx:id="btnBack" disable="true" mnemonicParsing="false" styleClass="Btn" text="Back" />
-                                          <Button fx:id="btnNext" disable="true" mnemonicParsing="false" styleClass="Btn" text="Next" />
-                                          <Button fx:id="btnExit" mnemonicParsing="false" styleClass="Btn" text="뒤로가기" />
+                                          <Button fx:id="btnBack" disable="true" mnemonicParsing="false" style="-fx-background-color: #F2887E;" styleClass="btnAll" text="Back" />
+                                          <Button fx:id="btnNext" disable="true" mnemonicParsing="false" style="-fx-background-color: #F2887E;" styleClass="btnAll" text="Next" />
+                                          <Button fx:id="btnExit" mnemonicParsing="false" style="-fx-background-color: #F2887E;" styleClass="btnAll" text="뒤로가기" />
                                        </children>
                                     </HBox>
                                  </children>

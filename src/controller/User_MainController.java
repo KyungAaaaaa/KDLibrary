@@ -181,7 +181,7 @@ public class User_MainController implements Initializable {
 			userBookSearchController.stage = mainStage;
 
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/css/user_Main.css").toString());
+			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			mainStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 			mainStage.setTitle("KD Library");
 			mainStage.setScene(scene);

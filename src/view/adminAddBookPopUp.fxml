@@ -12,11 +12,11 @@
       <VBox alignment="CENTER" prefHeight="400.0" prefWidth="249.0" spacing="10.0">
          <children>
             <ImageView id="imgV" fitHeight="400.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
-            <Button id="btnFileSelect" mnemonicParsing="false" text="이미지 파일 선택" />
+            <Button id="btnFileSelect" mnemonicParsing="false" styleClass="btnAll" text="이미지 파일 선택" />
             <HBox alignment="CENTER" prefHeight="54.0" prefWidth="249.0" spacing="30.0">
                <children>
-                  <Button id="btnOk" mnemonicParsing="false" text="완료" />
-                  <Button id="btnCancel" mnemonicParsing="false" text="취소" />
+                  <Button id="btnOk" mnemonicParsing="false" styleClass="btnAll" text="완료" />
+                  <Button id="btnCancel" mnemonicParsing="false" styleClass="btnAll" text="취소" />
                </children>
             </HBox>
          </children>
@@ -26,7 +26,7 @@
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">
                <children>
                   <Label prefWidth="60.0" styleClass="textLabel" text="ISBN " />
-                  <TextField id="txtISBN" prefWidth="150.0" styleClass="textField" />
+                  <TextField id="txtISBN" prefWidth="150.0" promptText=" " styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="343.0" spacing="20.0">

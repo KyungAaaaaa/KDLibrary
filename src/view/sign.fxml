@@ -20,7 +20,7 @@
                   <Insets right="25.0" />
                </padding>
             </Label>
-            <TextField id="txtName" styleClass="textField">
+            <TextField id="txtName" promptText="성 함" styleClass="textField">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
@@ -33,7 +33,7 @@
                   <Insets right="23.0" />
                </padding>
             </Label>
-            <TextField id="txtId" styleClass="textField">
+            <TextField id="txtId" promptText="I D" styleClass="textField">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></TextField>
@@ -45,7 +45,7 @@
                   <Insets right="20.0" />
                </padding>
             </Label>
-            <PasswordField id="txtPass" styleClass="textField">
+            <PasswordField id="txtPass" promptText="Pass" styleClass="textField">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></PasswordField>
@@ -54,7 +54,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <PasswordField id="txtPass2" styleClass="textField">
+            <PasswordField id="txtPass2" promptText="Pass Confirm" styleClass="textField">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin></PasswordField>
@@ -96,7 +96,7 @@
                   <Insets right="25.0" />
                </padding>
             </Label>
-            <TextField id="txtPhoneNumber" styleClass="textField">
+            <TextField id="txtPhoneNumber" promptText="Phone Number" styleClass="textField">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
@@ -109,7 +109,7 @@
             </VBox>
             <HBox alignment="CENTER" spacing="50.0">
                <children>
-                  <Button id="btnOk" mnemonicParsing="false" prefHeight="23.0" prefWidth="330.0" text="가입하기" />
+                  <Button id="btnOk" mnemonicParsing="false" prefHeight="23.0" prefWidth="330.0" styleClass="btnLogin" text="가입하기" />
                </children>
             </HBox>
          </children>

@@ -26,8 +26,8 @@
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button id="btnAdd" layoutX="384.0" layoutY="548.0" mnemonicParsing="false" text="도서 추가" />
-      <Button id="btnBack" layoutX="472.0" layoutY="548.0" mnemonicParsing="false" text="뒤로 가기" />
+      <Button id="btnAdd" layoutX="384.0" layoutY="548.0" mnemonicParsing="false" styleClass="btnAll" text="도서 추가" />
+      <Button id="btnBack" layoutX="472.0" layoutY="548.0" mnemonicParsing="false" styleClass="btnAll" text="뒤로 가기" />
       <Label id="lbName" layoutX="123.0" layoutY="81.0" styleClass="etcLabel" text="-" />
       <Label id="lbDate" layoutX="413.0" layoutY="81.0" styleClass="etcLabel" text="-" />
    </children>

@@ -18,12 +18,12 @@
 					</font>
 				</Label>
 				<DatePicker id="dp2" />
-				<Button id="btnSearch" mnemonicParsing="false" text="검색">
+				<Button id="btnSearch" mnemonicParsing="false" styleClass="btnAll" text="검색">
 					<HBox.margin>
 						<Insets left="20.0" />
 					</HBox.margin>
 				</Button>
-				<Button id="btnAll" mnemonicParsing="false" text="전체보기" />
+				<Button id="btnAll" mnemonicParsing="false" styleClass="btnAll" text="전체보기" />
 			</children>
 		</HBox>
 		<HBox prefHeight="426.0" prefWidth="960.0" spacing="10.0">
@@ -39,7 +39,7 @@
 				</LineChart>
 			</children>
 		</HBox>
-		<Button id="btnExit" mnemonicParsing="false" text="닫기">
+		<Button id="btnExit" mnemonicParsing="false" styleClass="btnAll" text="닫기">
 			<VBox.margin>
 				<Insets top="10.0" />
 			</VBox.margin>

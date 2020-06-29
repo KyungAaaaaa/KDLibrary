@@ -19,7 +19,7 @@
             <TextArea id="txaContent" prefHeight="200.0" prefWidth="200.0" styleClass="textField" />
          </children>
       </HBox>
-      <Button id="btnEdit" mnemonicParsing="false" text="수 정" />
+      <Button id="btnEdit" mnemonicParsing="false" styleClass="btnAll" text="수 정" />
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

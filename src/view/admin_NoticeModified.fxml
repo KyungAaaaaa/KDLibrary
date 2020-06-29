@@ -11,7 +11,7 @@
    <children>
       <HBox alignment="CENTER" layoutX="62.0" layoutY="85.0">
          <children>
-            <Label text="제 목 : ">
+            <Label styleClass="etcLabel" text="제 목 : ">
                <font>
                   <Font size="15.0" />
                </font>
@@ -21,12 +21,12 @@
                   <Insets right="85.0" />
                </HBox.margin>
             </TextField>
-            <Label text="작성일 : ">
+            <Label styleClass="etcLabel" text="작성일 : ">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label id="lblDate" text="날짜">
+            <Label id="lblDate" styleClass="etcLabel" text="날짜">
                <font>
                   <Font size="15.0" />
                </font>
@@ -38,8 +38,8 @@
             <TextArea id="txaContent" prefHeight="400.0" prefWidth="600.0" />
             <HBox alignment="CENTER" spacing="100.0">
                <children>
-                  <Button id="btnOk" mnemonicParsing="false" text="완 료" />
-                  <Button id="btnNo" mnemonicParsing="false" text="취 소" />
+                  <Button id="btnOk" mnemonicParsing="false" styleClass="btnAll" text="완 료" />
+                  <Button id="btnNo" mnemonicParsing="false" styleClass="btnAll" text="취 소" />
                </children>
                <VBox.margin>
                   <Insets top="25.0" />
@@ -47,7 +47,7 @@
             </HBox>
          </children>
       </VBox>
-      <Label layoutX="244.0" layoutY="35.0" prefHeight="21.0" prefWidth="112.0" text="공지사항 수정">
+      <Label layoutX="244.0" layoutY="35.0" prefHeight="21.0" prefWidth="112.0" styleClass="etcLabel" text="공지사항 수정">
          <font>
             <Font size="17.0" />
          </font>

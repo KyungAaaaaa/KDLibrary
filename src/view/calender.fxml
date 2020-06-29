@@ -16,7 +16,7 @@
       </DatePicker>
       <VBox id="vBoxList" alignment="CENTER" prefHeight="200.0" prefWidth="163.0">
          <children>
-            <Label id="lbDate" prefHeight="21.0" prefWidth="58.0" text="일정">
+            <Label id="lbDate" prefHeight="21.0" prefWidth="58.0" styleClass="etcLabel" text="일정">
                <font>
                   <Font name="NanumSquare Light" size="18.0" />
                </font>
@@ -26,10 +26,10 @@
       </VBox>
       <VBox id="vboxBtn" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="40.0">
          <children>
-            <Button id="btnAdd" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" text="추가" />
-            <Button id="btnEdit" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" text="수정" />
-            <Button id="btnDelete" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" text="삭제" />
-            <Button id="btnClose" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" text="닫기" />
+            <Button id="btnAdd" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" styleClass="btnAll" text="추 가" />
+            <Button id="btnEdit" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" styleClass="btnAll" text="수 정" />
+            <Button id="btnDelete" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" styleClass="btnAll" text="삭 제" />
+            <Button id="btnClose" mnemonicParsing="false" prefHeight="23.0" prefWidth="73.0" styleClass="btnAll" text="닫 기" />
          </children>
       </VBox>
    </children>

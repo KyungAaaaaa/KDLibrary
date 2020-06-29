@@ -27,7 +27,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <PasswordField id="txtResetPass" styleClass="textField" />
+                  <PasswordField id="txtResetPass" promptText="new Pass" styleClass="textField" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT">
@@ -40,15 +40,15 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <PasswordField id="txtResetPass2" styleClass="textField" />
+                  <PasswordField id="txtResetPass2" promptText="new Pass Confirm" styleClass="textField" />
                </children>
             </HBox>
          </children>
       </VBox>
       <HBox alignment="CENTER_LEFT" layoutX="131.0" layoutY="320.0" spacing="50.0">
          <children>
-            <Button id="btnOk" mnemonicParsing="false" text="확 인" />
-            <Button id="btnNo" mnemonicParsing="false" text="취 소" />
+            <Button id="btnOk" mnemonicParsing="false" styleClass="btnLogin" text="확 인" />
+            <Button id="btnNo" mnemonicParsing="false" styleClass="btnLogin" text="취 소" />
          </children>
       </HBox>
    </children>

@@ -874,17 +874,17 @@ public class AdminManagement implements Initializable {
 					addPopup1.setTitle("도서 추가");
 					addPopup1.setScene(s1);
 					addPopup1.show();
-					Button btnOk = (Button) s.lookup("#btnOk");
-					Button btnCancel = (Button) s.lookup("#btnCancel");
-					Button btnFileSelect = (Button) s.lookup("#btnFileSelect");
-					TextField txtISBN = (TextField) s.lookup("#txtISBN");
-					TextField txtTitle1 = (TextField) s.lookup("#txtTitle");
-					TextField txtWriter = (TextField) s.lookup("#txtWriter");
-					ComboBox cmbCategory = (ComboBox) s.lookup("#cmbCategory");
-					TextField txtCompany = (TextField) s.lookup("#txtCompany");
-					TextField txtDate = (TextField) s.lookup("#txtDate");
-					TextArea txaInformation = (TextArea) s.lookup("#txaInformation");
-					ImageView imgV = (ImageView) s.lookup("#imgV");
+					Button btnOk = (Button) s1.lookup("#btnOk");
+					Button btnCancel = (Button) s1.lookup("#btnCancel");
+					Button btnFileSelect = (Button) s1.lookup("#btnFileSelect");
+					TextField txtISBN = (TextField) s1.lookup("#txtISBN");
+					TextField txtTitle1 = (TextField) s1.lookup("#txtTitle");
+					TextField txtWriter = (TextField) s1.lookup("#txtWriter");
+					ComboBox cmbCategory = (ComboBox) s1.lookup("#cmbCategory");
+					TextField txtCompany = (TextField) s1.lookup("#txtCompany");
+					TextField txtDate = (TextField) s1.lookup("#txtDate");
+					TextArea txaInformation = (TextArea) s1.lookup("#txaInformation");
+					ImageView imgV = (ImageView) s1.lookup("#imgV");
 					cmbCategory.setItems(dao.categoryList);
 
 					btnFileSelect.setOnAction(eve1 -> {
@@ -895,13 +895,17 @@ public class AdminManagement implements Initializable {
 					btnOk.setOnAction(eve1 -> {
 						Book book1 = null;
 						try {
-							book1 = new Book(txtISBN.getText(), txtTitle.getText(), cmbCategory.getValue().toString(),
+							if (txtISBN.getText().trim().equals("") || txtTitle1.getText().trim().equals("")
+									|| txtWriter.getText().trim().equals("") || txtCompany.getText().trim().equals("")
+									|| txtDate.getText().trim().equals("") || txaInformation.getText().trim().equals(""))
+								throw new Exception();
+							book1 = new Book(txtISBN.getText(), txtTitle1.getText(), cmbCategory.getValue().toString(),
 									txtWriter.getText(), txtCompany.getText(), txtDate.getText(), null,
 									txaInformation.getText(), false);
 						} catch (Exception e1) {
 							Alert alert = new Alert(AlertType.ERROR);
-							alert.setTitle("장르 미선택");
-							alert.setHeaderText("장르를 선택하세요");
+							alert.setTitle("항목 누락");
+							alert.setHeaderText("모든 항목을 입력하세요.");
 							alert.showAndWait();
 							return;
 						}
@@ -947,12 +951,14 @@ public class AdminManagement implements Initializable {
 						}
 					});
 					btnCancel.setOnAction(eve1 -> addPopup.close());
+					
 				} catch (Exception e1) {
+					System.out.println(e1.getMessage());
 				}
 			});
 
 			btnBack.setOnAction(eve -> addPopup.close());
-
+			
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}

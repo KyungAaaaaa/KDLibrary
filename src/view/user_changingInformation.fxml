@@ -11,7 +11,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="54.0" layoutY="55.0">
          <children>
-            <Label id="lb" text="Pass : ">
+            <Label id="lb" styleClass="etcLabel" text="Pass : ">
                <font>
                   <Font name="Arial Black" size="15.0" />
                </font>
@@ -21,8 +21,8 @@
       </HBox>
       <HBox layoutX="87.0" layoutY="123.0" spacing="40.0">
          <children>
-            <Button id="btnOk" mnemonicParsing="false" text="확 인" />
-            <Button id="btnNo" mnemonicParsing="false" text="취 소" />
+            <Button id="btnOk" mnemonicParsing="false" styleClass="btnAll" text="확 인" />
+            <Button id="btnNo" mnemonicParsing="false" styleClass="btnAll" text="취 소" />
          </children>
       </HBox>
    </children>

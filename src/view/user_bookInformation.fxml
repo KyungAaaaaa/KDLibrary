@@ -68,8 +68,8 @@
             </HBox>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="19.0" prefWidth="300.0" spacing="30.0">
                <children>
-                  <Button id="btnRental" mnemonicParsing="false" text="대여" />
-                  <Button id="btnClose" mnemonicParsing="false" text="닫기" />
+                  <Button id="btnRental" mnemonicParsing="false" styleClass="btnAll" text="대여" />
+                  <Button id="btnClose" mnemonicParsing="false" styleClass="btnAll" text="닫기" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />

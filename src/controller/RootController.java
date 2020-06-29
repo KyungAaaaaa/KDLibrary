@@ -415,7 +415,7 @@ public class RootController implements Initializable {
 				
 				
 				Stage user_MainStage = new Stage();
-				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main.fxml"));
+				FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/user_Main2.fxml"));
 				Parent root = fxmlLoader.load();
 				User_MainController user_MainController = fxmlLoader.getController();
 				user_MainController.userStage = user_MainStage;

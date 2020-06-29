@@ -40,7 +40,7 @@
             </HBox>
          </children>
       </VBox>
-      <Button fx:id="btnLogin" layoutX="274.0" layoutY="318.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="320.0" text="Login" />
+      <Button fx:id="btnLogin" layoutX="274.0" layoutY="318.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="320.0" text="Login" styleClass="btnLogin" />
       <Label fx:id="lblFindPass" layoutX="347.0" layoutY="389.0" styleClass="text" text="비밀번호 찾기 ">
          <font>
             <Font size="11.0" />
@@ -51,7 +51,7 @@
          </font>
       </Label>
       <Separator layoutX="274.0" layoutY="368.0" prefHeight="5.0" prefWidth="320.0" />
-      <Button fx:id="btnAdminLogin" layoutX="388.0" layoutY="409.0" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="관리자 로그인" />
-      <Button fx:id="btnExit" layoutX="410.0" layoutY="503.0" mnemonicParsing="false" text="종  료" />
+      <Button fx:id="btnAdminLogin" layoutX="388.0" layoutY="409.0" mnemonicParsing="false" style="-fx-background-color: #00ff0000;" text="관리자 로그인" styleClass="btnLogin" />
+      <Button fx:id="btnExit" layoutX="410.0" layoutY="503.0" mnemonicParsing="false" text="종  료" styleClass="btnLogin" />
    </children>
 </AnchorPane>
