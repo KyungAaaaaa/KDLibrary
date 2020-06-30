@@ -2,8 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class AdminController implements Initializable {
 	private ObservableList<Notice> obsListN = FXCollections.observableArrayList();
 	ArrayList<Notice> arrayList = null;
 	ArrayList<Schedule> arrayList2 = null;
-	private int tableViewselectedIndex=-1;
+	private int tableViewselectedIndex = -1;
 	private int tableViewselectedIndex2 = -1;
 	String Noticetime = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
 	String date = LocalDate.now().toString();
@@ -221,15 +219,14 @@ public class AdminController implements Initializable {
 	private void handleBtnManagementAction(ActionEvent e) {
 
 		try {
-			
+
 			Stage adminMain = new Stage();
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/admin_Management.fxml"));
 			Parent root = fxmlLoader.load();
-			AdminManagement adminManagement= fxmlLoader.getController();
+			AdminManagement adminManagement = fxmlLoader.getController();
 			adminManagement.stage = adminMain;
 			adminMain.initOwner(this.stage);
-			
-			
+
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			adminMain = new Stage();
@@ -253,7 +250,7 @@ public class AdminController implements Initializable {
 			Stage mainStage = new Stage();
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
 			Parent root1 = fxmlLoader.load();
-			RootController rootController= fxmlLoader.getController();
+			RootController rootController = fxmlLoader.getController();
 			rootController.stage = mainStage;
 			mainStage.initOwner(this.stage);
 			Scene scene = new Scene(root1);
@@ -316,9 +313,9 @@ public class AdminController implements Initializable {
 			}
 			tbladminNotice.setItems(obsListN);
 			// 테이블뷰에서 선택한 인덱스를 정수값으로 받아오는 이벤트
-						tbladminNotice.setOnMousePressed(event -> {
-							tableViewselectedIndex = tbladminNotice.getSelectionModel().getSelectedIndex();
-						});
+			tbladminNotice.setOnMousePressed(event -> {
+				tableViewselectedIndex = tbladminNotice.getSelectionModel().getSelectedIndex();
+			});
 			// 삭제버튼
 			btnadminDelete.setOnAction(event3 -> {
 				try {
@@ -396,11 +393,9 @@ public class AdminController implements Initializable {
 				}
 			});
 
-			
-
 			// 수정버튼
-			// 테이블뷰 선택을 더블 클릭으로 바꾸어주는 이벤트
 			tbladminNotice.setOnMouseClicked(event -> {
+				// 테이블뷰 선택을 더블 클릭으로 바꾸어주는 이벤트
 				if (event.getClickCount() > 1) {
 					try {
 						if (tableViewselectedIndex == -1) {
@@ -410,8 +405,7 @@ public class AdminController implements Initializable {
 							alert.showAndWait();
 							return;
 						}
-						Parent adminNotMfView = FXMLLoader
-								.load(getClass().getResource("/view/admin_NoticeAdd.fxml"));
+						Parent adminNotMfView = FXMLLoader.load(getClass().getResource("/view/admin_NoticeAdd.fxml"));
 						Scene scene3 = new Scene(adminNotMfView);
 						Stage adminNotMfStage = new Stage();
 						scene3.getStylesheets().add(getClass().getResource("/application/main.css").toString());
@@ -423,7 +417,6 @@ public class AdminController implements Initializable {
 						adminNotMfStage.setTitle("공지사항 수정창");
 						adminNotMfStage.show();
 
-						
 						TextField txtAdminMfTitle = (TextField) scene3.lookup("#txtTitle");
 						Label lblAdminMfDate = (Label) scene3.lookup("#lblDate");
 						Label lbTitle = (Label) scene3.lookup("#lbTitle");
@@ -440,44 +433,17 @@ public class AdminController implements Initializable {
 							if (!(txtAdminMfTitle.getText().trim().equals("")
 									|| txaAdminMfContent.getText().trim().equals(""))) {
 
-								Connection con2 = null;
-								PreparedStatement pstmt2 = null;
-								try {
-									con2 = DBUtil.getConnection();
+								not.setTitle(txtAdminMfTitle.getText());
+								not.setContent(txaAdminMfContent.getText());
+								not.setDate(lblAdminMfDate.getText());
 
-									String query = "update noticeTBL set title = ?, content = ?, date = ? where No = ?";
+								int mf = dao.editNotice(not);
+								if (mf != 0) {
+									obsListN.set(tableViewselectedIndex, not);
+									tableViewselectedIndex = -1;
+									adminNotMfStage.close();
+								} 
 
-									not.setTitle(txtAdminMfTitle.getText());
-									not.setContent(txaAdminMfContent.getText());
-									not.setDate(lblAdminMfDate.getText());
-
-									pstmt2 = con2.prepareStatement(query);
-									pstmt2.setString(1, not.getTitle());
-									pstmt2.setString(2, not.getContent());
-									pstmt2.setString(3, not.getDate());
-									pstmt2.setInt(4, not.getNo());
-
-									int mf = pstmt2.executeUpdate();
-
-									if (mf != 0) {
-										obsListN.set(tableViewselectedIndex, not);
-										tableViewselectedIndex = -1;
-										Alert alert = new Alert(AlertType.INFORMATION);
-										alert.setTitle("공지사항 수정");
-										alert.setHeaderText("수정을 성공적으로 진행하였습니다");
-										alert.showAndWait();
-										adminNotMfStage.close();
-									} else {
-										throw new Exception();
-									}
-
-								} catch (Exception e1) {
-									Alert alert = new Alert(AlertType.CONFIRMATION);
-									alert.setTitle("에러 발생");
-									alert.setHeaderText("공지사항 수정 문제발생");
-									alert.setContentText(e1.getMessage());
-									alert.showAndWait();
-								}
 							} else {
 								Alert alert = new Alert(AlertType.CONFIRMATION);
 								alert.setTitle("에러 발생");
@@ -488,7 +454,7 @@ public class AdminController implements Initializable {
 						});
 						btnAdminMfNo.setOnAction(event3 -> adminNotMfStage.close());
 						lblAdminMfDate.setText(Noticetime);
-					} catch (IOException e1) {
+					} catch (Exception e1) {
 					}
 				}
 			});
@@ -518,15 +484,15 @@ public class AdminController implements Initializable {
 			Button btnClose = (Button) tab3.lookup("#btnClose");
 			ListView listV = (ListView) tab3.lookup("#listV");
 			DatePicker datePicker = (DatePicker) tab3.lookup("#datePicker");
-			
+
 			datePicker.setValue(LocalDate.now());
-			
+
 			DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
 			Pane popupContent = (Pane) datePickerSkin.getPopupContent();
 			popupContent.setPrefWidth(250);
 			VBox vboxBtn = (VBox) tab3.lookup("#vboxBtn");
 			VBox vBoxList = (VBox) tab3.lookup("#vBoxList");
-			vBoxList.getChildren().setAll( listV);
+			vBoxList.getChildren().setAll(listV);
 			vboxBtn.getChildren().setAll(btnAdd, btnEdit, btnDelete, btnClose);
 			tab3.getChildren().setAll(popupContent, vBoxList, vboxBtn);
 			Scene s = new Scene(tab3);
@@ -654,33 +620,12 @@ public class AdminController implements Initializable {
 							alert.showAndWait();
 							return;
 						}
-						Connection con2 = null;
-						PreparedStatement pstmt = null;
-						try {
-							con2 = DBUtil.getConnection();
-							String query = "update ScheduleTBL set content = ? where no = ?";
-							pstmt = con2.prepareStatement(query);
-							pstmt.setString(1, txaContent2.getText());
-							pstmt.setInt(2, sh.getNo());
-							int ase = pstmt.executeUpdate();
+							sh.setContent(txaContent2.getText());
+							int ase = dao.editSchedule(sh);
 							if (ase != 0) {
-								sh.setContent(txaContent2.getText());
 								obSchdule.set(tableViewselectedIndex2, sh.getContent());
 								tableViewselectedIndex2 = -1;
-								Alert alert = new Alert(AlertType.INFORMATION);
-								alert.setTitle("일정표 수정창");
-								alert.setHeaderText("수정이 완료되었습니다");
-								alert.showAndWait();
-								adminScheduleStage.close();
 							}
-							
-						} catch (Exception e1) {
-							Alert alert = new Alert(AlertType.INFORMATION);
-							alert.setTitle("일정표 수정창");
-							alert.setHeaderText("오류");
-							alert.setContentText(e1.getMessage());
-							alert.showAndWait();
-						}
 					});
 				} catch (Exception e1) {
 

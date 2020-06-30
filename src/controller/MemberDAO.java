@@ -18,8 +18,6 @@ public class MemberDAO {
 	
 	// 대여중인 도서 정보(반납)
 	public boolean getRentalBookInformationPopup(Book b) {
-		int returnValue1 = 0;
-		int returnValue2 = 0;
 		boolean returnValue = false;
 		Connection con = null;
 		PreparedStatement preparedStatement1 = null;
@@ -34,8 +32,6 @@ public class MemberDAO {
 			preparedStatement1.setString(2, MemberDAO.m.getId());
 			preparedStatement2.setBoolean(1, false);
 			preparedStatement2.setString(2, b.getIsbn());
-			returnValue1 = preparedStatement1.executeUpdate();
-			returnValue2 = preparedStatement1.executeUpdate();
 			if (preparedStatement1.executeUpdate() != 0 && preparedStatement2.executeUpdate() != 0)
 				returnValue = true;
 			if (returnValue) {
@@ -214,4 +210,90 @@ public class MemberDAO {
 		return returnValue;
 
 	}
+	
+	// 유저 수정 메소드
+	public int editUser(Member selectUser) {
+		int returnValue = 0;
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			con = DBUtil.getConnection();
+			String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,etc=? where Id=?";
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, selectUser.getName());
+			preparedStatement.setString(2, selectUser.getPass());
+			preparedStatement.setString(3, selectUser.getPhoneNumber());
+			preparedStatement.setString(4,selectUser.getBirth());
+			preparedStatement.setString(5,selectUser.getEtc());
+			preparedStatement.setString(6, selectUser.getId());
+			returnValue = preparedStatement.executeUpdate();
+			if (returnValue != 0) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("회원 수정");
+				alert.setHeaderText("수정 완료");
+				alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("회원 수정");
+				alert.setHeaderText("수정 실패");
+				alert.showAndWait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+		}
+		
+		return returnValue;
+		
+	}
+	
+	// 개인정보 수정 메소드
+		public int editUser2() {
+			int returnValue = 0;
+			Connection con = null;
+			PreparedStatement preparedStatement = null;
+			try {
+				con = DBUtil.getConnection();
+				String query = "update memberTBL set pass = ?, phoneNumber = ? where id = ?";
+				preparedStatement = con.prepareStatement(query);
+				preparedStatement.setString(1, MemberDAO.m.getName());
+				preparedStatement.setString(2, MemberDAO.m.getPass());
+				preparedStatement.setString(3, MemberDAO.m.getId());
+
+				returnValue = preparedStatement.executeUpdate();
+				if (returnValue != 0) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("개인 정보 수정");
+					alert.setHeaderText("수정 완료");
+					alert.showAndWait();
+				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("개인 정보 수정");
+					alert.setHeaderText("수정 실패");
+					alert.showAndWait();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (preparedStatement != null)
+						preparedStatement.close();
+					if (con != null)
+						con.close();
+				} catch (SQLException e1) {
+					System.out.println(e1.getMessage());
+				}
+			}
+			
+			return returnValue;
+			
+		}
 }

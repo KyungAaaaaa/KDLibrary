@@ -183,6 +183,43 @@ public class BookDAO {
 		}
 		return returnValue;
 	}
+	// 도서 수정 메소드
+	public int editBook(Book selectBook) {
+		int returnValue = 0;
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			
+			con = DBUtil.getConnection();
+			String query = "update BookTBL set title=?,writer=?,category=?,company=?,date=?,information=?,fileimg=? where ISBN=?";
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, selectBook.getTitle());
+			preparedStatement.setString(2, selectBook.getWriter());
+			preparedStatement.setString(3, selectBook.getCategory());
+			preparedStatement.setString(4, selectBook.getCompany());
+			preparedStatement.setString(5, selectBook.getDate());
+			preparedStatement.setString(6, selectBook.getInformation());
+			preparedStatement.setString(7, selectBook.getFileimg());
+			preparedStatement.setString(8, selectBook.getIsbn());
+			
+			returnValue = preparedStatement.executeUpdate();
+			if (returnValue != 0) {
+				
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("도서 수정");
+				alert.setHeaderText("수정 완료");
+				alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("도서 수정");
+				alert.setHeaderText("수정 실패");
+				alert.showAndWait();
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return returnValue;
+	}
 
 	// 누적 이용수 (대출 수)
 	public ArrayList<Statistical> getAllRentalCount(String month) {

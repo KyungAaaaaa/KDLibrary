@@ -8,9 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -38,7 +35,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -307,56 +303,25 @@ public class AdminManagement implements Initializable {
 			addPopup.show();
 
 			btnOk.setOnAction(eve -> {
-				Connection con1 = null;
-				PreparedStatement preparedStatement = null;
 				try {
 					if (txtName.getText().trim().equals("") || txtPass.getText().trim().equals("")
 							|| txtPhoneNumber.getText().trim().equals(""))
 						throw new Exception();
-					con1 = DBUtil.getConnection(); //
-					String query = "update memberTBL set name=?,pass=?,phoneNumber=?,birth=?,etc=? where Id=?";
-					preparedStatement = con1.prepareStatement(query);
-
-					preparedStatement.setString(1, txtName.getText());
-					preparedStatement.setString(2, txtPass.getText());
-					preparedStatement.setString(3, txtPhoneNumber.getText());
-					preparedStatement.setString(4,
-							cmbYear.getValue() + "-" + cmbMonth.getValue() + "-" + cmbDay.getValue());
-					preparedStatement.setString(5, cmbEtc.getValue().toString());
-					preparedStatement.setString(6, selectUser.getId());
 					selectUser.setName(txtName.getText());
 					selectUser.setPass(txtPass.getText());
 					selectUser.setPhoneNumber(txtPhoneNumber.getText());
 					selectUser.setEtc(cmbEtc.getValue().toString());
-
-					if (preparedStatement.executeUpdate() != 0) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("회원정보 수정");
-						alert.setHeaderText("수정 완료");
-						alert.showAndWait();
+					selectUser.setBirth(cmbYear.getValue() + "-" + cmbMonth.getValue() + "-" + cmbDay.getValue());
+					MemberDAO dao = new MemberDAO();
+					int returnValue = dao.editUser(selectUser);
+					if (returnValue != 0) {
 						addPopup.close();
 						obLMember.set(userTableSelectIndex, selectUser);
-					} else {
-						Alert alert = new Alert(AlertType.ERROR);
-						alert.setTitle("에러");
-						alert.setHeaderText("등록 실패");
-						alert.showAndWait();
-						throw new Exception();
 					}
-
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setHeaderText("모든 항목을 입력하세요.");
 					alert.showAndWait();
-				} finally {
-					try {
-						if (preparedStatement != null)
-							preparedStatement.close();
-						if (con1 != null)
-							con1.close();
-					} catch (SQLException e1) {
-						System.out.println("RootController edit-save : " + e1.getMessage());
-					}
 				}
 				tblUser.getSelectionModel().clearSelection();
 				userTableSelectIndex = -1;
@@ -436,7 +401,7 @@ public class AdminManagement implements Initializable {
 			ImageView imgV = (ImageView) root.lookup("#imgV");
 			btnCancel.setOnAction(eve -> addPopup.close());
 			cmbCategory.setItems(BookDAO.categoryList);
-			
+
 			Book book0 = obLBook.get(bookTableSelectIndex);
 			selectFileName = book0.getFileimg();
 			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
@@ -451,7 +416,6 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-			
 
 			selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
 
@@ -461,86 +425,50 @@ public class AdminManagement implements Initializable {
 			});
 
 			btnOk.setOnAction(eve -> {
-				// String fileName1= null;
-				Connection con1 = null;
-				PreparedStatement preparedStatement = null;
-				try {
 
-					con1 = DBUtil.getConnection(); //
-					String query = "update BookTBL set ISBN=?,title=?,writer=?,category=?,company=?,date=?,information=?,fileimg=? where ISBN=?";
-					preparedStatement = con1.prepareStatement(query);
-					//String fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
-					String fileName = "Book_" + txtISBN.getText() + "_" + txtTitle.getText() + ".jpg";
-					preparedStatement.setString(1, txtISBN.getText());
-					preparedStatement.setString(2, txtTitle.getText());
-					preparedStatement.setString(3, txtWriter.getText());
-					preparedStatement.setString(4, cmbCategory.getValue().toString());
-					preparedStatement.setString(5, txtCompany.getText());
-					preparedStatement.setString(6, txtDate.getText());
-					preparedStatement.setString(7, txaInformation.getText());
-					preparedStatement.setString(8, fileName);
-					preparedStatement.setString(9, book0.getIsbn());
-				
+				String fileName = "Book_" + txtISBN.getText() + "_" + txtTitle.getText() + ".jpg";
+				book0.setIsbn(txtISBN.getText());
+				book0.setTitle(txtTitle.getText());
+				book0.setWriter(txtWriter.getText());
+				book0.setCategory(cmbCategory.getValue().toString());
+				book0.setCompany(txtCompany.getText());
+				book0.setDate(txtDate.getText());
+				book0.setFileimg(fileName);
+				book0.setInformation(txaInformation.getText());
+				BookDAO dao = new BookDAO();
+				int returnValue = dao.editBook(book0);
+				if (returnValue != 0) {
+					imageDelete(selectFileName);// 기존이미지삭제
 
-					if (preparedStatement.executeUpdate() != 0) {
-						 imageDelete(selectFileName);
-						book0.setIsbn(txtISBN.getText());
-						book0.setTitle(txtTitle.getText());
-						book0.setWriter(txtWriter.getText());
-						book0.setCategory(cmbCategory.getValue().toString());
-						book0.setCompany(txtCompany.getText());
-						book0.setDate(txtDate.getText());
-						book0.setFileimg(fileName);
-						book0.setInformation(txaInformation.getText());
-						BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
-						BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
-						try {
-							book0.setFileimg(fileName);
-							bis = new BufferedInputStream(new FileInputStream(selectFile));
-							bos = new BufferedOutputStream(
-									new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
-							int data = -1;
-							while ((data = bis.read()) != -1) {
-								bos.write(data);
-								bos.flush();
-							}
-						} catch (Exception e1) {
-							System.out.println("파일 복사에러 : " + e1.getMessage());
-							return;
-						} finally {
-							try {
-								book0.setFileimg(fileName);
-
-								if (bis != null)
-									bis.close();
-								if (bos != null)
-									bos.close();
-							} catch (IOException e1) {
-							}
-						}
-
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setHeaderText("등록 완료");
-						alert.showAndWait();
-						addPopup.close();
-						obLBook.set(bookTableSelectIndex, book0);
-					}
-
-				} catch (Exception e1) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setHeaderText("등록 실패 : DB에러");
-					alert.setContentText(e1.getMessage());
-					alert.showAndWait();
-				} finally {
+					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
+					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
 					try {
-						if (preparedStatement != null)
-							preparedStatement.close();
-						if (con1 != null)
-							con1.close();
-					} catch (SQLException e1) {
-						e1.getMessage();
+						bis = new BufferedInputStream(new FileInputStream(selectFile));
+						bos = new BufferedOutputStream(
+								new FileOutputStream(directorySave.getAbsolutePath() + "\\" + fileName));
+						int data = -1;
+						while ((data = bis.read()) != -1) {
+							bos.write(data);
+							bos.flush();
+						}
+					} catch (Exception e1) {
+						System.out.println("파일 복사에러 : " + e1.getMessage());
+						// return;
+					} finally {
+						try {
+
+							if (bis != null)
+								bis.close();
+							if (bos != null)
+								bos.close();
+						} catch (IOException e1) {
+						}
 					}
+
+					addPopup.close();
+					obLBook.set(bookTableSelectIndex, book0);
 				}
+
 				tblBook.getSelectionModel().clearSelection();
 				bookTableSelectIndex = -1;
 			});
@@ -627,7 +555,7 @@ public class AdminManagement implements Initializable {
 							return;
 						} finally {
 							try {
-								
+
 								selectFile = null;
 								if (bis != null)
 									bis.close();
@@ -866,7 +794,7 @@ public class AdminManagement implements Initializable {
 
 			btnAdd.setOnAction(eve -> {
 				try {
-					//BookDAO dao = new BookDAO();
+					// BookDAO dao = new BookDAO();
 					Parent root1 = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 					Stage addPopup1 = new Stage();
 					addPopup1.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
@@ -947,7 +875,7 @@ public class AdminManagement implements Initializable {
 							} catch (IOException e1) {
 							}
 						}
-						 BookDAO dao = new BookDAO();
+						BookDAO dao = new BookDAO();
 						int returnValue = dao.addBook(book1);
 						if (returnValue != 0) {
 							obLBook.add(book1);

@@ -80,37 +80,6 @@ public class DAO {
 		return schduleList;
 	}
 
-	// 공지 전체보기
-	public ArrayList<Notice> getNotice() {
-		ArrayList<Notice> arrayList = new ArrayList<Notice>();
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			con = DBUtil.getConnection();
-
-			String query = "select * from noticeTBL";
-
-			pstmt = con.prepareStatement(query);
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				Notice notice = new Notice(rs.getString("title"), rs.getString("content"), rs.getString("date"),
-						rs.getInt("No"));
-				arrayList.add(notice);
-			}
-
-		} catch (Exception e1) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("에러");
-			alert.setHeaderText("공지사항 불러오기 오류");
-			alert.setContentText(e1.getMessage());
-			alert.showAndWait();
-		}
-		return arrayList;
-	}
-
 	// 대여기록 전체보기
 	public ArrayList<Statistical> getRentalList() {
 		ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
@@ -186,7 +155,6 @@ public class DAO {
 	}
 
 	// 설정한 날짜별 대출 기록 메소드
-
 	public ArrayList<Statistical> searchRentalBookList(int searchDate1, int searchDate2) {
 		ArrayList<Statistical> arrayList = new ArrayList<Statistical>();
 		Connection con = null;
@@ -221,6 +189,37 @@ public class DAO {
 			} catch (SQLException e1) {
 				System.out.println(e1.getMessage());
 			}
+		}
+		return arrayList;
+	}
+
+	// 공지 전체보기
+	public ArrayList<Notice> getNotice() {
+		ArrayList<Notice> arrayList = new ArrayList<Notice>();
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			con = DBUtil.getConnection();
+
+			String query = "select * from noticeTBL";
+
+			pstmt = con.prepareStatement(query);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				Notice notice = new Notice(rs.getString("title"), rs.getString("content"), rs.getString("date"),
+						rs.getInt("No"));
+				arrayList.add(notice);
+			}
+
+		} catch (Exception e1) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("에러");
+			alert.setHeaderText("공지사항 불러오기 오류");
+			alert.setContentText(e1.getMessage());
+			alert.showAndWait();
 		}
 		return arrayList;
 	}
@@ -308,6 +307,87 @@ public class DAO {
 			}
 		}
 		return returnValue;
+	}
+
+	// 공지 수정 메소드
+	public int editNotice(Notice selectNotice) {
+		int returnValue = 0;
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			con = DBUtil.getConnection();
+			String query = "update noticeTBL set title = ?, content = ?, date = ? where No = ?";
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, selectNotice.getTitle());
+			preparedStatement.setString(2, selectNotice.getContent());
+			preparedStatement.setString(3, selectNotice.getDate());
+			preparedStatement.setInt(4, selectNotice.getNo());
+			returnValue = preparedStatement.executeUpdate();
+			if (returnValue != 0) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 수정");
+				alert.setHeaderText("수정 완료");
+				alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("공지 수정");
+				alert.setHeaderText("수정 실패");
+				alert.showAndWait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+		}
+
+		return returnValue;
+
+	}
+	// 일정 수정 메소드
+	public int editSchedule(Schedule selectSchedule) {
+		int returnValue = 0;
+		Connection con = null;
+		PreparedStatement preparedStatement = null;
+		try {
+			con = DBUtil.getConnection();
+			String query = "update ScheduleTBL set content = ? where no = ?";
+			preparedStatement = con.prepareStatement(query);
+			preparedStatement.setString(1, selectSchedule.getContent());
+			preparedStatement.setInt(2, selectSchedule.getNo());
+			returnValue = preparedStatement.executeUpdate();
+			if (returnValue != 0) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("일정 수정");
+				alert.setHeaderText("수정 완료");
+				alert.showAndWait();
+			} else {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("일정 수정");
+				alert.setHeaderText("수정 실패");
+				alert.showAndWait();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (preparedStatement != null)
+					preparedStatement.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e1) {
+				System.out.println(e1.getMessage());
+			}
+		}
+		
+		return returnValue;
+		
 	}
 
 	// 일정 추가 메소드

@@ -3,8 +3,6 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,12 +29,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import model.Book;
-import model.Member;
 import model.Notice;
 import model.RequestBook;
 import model.Schedule;
@@ -275,36 +271,13 @@ public class User_MainController implements Initializable {
 								alert.showAndWait();
 								return;
 							}
-							Connection con = null;
-							PreparedStatement pstmt = null;
-							try {
-								con = DBUtil.getConnection();
-								String query = "update memberTBL set pass = ?, phoneNumber = ? where id = ?";
-								pstmt = con.prepareStatement(query);
-								pstmt.setString(1, txtPass2.getText());
-								pstmt.setString(2, txtPhone2.getText());
-								pstmt.setString(3, MemberDAO.m.getId());
-
-								int userModify = pstmt.executeUpdate();
+								MemberDAO.m.setPass(txtPass2.getText());
+								MemberDAO.m.setPhoneNumber(txtPhone2.getText());
+								MemberDAO dao=new MemberDAO();
+								int userModify = dao.editUser2();
 
 								if (userModify != 0) {
-									MemberDAO.m.setPass(txtPass2.getText());
-									MemberDAO.m.setPhoneNumber(txtPhone2.getText());
-									Alert alert = new Alert(AlertType.INFORMATION);
-									alert.setTitle("계정관리");
-									alert.setHeaderText("회원정보 수정이 완료되었습니다");
-									alert.showAndWait();
-									userModifyStage2.close();
-								} else {
-									throw new Exception();
-								}
-							} catch (Exception e) {
-								Alert alert = new Alert(AlertType.ERROR);
-								alert.setTitle("에러발생");
-								alert.setHeaderText("수정창 점검");
-								alert.setContentText(e.getMessage());
-								alert.showAndWait();
-							}
+									userModifyStage2.close();}
 						});
 
 						userModifyStage2.initModality(Modality.WINDOW_MODAL);
