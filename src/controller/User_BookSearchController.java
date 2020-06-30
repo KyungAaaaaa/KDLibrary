@@ -321,10 +321,10 @@ public class User_BookSearchController implements Initializable {
 
 			for (int i = 0; i < 9; i++) {
 				if (bookCount < 9) {
-					if (i == bookCount) {
+					if (i == bookCount) 
 						break;
-					}
-					;
+					
+					
 				}
 				Book b = bookList.get(i);
 				selectFileName = b.getFileimg();
@@ -355,7 +355,7 @@ public class User_BookSearchController implements Initializable {
 							bookImageVList.get(i - 9).setImage(new Image(localUrl));
 							bookImageVList.get(i - 9).setDisable(false);
 						} catch (Exception e) {
-							System.out.println("페이지넘기기 오류 ㅠ왜 setDisable안되냐");
+							System.out.println("페이지넘기기 오류 ㅠ");
 						}
 
 					}
@@ -512,7 +512,7 @@ public class User_BookSearchController implements Initializable {
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");
-			alert.setHeaderText("계정관리창 부르기 오류");
+			alert.setHeaderText("도서 정보 창 부르기 오류");
 			alert.setContentText(e.getMessage());
 			alert.showAndWait();
 		}

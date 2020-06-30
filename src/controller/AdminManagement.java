@@ -435,8 +435,8 @@ public class AdminManagement implements Initializable {
 			TextArea txaInformation = (TextArea) root.lookup("#txaInformation");
 			ImageView imgV = (ImageView) root.lookup("#imgV");
 			btnCancel.setOnAction(eve -> addPopup.close());
-			//BookDAO dao = new BookDAO();
 			cmbCategory.setItems(BookDAO.categoryList);
+			
 			Book book0 = obLBook.get(bookTableSelectIndex);
 			selectFileName = book0.getFileimg();
 			localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
@@ -451,9 +451,9 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-			String fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
+			
 
-			selectFile = new File(directorySave.getAbsolutePath() + "\\" + fileName.trim());
+			selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
 
 			btnFileSelect.setOnAction(eve1 -> {
 				image = handleBtnImageFileAction(addPopup);
@@ -469,7 +469,8 @@ public class AdminManagement implements Initializable {
 					con1 = DBUtil.getConnection(); //
 					String query = "update BookTBL set ISBN=?,title=?,writer=?,category=?,company=?,date=?,information=?,fileimg=? where ISBN=?";
 					preparedStatement = con1.prepareStatement(query);
-
+					//String fileName = "Book_" + book0.getIsbn() + "_" + book0.getTitle() + ".jpg";
+					String fileName = "Book_" + txtISBN.getText() + "_" + txtTitle.getText() + ".jpg";
 					preparedStatement.setString(1, txtISBN.getText());
 					preparedStatement.setString(2, txtTitle.getText());
 					preparedStatement.setString(3, txtWriter.getText());
@@ -479,17 +480,18 @@ public class AdminManagement implements Initializable {
 					preparedStatement.setString(7, txaInformation.getText());
 					preparedStatement.setString(8, fileName);
 					preparedStatement.setString(9, book0.getIsbn());
-					book0.setIsbn(txtISBN.getText());
-					book0.setTitle(txtTitle.getText());
-					book0.setWriter(txtWriter.getText());
-					book0.setCategory(cmbCategory.getValue().toString());
-					book0.setCompany(txtCompany.getText());
-					book0.setDate(txtDate.getText());
-					book0.setInformation(txaInformation.getText());
+				
 
 					if (preparedStatement.executeUpdate() != 0) {
-						// imageDelete(selectFileName);
-
+						 imageDelete(selectFileName);
+						book0.setIsbn(txtISBN.getText());
+						book0.setTitle(txtTitle.getText());
+						book0.setWriter(txtWriter.getText());
+						book0.setCategory(cmbCategory.getValue().toString());
+						book0.setCompany(txtCompany.getText());
+						book0.setDate(txtDate.getText());
+						book0.setFileimg(fileName);
+						book0.setInformation(txaInformation.getText());
 						BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 						BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
 						try {
@@ -597,18 +599,15 @@ public class AdminManagement implements Initializable {
 						throw new Exception();
 					fileName = "Book_" + book1.getIsbn() + "_" + book1.getTitle() + ".jpg";
 					book1.setFileimg(fileName);
-				//	BookDAO dao = new BookDAO();
 					if (selectFile == null) {
 						Alert alert = new Alert(AlertType.WARNING);
 						alert.setTitle("문제발생");
 						alert.setHeaderText("이미지 파일을 선택하세요");
-						alert.setContentText("다음에는 주의하세요.");
 						alert.showAndWait();
 						return;
 					}
 					int returnValue = dao.addBook(book1);
 					if (returnValue != 0) {
-
 						obLBook.add(book1);
 
 						BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
@@ -628,7 +627,7 @@ public class AdminManagement implements Initializable {
 							return;
 						} finally {
 							try {
-								book1.setFileimg(fileName);
+								
 								selectFile = null;
 								if (bis != null)
 									bis.close();
