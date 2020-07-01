@@ -165,7 +165,7 @@ public class DAO {
 			con = DBUtil.getConnection();
 
 			query = "select No,DATE_FORMAT(Rentaldate,'%Y-%m-%d '),Id,ISBN,title,category from StatisticalTBL A Left join memberTBL B "
-					+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?)+1;";
+					+ "on A.Member_Id=B.Id Left join BookTBL C on A.Book_ISBN=C.ISBN where Rentaldate between date(?) and date(?);";
 			preparedStatement = con.prepareStatement(query); //
 			preparedStatement.setInt(1, searchDate1);
 			preparedStatement.setInt(2, searchDate2);
