@@ -30,82 +30,81 @@ import model.Book;
 
 public class User_BookSearchController implements Initializable {
 	@FXML
-	HBox bookBox;
+	private HBox bookBox;
 	@FXML
-	ImageView imgV11;
+	private ImageView imgV11;
 	@FXML
-	ImageView imgV12;
+	private ImageView imgV12;
 	@FXML
-	ImageView imgV13;
+	private ImageView imgV13;
 	@FXML
-	ImageView imgV21;
+	private ImageView imgV21;
 	@FXML
-	ImageView imgV22;
+	private ImageView imgV22;
 	@FXML
-	ImageView imgV23;
+	private ImageView imgV23;
 	@FXML
-	ImageView imgV31;
+	private ImageView imgV31;
 	@FXML
-	ImageView imgV32;
+	private ImageView imgV32;
 	@FXML
-	ImageView imgV33;
+	private ImageView imgV33;
 	@FXML
-	Label lbTitle11;
+	private Label lbTitle11;
 	@FXML
-	Label lbTitle12;
+	private Label lbTitle12;
 	@FXML
-	Label lbTitle13;
+	private Label lbTitle13;
 	@FXML
-	Label lbTitle21;
+	private Label lbTitle21;
 	@FXML
-	Label lbTitle22;
+	private Label lbTitle22;
 	@FXML
-	Label lbTitle23;
+	private Label lbTitle23;
 	@FXML
-	Label lbTitle31;
+	private Label lbTitle31;
 	@FXML
-	Label lbTitle32;
+	private Label lbTitle32;
 	@FXML
-	Label lbTitle33;
+	private Label lbTitle33;
 	@FXML
-	Button btnBack;
+	private Button btnBack;
 	@FXML
-	Button btnCategory1;
+	private Button btnCategory1;
 	@FXML
-	Button btnCategory11;
+	private Button btnCategory11;
 	@FXML
-	Button btnCategory12;
+	private Button btnCategory12;
 	@FXML
-	Button btnCategory13;
+	private Button btnCategory13;
 	@FXML
-	Button btnCategory14;
+	private Button btnCategory14;
 	@FXML
-	Button btnCategory15;
+	private Button btnCategory15;
 	@FXML
-	Button btnCategory16;
+	private Button btnCategory16;
 	@FXML
-	Button btnCategory17;
+	private Button btnCategory17;
 	@FXML
-	Button btnNext;
+	private Button btnNext;
 	@FXML
-	Button btnExit;
+	private Button btnExit;
 	@FXML
-	Button btnSearch;
+	private Button btnSearch;
 	@FXML
-	TextField txtSearch;
+	private TextField txtSearch;
 	private String listViewSelectItem;
-	String wkdfm = null;
+	private String wkdfm = null;
 	public Stage stage;
-	ArrayList<Book> bookList;
-	ArrayList<Book> bookList2;
-	ArrayList<Label> bookTitleList = new ArrayList<Label>();
-	ArrayList<ImageView> bookImageVList = new ArrayList<ImageView>();
-	ArrayList<Button> buttonList = new ArrayList<Button>();
+	private ArrayList<Book> bookList = new ArrayList<Book>();
+	private ArrayList<Book> bookList2 = null;
+	private ArrayList<Label> bookTitleList = new ArrayList<Label>();
+	private ArrayList<ImageView> bookImageVList = new ArrayList<ImageView>();
+	private ArrayList<Button> buttonList = new ArrayList<Button>();
 	private String selectFileName;
 	private String localUrl;
 	private int bookCount;
 	private int page = 0;
-	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -321,10 +320,9 @@ public class User_BookSearchController implements Initializable {
 
 			for (int i = 0; i < 9; i++) {
 				if (bookCount < 9) {
-					if (i == bookCount) 
+					if (i == bookCount)
 						break;
-					
-					
+
 				}
 				Book b = bookList.get(i);
 				selectFileName = b.getFileimg();
@@ -447,7 +445,7 @@ public class User_BookSearchController implements Initializable {
 			userModifyStage.show();
 			btnClose.setOnAction(e -> userModifyStage.close());
 			btnRental.setOnAction(e -> {
-				//MemberDAO dao = new MemberDAO();
+				// MemberDAO dao = new MemberDAO();
 				if (!(b.isRental())) {
 					if (MemberDAO.m.getRentalBook() == null) {
 						Connection con1 = null;

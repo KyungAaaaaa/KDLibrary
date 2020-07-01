@@ -50,69 +50,66 @@ import model.RequestBook;
 
 public class AdminManagement implements Initializable {
 	@FXML
-	TableView tblUser;
+	private TableView tblUser;
 	@FXML
-	TableView tblBook;
+	private TableView tblBook;
 	@FXML
-	TableView tblRequest;
+	private TableView tblRequest;
 ///////////////////////////
 	@FXML
-	TabPane tabContainer;
+	private TabPane tabContainer;
 	@FXML
-	Tab memberTab;
+	private Tab memberTab;
 	@FXML
-	AnchorPane memberContainer;
+	private AnchorPane memberContainer;
 	@FXML
-	Tab bookTab;
+	private Tab bookTab;
 	@FXML
-	AnchorPane bookContainer;
+	private AnchorPane bookContainer;
 	@FXML
-	Tab requestTab;
+	private Tab requestTab;
 	@FXML
-	AnchorPane requestContainer;
-
+	private AnchorPane requestContainer;
 ///////////////////////////
 	@FXML
-	Button btnBookAdd;
+	private Button btnBookAdd;
 	@FXML
-	Button btnBack;
+	private Button btnBack;
 	@FXML
-	Button btnBookDelete;
+	private Button btnBookDelete;
 	@FXML
-	Button btnBookEdit;
+	private Button btnBookEdit;
 	@FXML
-	Button btnUserEdit;
+	private Button btnUserEdit;
 	@FXML
-	Button btnUserDelete;
+	private Button btnUserDelete;
 	@FXML
-	Button btnUserSearch;
+	private Button btnUserSearch;
 	@FXML
-	Button btnBookSearch;
+	private Button btnBookSearch;
 	@FXML
-	Button btnRequestDelete;
+	private Button btnRequestDelete;
 	@FXML
-	Button btnBookCategory;
+	private Button btnBookCategory;
 	@FXML
-	Button btnBarChart;
+	private Button btnBarChart;
 	@FXML
-	Button btnPieChart;
+	private Button btnPieChart;
 	@FXML
-	TextField txtBookSearch;
+	private TextField txtBookSearch;
 	@FXML
-	TextField txtUserSearch;
+	private TextField txtUserSearch;
 	@FXML
 	private NumberAxis xAxis;
 	@FXML
 	public Stage stage;
 	private double tabWidth = 90.0;
-	public static int lastSelectedTabIndex = 0;
 	private File selectFile;
 	private File directorySave;
 	private int bookTableSelectIndex = -1;
 	private int requestTableSelectIndex = -1;
 	private int userTableSelectIndex = -1;
 	private String localUrl;
-	private Image localImage;
 	private String selectFileName;
 	private Image image = null;
 	private ObservableList<Book> obLBook = FXCollections.observableArrayList();
@@ -163,6 +160,7 @@ public class AdminManagement implements Initializable {
 		// 관리페이지 뒤로가기
 		btnBack.setOnAction(e -> handleBtnBackAction(e));
 
+		//탭페인 디자인 메소드
 		configureView();
 	}
 
@@ -206,12 +204,10 @@ public class AdminManagement implements Initializable {
 	// 유저 테이블 검색 버튼 이벤트
 	private void handleBtnUserSearchAction(ActionEvent e) {
 		MemberDAO dao = new MemberDAO();
-		// ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		ArrayList<Member> arrayList = dao.searchUser(txtUserSearch.getText());
 		obLMember.clear();
 		for (Member m : arrayList) {
 			obLMember.add(m);
-
 		}
 	}
 
@@ -235,7 +231,6 @@ public class AdminManagement implements Initializable {
 			alert.showAndWait();
 			userTableSelectIndex = -1;
 		}
-
 	}
 
 	// 유저테이블 수정 버튼 이벤트
@@ -260,7 +255,6 @@ public class AdminManagement implements Initializable {
 			TextField txtName = (TextField) root.lookup("#txtName");
 			TextField txtPass = (TextField) root.lookup("#txtPass");
 			TextField txtPhoneNumber = (TextField) root.lookup("#txtPhoneNumber");
-			// DatePicker dpBirth = (DatePicker) root.lookup("#dpBirth");
 			ComboBox cmbEtc = (ComboBox) root.lookup("#cmbEtc");
 			ComboBox<String> cmbYear = (ComboBox) root.lookup("#cmbYear");
 			ComboBox<String> cmbMonth = (ComboBox) root.lookup("#cmbMonth");
@@ -269,7 +263,6 @@ public class AdminManagement implements Initializable {
 			cmbEtc.setItems(FXCollections.observableArrayList("정상", "연체"));
 
 			Member selectUser = obLMember.get(userTableSelectIndex);
-
 			btnCancel.setOnAction(eve -> addPopup.close());
 
 			txtId.setText(selectUser.getId());
@@ -373,7 +366,6 @@ public class AdminManagement implements Initializable {
 
 	// 도서탭 수정 버튼 핸들러이벤트
 	private void handleBtnBookEditAction(ActionEvent e) {
-
 		try {
 
 			if (bookTableSelectIndex == -1)
@@ -439,7 +431,6 @@ public class AdminManagement implements Initializable {
 				int returnValue = dao.editBook(book0);
 				if (returnValue != 0) {
 					imageDelete(selectFileName);// 기존이미지삭제
-
 					BufferedInputStream bis = null;// 파일을 읽을때 사용하는 클래스
 					BufferedOutputStream bos = null;// 파일을 쓸때 사용하는 클래스
 					try {
@@ -594,7 +585,7 @@ public class AdminManagement implements Initializable {
 		Book selectBook = obLBook.get(bookTableSelectIndex);
 		selectFileName = selectBook.getFileimg();
 		localUrl = "file:/C:/images/Library_BookData/" + selectFileName;
-		localImage = new Image(localUrl, false);
+		new Image(localUrl, false);
 		BookDAO dao = new BookDAO();
 		int returnValue = dao.deleteBook(selectBook);
 		if (returnValue != 0) {
@@ -794,8 +785,6 @@ public class AdminManagement implements Initializable {
 
 			btnAdd.setOnAction(eve -> {
 				try {
-					// BookDAO dao = new BookDAO();
-					Parent root1 = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 					Stage addPopup1 = new Stage();
 					addPopup1.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					addPopup1.initModality(Modality.NONE);

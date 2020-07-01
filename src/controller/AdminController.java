@@ -44,26 +44,24 @@ import model.Statistical;
 
 public class AdminController implements Initializable {
 	public Stage stage;
-	int schduleCount = 0;
 	@FXML
-	Button btnLogout;
+	private Button btnLogout;
 	@FXML
-	Button btnManagement;
+	private Button btnManagement;
 	@FXML
-	Button btnNotice;
+	private Button btnNotice;
 	@FXML
-	Button btnSchedule;
+	private Button btnSchedule;
 	@FXML
-	Button btnReantalList;
-	ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
-	private ObservableList<Statistical> obsListRentalList = FXCollections.observableArrayList();
+	private Button btnReantalList;
+	private ArrayList<Schedule> schduleList = new ArrayList<Schedule>();
+	private ArrayList<Notice> noticeList = new ArrayList<Notice>();
 	private ObservableList<Notice> obsListN = FXCollections.observableArrayList();
-	ArrayList<Notice> arrayList = null;
-	ArrayList<Schedule> arrayList2 = null;
-	private int tableViewselectedIndex = -1;
-	private int tableViewselectedIndex2 = -1;
-	String Noticetime = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
-	String date = LocalDate.now().toString();
+	private ObservableList<Statistical> obsListRentalList = FXCollections.observableArrayList();
+	private int noticeTableViewSelectedIndex = -1;
+	private int schduleTableViewSelectedIndex = -1;
+	private String noticeTime = new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
+	private String date = LocalDate.now().toString();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -307,19 +305,19 @@ public class AdminController implements Initializable {
 
 			tbladminNotice.getColumns().addAll(colNo, colTitle, colContent, colDate);
 			DAO dao = new DAO();
-			arrayList = dao.getNotice();
-			for (Notice n : arrayList) {
+			noticeList = dao.getNotice();
+			for (Notice n : noticeList) {
 				obsListN.add(n);
 			}
 			tbladminNotice.setItems(obsListN);
 			// 테이블뷰에서 선택한 인덱스를 정수값으로 받아오는 이벤트
 			tbladminNotice.setOnMousePressed(event -> {
-				tableViewselectedIndex = tbladminNotice.getSelectionModel().getSelectedIndex();
+				noticeTableViewSelectedIndex = tbladminNotice.getSelectionModel().getSelectedIndex();
 			});
 			// 삭제버튼
 			btnadminDelete.setOnAction(event3 -> {
 				try {
-					if (tableViewselectedIndex == -1) {
+					if (noticeTableViewSelectedIndex == -1) {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("삭제 에러");
 						alert.setHeaderText("삭제할 데이터를 선택하세요.");
@@ -328,11 +326,11 @@ public class AdminController implements Initializable {
 					}
 					if (tbladminNotice.getSelectionModel().getSelectedItem() == null)
 						throw new Exception();
-					Notice selectNotice = obsListN.get(tableViewselectedIndex);
+					Notice selectNotice = obsListN.get(noticeTableViewSelectedIndex);
 					int notxx = dao.deleteNotice(selectNotice);
 					if (notxx != 0) {
-						obsListN.remove(tableViewselectedIndex);
-						tableViewselectedIndex = -1;
+						obsListN.remove(noticeTableViewSelectedIndex);
+						noticeTableViewSelectedIndex = -1;
 					}
 				} catch (Exception e1) {
 				}
@@ -375,8 +373,8 @@ public class AdminController implements Initializable {
 							obsListN.clear();
 							adminNotAddStage.close();
 
-							arrayList = dao.getNotice();
-							for (Notice n1 : arrayList) {
+							noticeList = dao.getNotice();
+							for (Notice n1 : noticeList) {
 								obsListN.add(n1);
 							}
 							tbladminNotice.setItems(obsListN);
@@ -384,7 +382,7 @@ public class AdminController implements Initializable {
 
 					});
 					btnAdminAddNo.setOnAction(event2 -> adminNotAddStage.close());
-					lblAdminAddDate.setText(Noticetime);
+					lblAdminAddDate.setText(noticeTime);
 
 				} catch (Exception e1) {
 					Alert alert = new Alert(AlertType.ERROR);
@@ -398,7 +396,7 @@ public class AdminController implements Initializable {
 				// 테이블뷰 선택을 더블 클릭으로 바꾸어주는 이벤트
 				if (event.getClickCount() > 1) {
 					try {
-						if (tableViewselectedIndex == -1) {
+						if (noticeTableViewSelectedIndex == -1) {
 							Alert alert = new Alert(AlertType.INFORMATION);
 							alert.setTitle("공지사항 수정창");
 							alert.setHeaderText("수정할 데이터를 선택하세요.");
@@ -425,7 +423,7 @@ public class AdminController implements Initializable {
 						Button btnAdminMfNo = (Button) scene3.lookup("#btnNo");
 						lbTitle.setText("공지사항 수정");
 						// Notice가 있는 obsListN를 가져와서 not에 넣어줌
-						Notice not = obsListN.get(tableViewselectedIndex);
+						Notice not = obsListN.get(noticeTableViewSelectedIndex);
 						txtAdminMfTitle.setText(not.getTitle());
 						txaAdminMfContent.setText(not.getContent());
 
@@ -439,10 +437,10 @@ public class AdminController implements Initializable {
 
 								int mf = dao.editNotice(not);
 								if (mf != 0) {
-									obsListN.set(tableViewselectedIndex, not);
-									tableViewselectedIndex = -1;
+									obsListN.set(noticeTableViewSelectedIndex, not);
+									noticeTableViewSelectedIndex = -1;
 									adminNotMfStage.close();
-								} 
+								}
 
 							} else {
 								Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -453,7 +451,7 @@ public class AdminController implements Initializable {
 
 						});
 						btnAdminMfNo.setOnAction(event3 -> adminNotMfStage.close());
-						lblAdminMfDate.setText(Noticetime);
+						lblAdminMfDate.setText(noticeTime);
 					} catch (Exception e1) {
 					}
 				}
@@ -562,7 +560,6 @@ public class AdminController implements Initializable {
 						Schedule schedule = new Schedule(txaContent.getText(), date);
 						int resultValue = dao.addSchedule(schedule);
 						if (resultValue != 0) {
-							schduleCount += 1;
 							schduleList = dao.getSchedule(date);
 							if (schduleList.size() != 0) {
 								for (int i = 0; i < schduleList.size(); i++) {
@@ -574,19 +571,17 @@ public class AdminController implements Initializable {
 						}
 					});
 				} catch (IOException e1) {
-					e1.printStackTrace();
 				}
-
 			});
-			//
+
 			listV.setOnMousePressed(event -> {
-				tableViewselectedIndex2 = listV.getSelectionModel().getSelectedIndex();
+				schduleTableViewSelectedIndex = listV.getSelectionModel().getSelectedIndex();
 			});
 
 			// 수정버튼
 			btnEdit.setOnAction(eve -> {
 				try {
-					if (tableViewselectedIndex2 == -1) {
+					if (schduleTableViewSelectedIndex == -1) {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("일정표 수정창");
 						alert.setHeaderText("수정할 데이터를 선택하세요.");
@@ -602,7 +597,7 @@ public class AdminController implements Initializable {
 					Button btnEdit2 = (Button) scene.lookup("#btnAdd");
 					Label lbDate2 = (Label) scene.lookup("#lbDate");
 					TextArea txaContent2 = (TextArea) scene.lookup("#txaContent");
-					Schedule sh = schduleList.get(tableViewselectedIndex2);
+					Schedule sh = schduleList.get(schduleTableViewSelectedIndex);
 					lbDate2.setText(sh.getDate());
 					btnEdit2.setText("수정");
 					txaContent2.setText(sh.getContent());
@@ -620,12 +615,12 @@ public class AdminController implements Initializable {
 							alert.showAndWait();
 							return;
 						}
-							sh.setContent(txaContent2.getText());
-							int ase = dao.editSchedule(sh);
-							if (ase != 0) {
-								obSchdule.set(tableViewselectedIndex2, sh.getContent());
-								tableViewselectedIndex2 = -1;
-							}
+						sh.setContent(txaContent2.getText());
+						int ase = dao.editSchedule(sh);
+						if (ase != 0) {
+							obSchdule.set(schduleTableViewSelectedIndex, sh.getContent());
+							schduleTableViewSelectedIndex = -1;
+						}
 					});
 				} catch (Exception e1) {
 
@@ -635,18 +630,18 @@ public class AdminController implements Initializable {
 			// 일정 삭제
 			btnDelete.setOnAction(event -> {
 				try {
-					if (tableViewselectedIndex2 == -1) {
+					if (schduleTableViewSelectedIndex == -1) {
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("삭제 오류");
 						alert.setHeaderText("삭제할 데이터를 선택하세요.");
 						alert.showAndWait();
 						return;
 					}
-					Schedule sh = schduleList.get(tableViewselectedIndex2);
+					Schedule sh = schduleList.get(schduleTableViewSelectedIndex);
 					int notxx = dao.deleteSchedule(sh);
 					if (notxx != 0) {
-						obSchdule.remove(tableViewselectedIndex2);
-						tableViewselectedIndex2 = -1;
+						obSchdule.remove(schduleTableViewSelectedIndex);
+						schduleTableViewSelectedIndex = -1;
 					}
 
 				} catch (Exception e1) {

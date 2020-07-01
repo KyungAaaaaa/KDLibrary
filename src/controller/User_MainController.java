@@ -38,7 +38,6 @@ import model.RequestBook;
 import model.Schedule;
 
 public class User_MainController implements Initializable {
-
 	@FXML
 	private Button btnUserModify;
 	@FXML
@@ -58,12 +57,11 @@ public class User_MainController implements Initializable {
 	private ImageView imgV;
 	@FXML
 	private Label lblName;
-	
-	private ArrayList<Book> bookList;
+	private ArrayList<Book> bookList=null;
 	private ArrayList<Schedule> schList = new ArrayList<Schedule>();
 	private ObservableList<Notice> obsList = FXCollections.observableArrayList();
 	private ObservableList<Schedule> obsListS = FXCollections.observableArrayList();
-	private int tableViewselectedIndex;
+	private int noticeTableViewSelectedIndex;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -271,13 +269,14 @@ public class User_MainController implements Initializable {
 								alert.showAndWait();
 								return;
 							}
-								MemberDAO.m.setPass(txtPass2.getText());
-								MemberDAO.m.setPhoneNumber(txtPhone2.getText());
-								MemberDAO dao=new MemberDAO();
-								int userModify = dao.editUser2();
+							MemberDAO.m.setPass(txtPass2.getText());
+							MemberDAO.m.setPhoneNumber(txtPhone2.getText());
+							MemberDAO dao = new MemberDAO();
+							int userModify = dao.editUser2();
 
-								if (userModify != 0) {
-									userModifyStage2.close();}
+							if (userModify != 0) {
+								userModifyStage2.close();
+							}
 						});
 
 						userModifyStage2.initModality(Modality.WINDOW_MODAL);
@@ -383,7 +382,7 @@ public class User_MainController implements Initializable {
 			userScheduleStage.setResizable(false);
 			userScheduleStage.setTitle("일정표");
 			userScheduleStage.show();
-			btnSchExit.setOnAction(eve-> userScheduleStage.close());
+			btnSchExit.setOnAction(eve -> userScheduleStage.close());
 		} catch (Exception e) {
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("에러발생");
@@ -431,7 +430,7 @@ public class User_MainController implements Initializable {
 			tblUserNotice.setItems(obsList);
 
 			tblUserNotice.setOnMousePressed(event1 -> {
-				tableViewselectedIndex = tblUserNotice.getSelectionModel().getSelectedIndex();
+				noticeTableViewSelectedIndex = tblUserNotice.getSelectionModel().getSelectedIndex();
 			});
 
 			tblUserNotice.setOnMouseClicked(event1 -> {
@@ -448,7 +447,7 @@ public class User_MainController implements Initializable {
 						TextArea txaContentNotView = (TextArea) scene1.lookup("#txaContent");
 						Button btnNoNotView = (Button) scene1.lookup("#btnNo");
 
-						Notice noti = obsList.get(tableViewselectedIndex);
+						Notice noti = obsList.get(noticeTableViewSelectedIndex);
 						txtTitleNotView.setText(noti.getTitle());
 						lblDateNotView.setText(noti.getDate());
 						txaContentNotView.setText(noti.getContent());

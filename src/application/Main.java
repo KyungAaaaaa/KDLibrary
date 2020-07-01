@@ -32,6 +32,7 @@ public class Main extends Application {
 		s.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 		primaryStage.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 		primaryStage.setTitle("KD Library");
+		
 		primaryStage.show();
 		
 		

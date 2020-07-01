@@ -21,7 +21,6 @@ public class BookDAO {
 	// 도서 테이블 전체보기
 	public HashSet<Book> getBookTbl() {
 		HashSet<Book> hashSet = new HashSet<Book>();
-		// ArrayList<Book> arrayList = new ArrayList<Book>();
 		Connection con = null;
 		PreparedStatement preparedStatement = null;
 		ResultSet rs = null;
@@ -229,7 +228,6 @@ public class BookDAO {
 		ResultSet rs = null;
 		try {
 			con = DBUtil.getConnection();
-			// String query = "select * from StatisticalTBL where date like ?;";
 			String query = "select Rentaldate,category,count(category) from StatisticalTBL A left join BookTBL B on A.Book_ISBN=B.ISBN group by category having Rentaldate like ?;";
 			preparedStatement = con.prepareStatement(query);
 			preparedStatement.setString(1, "%" + month + "%");
