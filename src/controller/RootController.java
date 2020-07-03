@@ -4,6 +4,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -21,6 +23,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -67,10 +70,38 @@ public class RootController implements Initializable {
 
 	}
 
+	
+	private TextFormatter PhoneNumberTextFieldFormatSetting() {
+		DecimalFormat decimalFormat = new DecimalFormat("###########");
+		TextFormatter textFormatter = new TextFormatter<>(e -> {
+			if (e.getControlNewText().isEmpty())
+				return e;
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = decimalFormat.parse(e.getControlNewText(), parsePosition);
+			int number = Integer.MAX_VALUE;
+			try {
+				number = Integer.parseInt(e.getControlNewText());
+			} catch (NumberFormatException e2) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("입력 에러");
+				alert.setHeaderText("숫자 외 문자는 입력되지 않습니다.");
+				alert.setContentText("올바른 휴대전화 번호를 입력하세요.");
+				alert.showAndWait();
+				return null;
+			}
+			if (object == null || e.getControlNewText().length() > 12 )
+				return null;
+			else
+				return e;
+		});
+		return textFormatter;
+	}
+	
 	// 회원가입
 	private void handleBtnSignAction(MouseEvent event) {
 
 		try {
+			
 			int randomPass = 0;
 			Parent root = FXMLLoader.load(getClass().getResource("/view/sign.fxml"));
 			Scene scene = new Scene(root);
@@ -88,6 +119,7 @@ public class RootController implements Initializable {
 			Button btnSignOk = (Button) scene.lookup("#btnOk");
 			Button btnSignNo = (Button) scene.lookup("#btnNo");
 			ImageView imgSignView = (ImageView) scene.lookup("#imgView");
+			txtFieldSignPhoneNumber.setTextFormatter(PhoneNumberTextFieldFormatSetting());
 			imgSignView.setImage(img);
 			scene.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 			randomPass = (int) ((Math.random()) * (5 - 0 + 1) - 0);

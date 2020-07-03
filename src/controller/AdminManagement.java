@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -35,6 +37,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -198,7 +201,33 @@ public class AdminManagement implements Initializable {
 		} catch (IOException e1) {
 		}
 	}
-
+//
+//	private TextFormatter ISBNTextFieldFormatSetting() {
+//		DecimalFormat decimalFormat = new DecimalFormat("#############");
+//		TextFormatter textFormatter = new TextFormatter<>(e -> {
+//			if (e.getControlNewText().isEmpty())
+//				return e;
+//			ParsePosition parsePosition = new ParsePosition(0);
+//			Object object = decimalFormat.parse(e.getControlNewText(), parsePosition);
+//			long number = Long.MAX_VALUE;
+//			try {
+//				number = Long.parseLong(e.getControlNewText());
+//			} catch (NumberFormatException e2) {
+//				Alert alert = new Alert(AlertType.ERROR);
+//				alert.setTitle("입력 에러");
+//				alert.setHeaderText("숫자 외 문자는 입력되지 않습니다.");
+//				alert.setContentText("올바른 ISBN코드를 입력하세요.");
+//				alert.showAndWait();
+//				return null;
+//			}
+//			if (object == null || e.getControlNewText().length() > 14 )
+//				return null;
+//			else
+//				return e;
+//		});
+//		return textFormatter;
+//	}
+	
 	/* ========================회원관리====================== */
 
 	// 유저 테이블 검색 버튼 이벤트
@@ -408,7 +437,7 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-
+		//	txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
 			selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
 
 			btnFileSelect.setOnAction(eve1 -> {
@@ -499,7 +528,7 @@ public class AdminManagement implements Initializable {
 			TextArea txaInformation = (TextArea) s.lookup("#txaInformation");
 			ImageView imgV = (ImageView) s.lookup("#imgV");
 			cmbCategory.setItems(dao.categoryList);
-
+		//	txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
 			btnFileSelect.setOnAction(eve1 -> {
 				Image image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
@@ -789,6 +818,7 @@ public class AdminManagement implements Initializable {
 					addPopup1.getIcons().add(new Image(getClass().getResource("/image/logo.png").toString()));
 					addPopup1.initModality(Modality.NONE);
 					addPopup1.initOwner(btnAdd.getScene().getWindow());
+					Parent root1 = FXMLLoader.load(getClass().getResource("/view/admin_BookAdd.fxml"));
 					Scene s1 = new Scene(root1);
 					s1.getStylesheets().add(getClass().getResource("/application/main.css").toString());
 					addPopup1.setTitle("도서 추가");
