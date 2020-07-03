@@ -78,9 +78,9 @@ public class RootController implements Initializable {
 				return e;
 			ParsePosition parsePosition = new ParsePosition(0);
 			Object object = decimalFormat.parse(e.getControlNewText(), parsePosition);
-			int number = Integer.MAX_VALUE;
+			long number = Long.MAX_VALUE;
 			try {
-				number = Integer.parseInt(e.getControlNewText());
+				number = Long.parseLong(e.getControlNewText());
 			} catch (NumberFormatException e2) {
 				Alert alert = new Alert(AlertType.ERROR);
 				alert.setTitle("입력 에러");
@@ -89,8 +89,14 @@ public class RootController implements Initializable {
 				alert.showAndWait();
 				return null;
 			}
-			if (object == null || e.getControlNewText().length() > 12 )
-				return null;
+			if (object == null || e.getControlNewText().length() > 11 ) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("입력 에러");
+				alert.setHeaderText("휴대전화번호는 11자리로 입력해주세요.");
+				alert.setContentText("올바른 번호를 입력하세요.");
+				alert.showAndWait();
+				
+				return null;}
 			else
 				return e;
 		});

@@ -201,32 +201,37 @@ public class AdminManagement implements Initializable {
 		} catch (IOException e1) {
 		}
 	}
-//
-//	private TextFormatter ISBNTextFieldFormatSetting() {
-//		DecimalFormat decimalFormat = new DecimalFormat("#############");
-//		TextFormatter textFormatter = new TextFormatter<>(e -> {
-//			if (e.getControlNewText().isEmpty())
-//				return e;
-//			ParsePosition parsePosition = new ParsePosition(0);
-//			Object object = decimalFormat.parse(e.getControlNewText(), parsePosition);
-//			long number = Long.MAX_VALUE;
-//			try {
-//				number = Long.parseLong(e.getControlNewText());
-//			} catch (NumberFormatException e2) {
-//				Alert alert = new Alert(AlertType.ERROR);
-//				alert.setTitle("입력 에러");
-//				alert.setHeaderText("숫자 외 문자는 입력되지 않습니다.");
-//				alert.setContentText("올바른 ISBN코드를 입력하세요.");
-//				alert.showAndWait();
-//				return null;
-//			}
-//			if (object == null || e.getControlNewText().length() > 14 )
-//				return null;
-//			else
-//				return e;
-//		});
-//		return textFormatter;
-//	}
+
+	private TextFormatter ISBNTextFieldFormatSetting() {
+		DecimalFormat decimalFormat = new DecimalFormat("#############");
+		TextFormatter textFormatter = new TextFormatter<>(e -> {
+			if (e.getControlNewText().isEmpty())
+				return e;
+			ParsePosition parsePosition = new ParsePosition(0);
+			Object object = decimalFormat.parse(e.getControlNewText(), parsePosition);
+			long number = 0;
+			try {
+				number = Long.parseLong(e.getControlNewText());
+			} catch (NumberFormatException e2) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("입력 에러");
+				alert.setHeaderText("숫자 외 문자는 입력되지 않습니다.");
+				alert.setContentText("올바른 ISBN코드를 입력하세요.");
+				alert.showAndWait();
+				return null;
+			}
+			if (object == null || e.getControlNewText().length() > 13 ) {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("입력 에러");
+				alert.setHeaderText("ISBN코드는 13자리 입니다.");
+				alert.setContentText("올바른 ISBN코드를 입력하세요.");
+				alert.showAndWait();
+				return null;}
+			else
+				return e;
+		});
+		return textFormatter;
+	}
 	
 	/* ========================회원관리====================== */
 
@@ -437,7 +442,7 @@ public class AdminManagement implements Initializable {
 			txtCompany.setText(book0.getCompany());
 			txtDate.setText(book0.getDate());
 			txaInformation.setText(book0.getInformation());
-		//	txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
+			txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
 			selectFile = new File(directorySave.getAbsolutePath() + "\\" + selectFileName);
 
 			btnFileSelect.setOnAction(eve1 -> {
@@ -528,7 +533,7 @@ public class AdminManagement implements Initializable {
 			TextArea txaInformation = (TextArea) s.lookup("#txaInformation");
 			ImageView imgV = (ImageView) s.lookup("#imgV");
 			cmbCategory.setItems(dao.categoryList);
-		//	txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
+			txtISBN.setTextFormatter(ISBNTextFieldFormatSetting());
 			btnFileSelect.setOnAction(eve1 -> {
 				Image image = handleBtnImageFileAction(addPopup);
 				imgV.setImage(image);
