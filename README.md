@@ -1,6 +1,8 @@
-# KDLibrary
+# 📚KDLibrary
 
 도서관 관리 & 이용 시스템
+
+youtube : https://youtu.be/PFTYR5591Fs
 
 ## 개요
 - 소규모 온라인 도서관 시스템을 구상
